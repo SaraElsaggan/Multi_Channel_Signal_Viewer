@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>1233</width>
-    <height>702</height>
+    <width>1218</width>
+    <height>754</height>
    </rect>
   </property>
   <property name="focusPolicy">
@@ -17,377 +17,11 @@
    <string>MainWindow</string>
   </property>
   <widget class="QWidget" name="centralwidget">
-   <widget class="QWidget" name="layoutWidget_2">
-    <property name="geometry">
-     <rect>
-      <x>660</x>
-      <y>240</y>
-      <width>30</width>
-      <height>170</height>
-     </rect>
-    </property>
-    <layout class="QVBoxLayout" name="verticalLayout_2">
-     <property name="spacing">
-      <number>0</number>
-     </property>
-     <property name="topMargin">
-      <number>0</number>
-     </property>
-     <property name="rightMargin">
-      <number>0</number>
-     </property>
-     <item>
-      <widget class="QPushButton" name="move_up_btn_ch3_2">
-       <property name="text">
-        <string/>
-       </property>
-       <property name="icon">
-        <iconset resource="imgs.qrc">
-         <normaloff>:/imgs/imgs/move_up.png</normaloff>:/imgs/imgs/move_up.png</iconset>
-       </property>
-       <property name="flat">
-        <bool>true</bool>
-       </property>
-      </widget>
-     </item>
-     <item>
-      <widget class="QPushButton" name="speed_up_btn_ch3_2">
-       <property name="text">
-        <string/>
-       </property>
-       <property name="icon">
-        <iconset resource="imgs.qrc">
-         <normaloff>:/imgs/imgs/speed_up.png</normaloff>:/imgs/imgs/speed_up.png</iconset>
-       </property>
-       <property name="flat">
-        <bool>true</bool>
-       </property>
-      </widget>
-     </item>
-     <item>
-      <widget class="QPushButton" name="zoom_in_btn_ch3_2">
-       <property name="text">
-        <string/>
-       </property>
-       <property name="icon">
-        <iconset resource="imgs.qrc">
-         <normaloff>:/imgs/imgs/zoom_in.png</normaloff>:/imgs/imgs/zoom_in.png</iconset>
-       </property>
-       <property name="flat">
-        <bool>true</bool>
-       </property>
-      </widget>
-     </item>
-     <item>
-      <widget class="QPushButton" name="play_pause_btn_ch3_2">
-       <property name="text">
-        <string/>
-       </property>
-       <property name="icon">
-        <iconset resource="imgs.qrc">
-         <normaloff>:/imgs/imgs/play.png</normaloff>:/imgs/imgs/play.png</iconset>
-       </property>
-       <property name="flat">
-        <bool>true</bool>
-       </property>
-      </widget>
-     </item>
-     <item>
-      <widget class="QPushButton" name="zoom_out_btn_ch3_2">
-       <property name="text">
-        <string/>
-       </property>
-       <property name="icon">
-        <iconset resource="imgs.qrc">
-         <normaloff>:/imgs/imgs/aoom_out.png</normaloff>:/imgs/imgs/aoom_out.png</iconset>
-       </property>
-       <property name="flat">
-        <bool>true</bool>
-       </property>
-      </widget>
-     </item>
-     <item>
-      <widget class="QPushButton" name="slow_btn_ch3_2">
-       <property name="text">
-        <string/>
-       </property>
-       <property name="icon">
-        <iconset resource="imgs.qrc">
-         <normaloff>:/imgs/imgs/slow_down.png</normaloff>:/imgs/imgs/slow_down.png</iconset>
-       </property>
-       <property name="flat">
-        <bool>true</bool>
-       </property>
-      </widget>
-     </item>
-     <item>
-      <widget class="QPushButton" name="move_down_btn_ch3_2">
-       <property name="styleSheet">
-        <string notr="true"/>
-       </property>
-       <property name="text">
-        <string/>
-       </property>
-       <property name="icon">
-        <iconset resource="imgs.qrc">
-         <normaloff>:/imgs/imgs/move_down.png</normaloff>:/imgs/imgs/move_down.png</iconset>
-       </property>
-       <property name="flat">
-        <bool>true</bool>
-       </property>
-      </widget>
-     </item>
-    </layout>
-   </widget>
-   <widget class="QWidget" name="layoutWidget_3">
-    <property name="geometry">
-     <rect>
-      <x>660</x>
-      <y>440</y>
-      <width>30</width>
-      <height>170</height>
-     </rect>
-    </property>
-    <layout class="QVBoxLayout" name="verticalLayout_4">
-     <property name="spacing">
-      <number>0</number>
-     </property>
-     <property name="topMargin">
-      <number>0</number>
-     </property>
-     <property name="rightMargin">
-      <number>0</number>
-     </property>
-     <item>
-      <widget class="QPushButton" name="move_up_btn_ch3_3">
-       <property name="text">
-        <string/>
-       </property>
-       <property name="icon">
-        <iconset resource="imgs.qrc">
-         <normaloff>:/imgs/imgs/move_up.png</normaloff>:/imgs/imgs/move_up.png</iconset>
-       </property>
-       <property name="flat">
-        <bool>true</bool>
-       </property>
-      </widget>
-     </item>
-     <item>
-      <widget class="QPushButton" name="speed_up_btn_ch3_3">
-       <property name="text">
-        <string/>
-       </property>
-       <property name="icon">
-        <iconset resource="imgs.qrc">
-         <normaloff>:/imgs/imgs/speed_up.png</normaloff>:/imgs/imgs/speed_up.png</iconset>
-       </property>
-       <property name="flat">
-        <bool>true</bool>
-       </property>
-      </widget>
-     </item>
-     <item>
-      <widget class="QPushButton" name="zoom_in_btn_ch3_3">
-       <property name="text">
-        <string/>
-       </property>
-       <property name="icon">
-        <iconset resource="imgs.qrc">
-         <normaloff>:/imgs/imgs/zoom_in.png</normaloff>:/imgs/imgs/zoom_in.png</iconset>
-       </property>
-       <property name="flat">
-        <bool>true</bool>
-       </property>
-      </widget>
-     </item>
-     <item>
-      <widget class="QPushButton" name="play_pause_btn_ch3_3">
-       <property name="text">
-        <string/>
-       </property>
-       <property name="icon">
-        <iconset resource="imgs.qrc">
-         <normaloff>:/imgs/imgs/play.png</normaloff>:/imgs/imgs/play.png</iconset>
-       </property>
-       <property name="flat">
-        <bool>true</bool>
-       </property>
-      </widget>
-     </item>
-     <item>
-      <widget class="QPushButton" name="zoom_out_btn_ch3_3">
-       <property name="text">
-        <string/>
-       </property>
-       <property name="icon">
-        <iconset resource="imgs.qrc">
-         <normaloff>:/imgs/imgs/aoom_out.png</normaloff>:/imgs/imgs/aoom_out.png</iconset>
-       </property>
-       <property name="flat">
-        <bool>true</bool>
-       </property>
-      </widget>
-     </item>
-     <item>
-      <widget class="QPushButton" name="slow_btn_ch3_3">
-       <property name="text">
-        <string/>
-       </property>
-       <property name="icon">
-        <iconset resource="imgs.qrc">
-         <normaloff>:/imgs/imgs/slow_down.png</normaloff>:/imgs/imgs/slow_down.png</iconset>
-       </property>
-       <property name="flat">
-        <bool>true</bool>
-       </property>
-      </widget>
-     </item>
-     <item>
-      <widget class="QPushButton" name="move_down_btn_ch3_3">
-       <property name="styleSheet">
-        <string notr="true"/>
-       </property>
-       <property name="text">
-        <string/>
-       </property>
-       <property name="icon">
-        <iconset resource="imgs.qrc">
-         <normaloff>:/imgs/imgs/move_down.png</normaloff>:/imgs/imgs/move_down.png</iconset>
-       </property>
-       <property name="flat">
-        <bool>true</bool>
-       </property>
-      </widget>
-     </item>
-    </layout>
-   </widget>
-   <widget class="QWidget" name="layoutWidget">
-    <property name="geometry">
-     <rect>
-      <x>660</x>
-      <y>40</y>
-      <width>30</width>
-      <height>170</height>
-     </rect>
-    </property>
-    <layout class="QVBoxLayout" name="verticalLayout">
-     <property name="spacing">
-      <number>0</number>
-     </property>
-     <property name="topMargin">
-      <number>0</number>
-     </property>
-     <property name="rightMargin">
-      <number>0</number>
-     </property>
-     <item>
-      <widget class="QPushButton" name="move_up_btn_ch3">
-       <property name="text">
-        <string/>
-       </property>
-       <property name="icon">
-        <iconset resource="imgs.qrc">
-         <normaloff>:/imgs/imgs/move_up.png</normaloff>:/imgs/imgs/move_up.png</iconset>
-       </property>
-       <property name="flat">
-        <bool>true</bool>
-       </property>
-      </widget>
-     </item>
-     <item>
-      <widget class="QPushButton" name="speed_up_btn_ch3">
-       <property name="text">
-        <string/>
-       </property>
-       <property name="icon">
-        <iconset resource="imgs.qrc">
-         <normaloff>:/imgs/imgs/speed_up.png</normaloff>:/imgs/imgs/speed_up.png</iconset>
-       </property>
-       <property name="flat">
-        <bool>true</bool>
-       </property>
-      </widget>
-     </item>
-     <item>
-      <widget class="QPushButton" name="zoom_in_btn_ch3">
-       <property name="text">
-        <string/>
-       </property>
-       <property name="icon">
-        <iconset resource="imgs.qrc">
-         <normaloff>:/imgs/imgs/zoom_in.png</normaloff>:/imgs/imgs/zoom_in.png</iconset>
-       </property>
-       <property name="flat">
-        <bool>true</bool>
-       </property>
-      </widget>
-     </item>
-     <item>
-      <widget class="QPushButton" name="play_pause_btn_ch3">
-       <property name="text">
-        <string/>
-       </property>
-       <property name="icon">
-        <iconset theme="accessories-character-map" resource="imgs.qrc">
-         <normaloff>:/imgs/imgs/play.png</normaloff>:/imgs/imgs/play.png</iconset>
-       </property>
-       <property name="flat">
-        <bool>true</bool>
-       </property>
-      </widget>
-     </item>
-     <item>
-      <widget class="QPushButton" name="zoom_out_btn_ch3">
-       <property name="text">
-        <string/>
-       </property>
-       <property name="icon">
-        <iconset resource="imgs.qrc">
-         <normaloff>:/imgs/imgs/aoom_out.png</normaloff>:/imgs/imgs/aoom_out.png</iconset>
-       </property>
-       <property name="flat">
-        <bool>true</bool>
-       </property>
-      </widget>
-     </item>
-     <item>
-      <widget class="QPushButton" name="slow_btn_ch3">
-       <property name="text">
-        <string/>
-       </property>
-       <property name="icon">
-        <iconset resource="imgs.qrc">
-         <normaloff>:/imgs/imgs/slow_down.png</normaloff>:/imgs/imgs/slow_down.png</iconset>
-       </property>
-       <property name="flat">
-        <bool>true</bool>
-       </property>
-      </widget>
-     </item>
-     <item>
-      <widget class="QPushButton" name="move_down_btn_ch3">
-       <property name="styleSheet">
-        <string notr="true"/>
-       </property>
-       <property name="text">
-        <string/>
-       </property>
-       <property name="icon">
-        <iconset resource="imgs.qrc">
-         <normaloff>:/imgs/imgs/move_down.png</normaloff>:/imgs/imgs/move_down.png</iconset>
-       </property>
-       <property name="flat">
-        <bool>true</bool>
-       </property>
-      </widget>
-     </item>
-    </layout>
-   </widget>
    <widget class="QTabWidget" name="tabWidget">
     <property name="geometry">
      <rect>
-      <x>750</x>
-      <y>310</y>
+      <x>820</x>
+      <y>320</y>
       <width>411</width>
       <height>261</height>
      </rect>
@@ -1269,7 +903,7 @@
    <widget class="QTabWidget" name="tabWidget_2">
     <property name="geometry">
      <rect>
-      <x>750</x>
+      <x>820</x>
       <y>30</y>
       <width>391</width>
       <height>211</height>
@@ -1311,12 +945,12 @@
       </row>
       <row>
        <property name="text">
-        <string>channel 3</string>
+        <string>min</string>
        </property>
       </row>
       <row>
        <property name="text">
-        <string>min</string>
+        <string>duration</string>
        </property>
       </row>
       <column>
@@ -1456,7 +1090,7 @@
    <widget class="QLabel" name="label_16">
     <property name="geometry">
      <rect>
-      <x>750</x>
+      <x>820</x>
       <y>10</y>
       <width>191</width>
       <height>16</height>
@@ -1469,8 +1103,8 @@
    <widget class="QLabel" name="label_17">
     <property name="geometry">
      <rect>
-      <x>750</x>
-      <y>290</y>
+      <x>820</x>
+      <y>300</y>
       <width>171</width>
       <height>16</height>
      </rect>
@@ -1479,77 +1113,306 @@
      <string>properties</string>
     </property>
    </widget>
-   <widget class="QWidget" name="">
+   <widget class="QWidget" name="layoutWidget_2">
     <property name="geometry">
      <rect>
-      <x>10</x>
-      <y>10</y>
-      <width>651</width>
-      <height>611</height>
+      <x>290</x>
+      <y>300</y>
+      <width>201</width>
+      <height>31</height>
      </rect>
     </property>
-    <layout class="QVBoxLayout" name="verticalLayout_3">
+    <layout class="QHBoxLayout" name="horizontalLayout">
+     <property name="spacing">
+      <number>0</number>
+     </property>
+     <property name="topMargin">
+      <number>0</number>
+     </property>
+     <property name="rightMargin">
+      <number>0</number>
+     </property>
      <item>
-      <widget class="QLabel" name="label_15">
-       <property name="maximumSize">
-        <size>
-         <width>16777215</width>
-         <height>10</height>
-        </size>
+      <widget class="QPushButton" name="move_down_btn_ch3_2">
+       <property name="styleSheet">
+        <string notr="true"/>
        </property>
        <property name="text">
-        <string>channel1</string>
+        <string/>
+       </property>
+       <property name="icon">
+        <iconset resource="imgs.qrc">
+         <normaloff>:/imgs/imgs/move_down.png</normaloff>:/imgs/imgs/move_down.png</iconset>
+       </property>
+       <property name="flat">
+        <bool>true</bool>
        </property>
       </widget>
      </item>
      <item>
-      <widget class="QWidget" name="signal_ch3" native="true">
-       <property name="styleSheet">
-        <string notr="true">background-color: rgb(255, 255, 255);</string>
-       </property>
-      </widget>
-     </item>
-     <item>
-      <widget class="QLabel" name="label">
-       <property name="maximumSize">
-        <size>
-         <width>16777215</width>
-         <height>10</height>
-        </size>
-       </property>
+      <widget class="QPushButton" name="slow_btn_ch3_2">
        <property name="text">
-        <string>channel2</string>
+        <string/>
+       </property>
+       <property name="icon">
+        <iconset resource="imgs.qrc">
+         <normaloff>:/imgs/imgs/slow_down.png</normaloff>:/imgs/imgs/slow_down.png</iconset>
+       </property>
+       <property name="flat">
+        <bool>true</bool>
        </property>
       </widget>
      </item>
      <item>
-      <widget class="QWidget" name="signal_ch3_2" native="true">
-       <property name="styleSheet">
-        <string notr="true">background-color: rgb(255, 255, 255);</string>
-       </property>
-      </widget>
-     </item>
-     <item>
-      <widget class="QLabel" name="label_7">
-       <property name="maximumSize">
-        <size>
-         <width>16777215</width>
-         <height>10</height>
-        </size>
-       </property>
+      <widget class="QPushButton" name="zoom_out_btn_ch3_2">
        <property name="text">
-        <string>channel3</string>
+        <string/>
+       </property>
+       <property name="icon">
+        <iconset resource="imgs.qrc">
+         <normaloff>:/imgs/imgs/aoom_out.png</normaloff>:/imgs/imgs/aoom_out.png</iconset>
+       </property>
+       <property name="flat">
+        <bool>true</bool>
        </property>
       </widget>
      </item>
      <item>
-      <widget class="QWidget" name="signal_ch3_3" native="true">
-       <property name="styleSheet">
-        <string notr="true">background-color: rgb(255, 255, 255);</string>
+      <widget class="QPushButton" name="play_pause_btn_ch3_2">
+       <property name="text">
+        <string/>
+       </property>
+       <property name="icon">
+        <iconset resource="imgs.qrc">
+         <normaloff>:/imgs/imgs/play.png</normaloff>:/imgs/imgs/play.png</iconset>
+       </property>
+       <property name="flat">
+        <bool>true</bool>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QPushButton" name="zoom_in_btn_ch3_2">
+       <property name="text">
+        <string/>
+       </property>
+       <property name="icon">
+        <iconset resource="imgs.qrc">
+         <normaloff>:/imgs/imgs/zoom_in.png</normaloff>:/imgs/imgs/zoom_in.png</iconset>
+       </property>
+       <property name="flat">
+        <bool>true</bool>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QPushButton" name="speed_up_btn_ch3_2">
+       <property name="text">
+        <string/>
+       </property>
+       <property name="icon">
+        <iconset resource="imgs.qrc">
+         <normaloff>:/imgs/imgs/speed_up.png</normaloff>:/imgs/imgs/speed_up.png</iconset>
+       </property>
+       <property name="flat">
+        <bool>true</bool>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QPushButton" name="move_up_btn_ch3_2">
+       <property name="text">
+        <string/>
+       </property>
+       <property name="icon">
+        <iconset resource="imgs.qrc">
+         <normaloff>:/imgs/imgs/move_up.png</normaloff>:/imgs/imgs/move_up.png</iconset>
+       </property>
+       <property name="flat">
+        <bool>true</bool>
        </property>
       </widget>
      </item>
     </layout>
+   </widget>
+   <widget class="QWidget" name="layoutWidget_3">
+    <property name="geometry">
+     <rect>
+      <x>290</x>
+      <y>660</y>
+      <width>201</width>
+      <height>31</height>
+     </rect>
+    </property>
+    <layout class="QHBoxLayout" name="horizontalLayout_3">
+     <property name="spacing">
+      <number>0</number>
+     </property>
+     <property name="topMargin">
+      <number>0</number>
+     </property>
+     <property name="rightMargin">
+      <number>0</number>
+     </property>
+     <item>
+      <widget class="QPushButton" name="move_down_btn_ch3_4">
+       <property name="styleSheet">
+        <string notr="true"/>
+       </property>
+       <property name="text">
+        <string/>
+       </property>
+       <property name="icon">
+        <iconset resource="imgs.qrc">
+         <normaloff>:/imgs/imgs/move_down.png</normaloff>:/imgs/imgs/move_down.png</iconset>
+       </property>
+       <property name="flat">
+        <bool>true</bool>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QPushButton" name="slow_btn_ch3_4">
+       <property name="text">
+        <string/>
+       </property>
+       <property name="icon">
+        <iconset resource="imgs.qrc">
+         <normaloff>:/imgs/imgs/slow_down.png</normaloff>:/imgs/imgs/slow_down.png</iconset>
+       </property>
+       <property name="flat">
+        <bool>true</bool>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QPushButton" name="zoom_out_btn_ch3_4">
+       <property name="text">
+        <string/>
+       </property>
+       <property name="icon">
+        <iconset resource="imgs.qrc">
+         <normaloff>:/imgs/imgs/aoom_out.png</normaloff>:/imgs/imgs/aoom_out.png</iconset>
+       </property>
+       <property name="flat">
+        <bool>true</bool>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QPushButton" name="play_pause_btn_ch3_4">
+       <property name="text">
+        <string/>
+       </property>
+       <property name="icon">
+        <iconset resource="imgs.qrc">
+         <normaloff>:/imgs/imgs/play.png</normaloff>:/imgs/imgs/play.png</iconset>
+       </property>
+       <property name="flat">
+        <bool>true</bool>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QPushButton" name="zoom_in_btn_ch3_4">
+       <property name="text">
+        <string/>
+       </property>
+       <property name="icon">
+        <iconset resource="imgs.qrc">
+         <normaloff>:/imgs/imgs/zoom_in.png</normaloff>:/imgs/imgs/zoom_in.png</iconset>
+       </property>
+       <property name="flat">
+        <bool>true</bool>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QPushButton" name="speed_up_btn_ch3_4">
+       <property name="text">
+        <string/>
+       </property>
+       <property name="icon">
+        <iconset resource="imgs.qrc">
+         <normaloff>:/imgs/imgs/speed_up.png</normaloff>:/imgs/imgs/speed_up.png</iconset>
+       </property>
+       <property name="flat">
+        <bool>true</bool>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QPushButton" name="move_up_btn_ch3_4">
+       <property name="text">
+        <string/>
+       </property>
+       <property name="icon">
+        <iconset resource="imgs.qrc">
+         <normaloff>:/imgs/imgs/move_up.png</normaloff>:/imgs/imgs/move_up.png</iconset>
+       </property>
+       <property name="flat">
+        <bool>true</bool>
+       </property>
+      </widget>
+     </item>
+    </layout>
+   </widget>
+   <widget class="QLabel" name="label_2">
+    <property name="geometry">
+     <rect>
+      <x>10</x>
+      <y>310</y>
+      <width>81</width>
+      <height>31</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>graph 2</string>
+    </property>
+   </widget>
+   <widget class="QLabel" name="label_3">
+    <property name="geometry">
+     <rect>
+      <x>10</x>
+      <y>0</y>
+      <width>81</width>
+      <height>31</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>graph 1</string>
+    </property>
+   </widget>
+   <widget class="QWidget" name="signal_ch3_2" native="true">
+    <property name="geometry">
+     <rect>
+      <x>10</x>
+      <y>40</y>
+      <width>750</width>
+      <height>360</height>
+     </rect>
+    </property>
+    <property name="styleSheet">
+     <string notr="true">
+</string>
+    </property>
+   </widget>
+   <widget class="QWidget" name="signal_ch3_3" native="true">
+    <property name="enabled">
+     <bool>true</bool>
+    </property>
+    <property name="geometry">
+     <rect>
+      <x>10</x>
+      <y>350</y>
+      <width>750</width>
+      <height>300</height>
+     </rect>
+    </property>
+    <property name="styleSheet">
+     <string notr="true">
+</string>
+    </property>
    </widget>
   </widget>
   <widget class="QMenuBar" name="menubar">
@@ -1557,7 +1420,7 @@
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>1233</width>
+     <width>1218</width>
      <height>26</height>
     </rect>
    </property>
