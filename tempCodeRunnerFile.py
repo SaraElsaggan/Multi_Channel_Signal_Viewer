@@ -1,3 +1,2 @@
-
-        # self.ui.graph2.setGeometry(QtCore.QRect(10, 30, 750, 300))
-        # self.ui.graph2.setObjectName("Channel1")
+ 400)
+        self.graph2.setObjectName("Channel2")

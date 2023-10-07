@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>1218</width>
-    <height>754</height>
+    <width>1327</width>
+    <height>784</height>
    </rect>
   </property>
   <property name="focusPolicy">
@@ -27,11 +27,11 @@
      </rect>
     </property>
     <property name="currentIndex">
-     <number>0</number>
+     <number>1</number>
     </property>
     <widget class="QWidget" name="tab">
      <attribute name="title">
-      <string>channel 1</string>
+      <string>graph 1</string>
      </attribute>
      <widget class="QTabWidget" name="tabWidget_3">
       <property name="geometry">
@@ -43,7 +43,7 @@
        </rect>
       </property>
       <property name="currentIndex">
-       <number>0</number>
+       <number>1</number>
       </property>
       <widget class="QWidget" name="tab_11">
        <attribute name="title">
@@ -325,7 +325,7 @@
     </widget>
     <widget class="QWidget" name="tab_2">
      <attribute name="title">
-      <string>channel 2</string>
+      <string>graph 2</string>
      </attribute>
      <widget class="QTabWidget" name="tabWidget_4">
       <property name="geometry">
@@ -611,302 +611,14 @@
       </widget>
      </widget>
     </widget>
-    <widget class="QWidget" name="tab_5">
-     <attribute name="title">
-      <string>channel 3</string>
-     </attribute>
-     <widget class="QTabWidget" name="tabWidget_5">
-      <property name="geometry">
-       <rect>
-        <x>0</x>
-        <y>0</y>
-        <width>431</width>
-        <height>231</height>
-       </rect>
-      </property>
-      <property name="currentIndex">
-       <number>0</number>
-      </property>
-      <widget class="QWidget" name="tab_15">
-       <attribute name="title">
-        <string>signal 1</string>
-       </attribute>
-       <widget class="QWidget" name="formLayoutWidget_9">
-        <property name="geometry">
-         <rect>
-          <x>0</x>
-          <y>0</y>
-          <width>342</width>
-          <height>183</height>
-         </rect>
-        </property>
-        <layout class="QFormLayout" name="formLayout_10">
-         <property name="leftMargin">
-          <number>6</number>
-         </property>
-         <property name="topMargin">
-          <number>6</number>
-         </property>
-         <property name="rightMargin">
-          <number>6</number>
-         </property>
-         <property name="bottomMargin">
-          <number>6</number>
-         </property>
-         <item row="0" column="0">
-          <widget class="QLabel" name="label_61">
-           <property name="text">
-            <string>signal color</string>
-           </property>
-          </widget>
-         </item>
-         <item row="0" column="1">
-          <widget class="QPushButton" name="pushButton_55">
-           <property name="text">
-            <string>choose color</string>
-           </property>
-          </widget>
-         </item>
-         <item row="1" column="0">
-          <widget class="QLabel" name="label_62">
-           <property name="text">
-            <string>signal speed</string>
-           </property>
-          </widget>
-         </item>
-         <item row="1" column="1">
-          <layout class="QHBoxLayout" name="horizontalLayout_16">
-           <item>
-            <widget class="QPushButton" name="pushButton_56">
-             <property name="text">
-              <string>slow down</string>
-             </property>
-            </widget>
-           </item>
-           <item>
-            <widget class="QPushButton" name="pushButton_57">
-             <property name="text">
-              <string>reset</string>
-             </property>
-            </widget>
-           </item>
-           <item>
-            <widget class="QPushButton" name="pushButton_58">
-             <property name="text">
-              <string>speed up</string>
-             </property>
-            </widget>
-           </item>
-          </layout>
-         </item>
-         <item row="2" column="0">
-          <widget class="QLabel" name="label_63">
-           <property name="text">
-            <string>rename</string>
-           </property>
-          </widget>
-         </item>
-         <item row="3" column="0">
-          <widget class="QLabel" name="label_64">
-           <property name="text">
-            <string>add signal wave</string>
-           </property>
-          </widget>
-         </item>
-         <item row="3" column="1">
-          <widget class="QPushButton" name="pushButton_59">
-           <property name="text">
-            <string>open file</string>
-           </property>
-          </widget>
-         </item>
-         <item row="4" column="0">
-          <widget class="QLabel" name="label_65">
-           <property name="text">
-            <string>signal display</string>
-           </property>
-          </widget>
-         </item>
-         <item row="4" column="1">
-          <widget class="QPushButton" name="pushButton_60">
-           <property name="text">
-            <string>choose signals</string>
-           </property>
-          </widget>
-         </item>
-         <item row="2" column="1">
-          <widget class="QLineEdit" name="lineEdit_10">
-           <property name="text">
-            <string/>
-           </property>
-          </widget>
-         </item>
-         <item row="5" column="1">
-          <layout class="QHBoxLayout" name="horizontalLayout_21">
-           <item>
-            <widget class="QCheckBox" name="checkBox_13">
-             <property name="text">
-              <string>show</string>
-             </property>
-            </widget>
-           </item>
-           <item>
-            <widget class="QCheckBox" name="checkBox_14">
-             <property name="text">
-              <string>hide</string>
-             </property>
-            </widget>
-           </item>
-          </layout>
-         </item>
-        </layout>
-       </widget>
-      </widget>
-      <widget class="QWidget" name="tab_16">
-       <attribute name="title">
-        <string>signal 2</string>
-       </attribute>
-       <widget class="QWidget" name="formLayoutWidget_10">
-        <property name="geometry">
-         <rect>
-          <x>0</x>
-          <y>0</y>
-          <width>342</width>
-          <height>183</height>
-         </rect>
-        </property>
-        <layout class="QFormLayout" name="formLayout_11">
-         <property name="leftMargin">
-          <number>6</number>
-         </property>
-         <property name="topMargin">
-          <number>6</number>
-         </property>
-         <property name="rightMargin">
-          <number>6</number>
-         </property>
-         <property name="bottomMargin">
-          <number>6</number>
-         </property>
-         <item row="0" column="0">
-          <widget class="QLabel" name="label_66">
-           <property name="text">
-            <string>signal color</string>
-           </property>
-          </widget>
-         </item>
-         <item row="0" column="1">
-          <widget class="QPushButton" name="pushButton_61">
-           <property name="text">
-            <string>choose color</string>
-           </property>
-          </widget>
-         </item>
-         <item row="1" column="0">
-          <widget class="QLabel" name="label_67">
-           <property name="text">
-            <string>signal speed</string>
-           </property>
-          </widget>
-         </item>
-         <item row="1" column="1">
-          <layout class="QHBoxLayout" name="horizontalLayout_17">
-           <item>
-            <widget class="QPushButton" name="pushButton_62">
-             <property name="text">
-              <string>slow down</string>
-             </property>
-            </widget>
-           </item>
-           <item>
-            <widget class="QPushButton" name="pushButton_63">
-             <property name="text">
-              <string>reset</string>
-             </property>
-            </widget>
-           </item>
-           <item>
-            <widget class="QPushButton" name="pushButton_64">
-             <property name="text">
-              <string>speed up</string>
-             </property>
-            </widget>
-           </item>
-          </layout>
-         </item>
-         <item row="2" column="0">
-          <widget class="QLabel" name="label_68">
-           <property name="text">
-            <string>rename</string>
-           </property>
-          </widget>
-         </item>
-         <item row="3" column="0">
-          <widget class="QLabel" name="label_69">
-           <property name="text">
-            <string>add signal wave</string>
-           </property>
-          </widget>
-         </item>
-         <item row="3" column="1">
-          <widget class="QPushButton" name="pushButton_65">
-           <property name="text">
-            <string>open file</string>
-           </property>
-          </widget>
-         </item>
-         <item row="4" column="0">
-          <widget class="QLabel" name="label_70">
-           <property name="text">
-            <string>signal display</string>
-           </property>
-          </widget>
-         </item>
-         <item row="4" column="1">
-          <widget class="QPushButton" name="pushButton_66">
-           <property name="text">
-            <string>choose signals</string>
-           </property>
-          </widget>
-         </item>
-         <item row="2" column="1">
-          <widget class="QLineEdit" name="lineEdit_11">
-           <property name="text">
-            <string/>
-           </property>
-          </widget>
-         </item>
-         <item row="5" column="1">
-          <layout class="QHBoxLayout" name="horizontalLayout_20">
-           <item>
-            <widget class="QCheckBox" name="checkBox_11">
-             <property name="text">
-              <string>show</string>
-             </property>
-            </widget>
-           </item>
-           <item>
-            <widget class="QCheckBox" name="checkBox_12">
-             <property name="text">
-              <string>hide</string>
-             </property>
-            </widget>
-           </item>
-          </layout>
-         </item>
-        </layout>
-       </widget>
-      </widget>
-     </widget>
-    </widget>
    </widget>
    <widget class="QTabWidget" name="tabWidget_2">
     <property name="geometry">
      <rect>
       <x>820</x>
       <y>30</y>
-      <width>391</width>
-      <height>211</height>
+      <width>481</width>
+      <height>261</height>
      </rect>
     </property>
     <property name="currentIndex">
@@ -914,15 +626,15 @@
     </property>
     <widget class="QWidget" name="tab_9">
      <attribute name="title">
-      <string>channel1</string>
+      <string>graph 1</string>
      </attribute>
      <widget class="QTableWidget" name="tableWidget">
       <property name="geometry">
        <rect>
         <x>0</x>
         <y>0</y>
-        <width>381</width>
-        <height>181</height>
+        <width>471</width>
+        <height>231</height>
        </rect>
       </property>
       <property name="styleSheet">
@@ -972,15 +684,15 @@
     </widget>
     <widget class="QWidget" name="tab_17">
      <attribute name="title">
-      <string>channel 2</string>
+      <string>graph2</string>
      </attribute>
      <widget class="QTableWidget" name="tableWidget_2">
       <property name="geometry">
        <rect>
         <x>0</x>
         <y>0</y>
-        <width>381</width>
-        <height>181</height>
+        <width>461</width>
+        <height>231</height>
        </rect>
       </property>
       <property name="styleSheet">
@@ -1003,65 +715,7 @@
       </row>
       <row>
        <property name="text">
-        <string>channel 3</string>
-       </property>
-      </row>
-      <row>
-       <property name="text">
-        <string>min</string>
-       </property>
-      </row>
-      <column>
-       <property name="text">
-        <string>signal 1</string>
-       </property>
-      </column>
-      <column>
-       <property name="text">
-        <string>signal 2</string>
-       </property>
-      </column>
-      <column>
-       <property name="text">
-        <string>signal 3</string>
-       </property>
-      </column>
-     </widget>
-    </widget>
-    <widget class="QWidget" name="tab_10">
-     <attribute name="title">
-      <string>channel 3</string>
-     </attribute>
-     <widget class="QTableWidget" name="tableWidget_3">
-      <property name="geometry">
-       <rect>
-        <x>0</x>
-        <y>0</y>
-        <width>381</width>
-        <height>181</height>
-       </rect>
-      </property>
-      <property name="styleSheet">
-       <string notr="true"/>
-      </property>
-      <row>
-       <property name="text">
-        <string>Mean</string>
-       </property>
-      </row>
-      <row>
-       <property name="text">
-        <string>std</string>
-       </property>
-      </row>
-      <row>
-       <property name="text">
-        <string>max</string>
-       </property>
-      </row>
-      <row>
-       <property name="text">
-        <string>channel 3</string>
+        <string>duration</string>
        </property>
       </row>
       <row>
@@ -1113,25 +767,55 @@
      <string>properties</string>
     </property>
    </widget>
-   <widget class="QWidget" name="layoutWidget_2">
+   <widget class="QLabel" name="label_3">
     <property name="geometry">
      <rect>
-      <x>290</x>
-      <y>300</y>
-      <width>201</width>
+      <x>10</x>
+      <y>0</y>
+      <width>81</width>
       <height>31</height>
      </rect>
     </property>
+    <property name="text">
+     <string>graph 1</string>
+    </property>
+   </widget>
+   <widget class="QLabel" name="label_4">
+    <property name="geometry">
+     <rect>
+      <x>10</x>
+      <y>360</y>
+      <width>81</width>
+      <height>31</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>graph 2</string>
+    </property>
+   </widget>
+   <widget class="QPushButton" name="pushButton">
+    <property name="geometry">
+     <rect>
+      <x>960</x>
+      <y>630</y>
+      <width>151</width>
+      <height>61</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>link graphs</string>
+    </property>
+   </widget>
+   <widget class="QWidget" name="">
+    <property name="geometry">
+     <rect>
+      <x>280</x>
+      <y>340</y>
+      <width>234</width>
+      <height>26</height>
+     </rect>
+    </property>
     <layout class="QHBoxLayout" name="horizontalLayout">
-     <property name="spacing">
-      <number>0</number>
-     </property>
-     <property name="topMargin">
-      <number>0</number>
-     </property>
-     <property name="rightMargin">
-      <number>0</number>
-     </property>
      <item>
       <widget class="QPushButton" name="move_down_btn_ch3_2">
        <property name="styleSheet">
@@ -1235,25 +919,16 @@
      </item>
     </layout>
    </widget>
-   <widget class="QWidget" name="layoutWidget_3">
+   <widget class="QWidget" name="">
     <property name="geometry">
      <rect>
-      <x>290</x>
-      <y>660</y>
-      <width>201</width>
-      <height>31</height>
+      <x>280</x>
+      <y>700</y>
+      <width>234</width>
+      <height>26</height>
      </rect>
     </property>
     <layout class="QHBoxLayout" name="horizontalLayout_3">
-     <property name="spacing">
-      <number>0</number>
-     </property>
-     <property name="topMargin">
-      <number>0</number>
-     </property>
-     <property name="rightMargin">
-      <number>0</number>
-     </property>
      <item>
       <widget class="QPushButton" name="move_down_btn_ch3_4">
        <property name="styleSheet">
@@ -1357,70 +1032,13 @@
      </item>
     </layout>
    </widget>
-   <widget class="QLabel" name="label_2">
-    <property name="geometry">
-     <rect>
-      <x>10</x>
-      <y>310</y>
-      <width>81</width>
-      <height>31</height>
-     </rect>
-    </property>
-    <property name="text">
-     <string>graph 2</string>
-    </property>
-   </widget>
-   <widget class="QLabel" name="label_3">
-    <property name="geometry">
-     <rect>
-      <x>10</x>
-      <y>0</y>
-      <width>81</width>
-      <height>31</height>
-     </rect>
-    </property>
-    <property name="text">
-     <string>graph 1</string>
-    </property>
-   </widget>
-   <widget class="QWidget" name="signal_ch3_2" native="true">
-    <property name="geometry">
-     <rect>
-      <x>10</x>
-      <y>40</y>
-      <width>750</width>
-      <height>360</height>
-     </rect>
-    </property>
-    <property name="styleSheet">
-     <string notr="true">
-</string>
-    </property>
-   </widget>
-   <widget class="QWidget" name="signal_ch3_3" native="true">
-    <property name="enabled">
-     <bool>true</bool>
-    </property>
-    <property name="geometry">
-     <rect>
-      <x>10</x>
-      <y>350</y>
-      <width>750</width>
-      <height>300</height>
-     </rect>
-    </property>
-    <property name="styleSheet">
-     <string notr="true">
-</string>
-    </property>
-   </widget>
   </widget>
   <widget class="QMenuBar" name="menubar">
    <property name="geometry">
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>1218</width>
+     <width>1327</width>
      <height>26</height>
     </rect>
    </property>

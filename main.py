@@ -14,7 +14,7 @@ from matplotlib.animation import FuncAnimation
 from pyqtgraph import PlotWidget
 from PyQt5.QtWidgets import QApplication, QMainWindow, QVBoxLayout, QWidget , QDesktopWidget , QFileDialog
 from PyQt5.QtCore import QStateMachine, QState, QPropertyAnimation
-
+import pyqtgraph as pg
 # from PyQt5 import QtWidgets, QtCore,QtGui,uic
 # from pyqtgraph import PlotWidget, plot
 # from mainwindow import Ui_MainWindow
@@ -45,13 +45,21 @@ class MyWindow(QMainWindow):  #this means is we're gonna take all of the propert
         
         self.ui.actionchannel_1.triggered.connect(self.open_file)
 
-        self.graph1 = PlotWidget(self.ui.signal_ch3_2)
-        self.graph1.setGeometry(QtCore.QRect(10, 40, 750, 300))
+        self.graph1 = PlotWidget(self.ui.centralwidget)
+        self.graph1.setGeometry(10, 40, 750, 300)
         self.graph1.setObjectName("Channel1")
-
-        self.graph2 = PlotWidget(self.ui.signal_ch3_3)
-        self.graph2.setGeometry(QtCore.QRect(10, 350, 750, 300))
-        self.graph2.setObjectName("Channel2")
+        
+        self.graph1 = PlotWidget(self.ui.centralwidget)
+        self.graph1.setGeometry(10, 400, 750, 300)
+        self.graph1.setObjectName("Channel2")
+        
+        # self.signal_ch3_3 = pg.GraphicsLayoutWidget(self.ui.centralwidget)
+        # self.signal_ch3_3.setGeometry(QtCore.QRect(20, 390, 750, 300))
+        # self.signal_ch3_3.setObjectName("signal_ch3_3")
+        # # self.graph1 = self.signal_ch3_2.addPlot()
+        # self.graph2 = PlotWidget(self.signal_ch3_3)
+        # # self.graph2.setGeometry(10, 350, 750, 400)
+        # # self.graph2.setObjectName("Channel2")
 
 
 
@@ -107,13 +115,13 @@ class MyWindow(QMainWindow):  #this means is we're gonna take all of the propert
         if file:
             print(f"Selected file: {file}")
 
-def toggle_play_pause(self):
-        if self.machine.configuration() == [self.play_state]:
-            self.machine.postEvent(QStateMachine.SignalEvent(self.play_pause_button.clicked))
-            self.play_animation.start()
-        else:
-            self.machine.postEvent(QStateMachine.SignalEvent(self.play_pause_button.clicked))
-            self.pause_animation.start()
+# def toggle_play_pause(self):
+#         if self.machine.configuration() == [self.play_state]:
+#             self.machine.postEvent(QStateMachine.SignalEvent(self.play_pause_button.clicked))
+#             self.play_animation.start()
+#         else:
+#             self.machine.postEvent(QStateMachine.SignalEvent(self.play_pause_button.clicked))
+#             self.pause_animation.start()
 
 
 
