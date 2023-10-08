@@ -15,6 +15,7 @@ from pyqtgraph import PlotWidget
 from PyQt5.QtWidgets import QApplication, QMainWindow, QVBoxLayout, QWidget , QDesktopWidget , QFileDialog
 from PyQt5.QtCore import QStateMachine, QState, QPropertyAnimation
 import pyqtgraph as pg
+import pandas as pd
 # from PyQt5 import QtWidgets, QtCore,QtGui,uic
 # from pyqtgraph import PlotWidget, plot
 # from mainwindow import Ui_MainWindow
@@ -44,13 +45,20 @@ class MyWindow(QMainWindow):  #this means is we're gonna take all of the propert
         self.ui.setupUi(self)
         
         self.ui.actionchannel_1.triggered.connect(self.open_file)
+        
+        
+        # self.ui.tab_12 = 
+        # self.ui.tab_12.
+
+        
+        self.selectid_file = None
 
         self.graph1 = PlotWidget(self.ui.centralwidget)
-        self.graph1.setGeometry(10, 40, 750, 300)
+        self.graph1.setGeometry(10, 10, 750, 300)
         self.graph1.setObjectName("Channel1")
         
         self.graph1 = PlotWidget(self.ui.centralwidget)
-        self.graph1.setGeometry(10, 400, 750, 300)
+        self.graph1.setGeometry(10, 349, 750, 300)
         self.graph1.setObjectName("Channel2")
         
         # self.signal_ch3_3 = pg.GraphicsLayoutWidget(self.ui.centralwidget)
@@ -71,9 +79,52 @@ class MyWindow(QMainWindow):  #this means is we're gonna take all of the propert
 
 
     def open_file(self):
-        file =QFileDialog.getOpenFileName(self,"QFileDialog.getOpenFileName()", "","(*.csv) ")
+        file = QFileDialog.getOpenFileName(self,"QFileDialog.getOpenFileName()", "","(*.csv) ")
         if file :
             print(f"selected file :{file}")
+            # self.selectid_file = file
+            # signal = pd.read_csv(file)
+            # file = file[0]
+            # print (signal.head())
+    
+    
+    def zoom_in(self):
+        pass
+
+    def out(self):
+        pass
+    
+    def choose_signal_color(self):
+        pass
+
+    def play(self):
+        pass
+    
+    def pause():
+        pass
+    
+    def faster(self):
+        pass
+    
+    def slower(self):
+        pass
+    
+    def move_up(self):
+        pass
+    
+    def move_down(self):
+        pass
+    
+    def add_signal_tab_to_data_window(self):
+        pass
+    
+    def add_signal_row_to_prop_window(self):
+        pass
+    
+    
+    def link_graphs(self):
+        pass
+    
     
     # def channel1 (self,data):
     #     self.ui.signal_ch3.setBackground('w')
