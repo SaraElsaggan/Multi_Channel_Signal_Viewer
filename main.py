@@ -1,102 +1,172 @@
-#IMPORTS
-#--------------------------
+import os
+import re
+import time#IMPORTS
+import csv
 import sys
-from PyQt5.QtWidgets import QApplication, QMainWindow, QVBoxLayout, QWidget , QDesktopWidget , QFileDialog
+from PyQt5.QtWidgets import QApplication, QMainWindow, QVBoxLayout, QWidget, QDesktopWidget, QFileDialog, QTableWidgetItem , QComboBox
 from PyQt5.QtGui import QIcon 
-import matplotlib.pyplot as plt
-from PyQt5.QtCore import QTimer
+from PyQt5.QtCore import QEvent, QObject, QTimer, Qt
 from PyQt5 import QtCore
 import numpy as np
-from matplotlib.backends.backend_qt5agg import FigureCanvasQTAgg as FigureCanvas
 from mainwindow import Ui_MainWindow
-
-from matplotlib.animation import FuncAnimation
+from tkinter import *
+from tkinter import colorchooser
 from pyqtgraph import PlotWidget
 from PyQt5.QtWidgets import QApplication, QMainWindow, QVBoxLayout, QWidget , QDesktopWidget , QFileDialog
 from PyQt5.QtCore import QStateMachine, QState, QPropertyAnimation
 import pyqtgraph as pg
 import pandas as pd
-# from PyQt5 import QtWidgets, QtCore,QtGui,uic
-# from pyqtgraph import PlotWidget, plot
-# from mainwindow import Ui_MainWindow
-# import matplotlib.pyplot as plot
-# from random import randint
-# from threading import Timer
-# from scipy import signal
-# import pyqtgraph as pg
-# import pandas as pd
-# import numpy as np 
-# import pathlib 
-# import sys  # We need sys so that we can pass argv to QApplication
-# import os
-# import csv
-# import pyautogui
-# from PIL import Image
 
-
-
-
-
-
-class MyWindow(QMainWindow):  #this means is we're gonna take all of the properties that cue main window has and we're gonna use them in my window
-    def __init__(self):
+class MyWindow(QMainWindow):  
+    def __init__(self ):
         super(MyWindow , self).__init__()
         self.ui = Ui_MainWindow()
-        self.ui.setupUi(self)
+        self.ui.setupUi(self)      
         
-        self.ui.actionchannel_1.triggered.connect(self.open_file)
-        
-        
-        # self.ui.tab_12 = 
-        # self.ui.tab_12.
+        self.data_1 = {}
+        self.data_line_1 = {}
 
+        self.data_2 = {}
+        self.data_line_2 = {}
+        
+        self.graph_1_signals = []
+
+        self.ui.act_add_sig_viewer_1.triggered.connect(self.open_file_1)
+        self.ui.act_add_sig_viewer_2.triggered.connect(self.open_file_2)
         
         self.selectid_file = None
 
+        self.index_1 = 50
+        self.index_2 = 50
+
+        self.pen = pg.mkPen(color=(255, 0, 0))
+        
+        
+        self.signals_grph_1 = []
+
         self.graph1 = PlotWidget(self.ui.centralwidget)
-        self.graph1.setGeometry(10, 10, 750, 300)
+        self.graph1.setGeometry(30, 50, 770, 300)
         self.graph1.setObjectName("Channel1")
+        self.graph1.setYRange(-2,2)
+
+        self.graph2 = PlotWidget(self.ui.centralwidget)
+        self.graph2.setGeometry(30, 410, 770, 300)
+        self.graph2.setObjectName("Channel2")
+        self.graph2.setYRange(-2,2)
         
-        self.graph1 = PlotWidget(self.ui.centralwidget)
-        self.graph1.setGeometry(10, 349, 750, 300)
-        self.graph1.setObjectName("Channel2")
+        self.ui.btn_zoom_in_viewer_1.clicked.connect(self.zoom_in_graph_1)
+        self.ui.btn_zoom_out_viewer_1.clicked.connect(self.zoom_out_graph_1)
         
-        # self.signal_ch3_3 = pg.GraphicsLayoutWidget(self.ui.centralwidget)
-        # self.signal_ch3_3.setGeometry(QtCore.QRect(20, 390, 750, 300))
-        # self.signal_ch3_3.setObjectName("signal_ch3_3")
-        # # self.graph1 = self.signal_ch3_2.addPlot()
-        # self.graph2 = PlotWidget(self.signal_ch3_3)
-        # # self.graph2.setGeometry(10, 350, 750, 400)
-        # # self.graph2.setObjectName("Channel2")
-
-
-
-        # self.ui.graph2 = PlotWidget(self.ui.graphicsView)
-        # self.ui.graph2.setGeometry(QtCore.QRect(10, 30, 750, 300))
-        # self.ui.graph2.setObjectName("Channel1")
+        self.ui.btn_zoom_in_grpbox_viewer_1.clicked.connect(self.zoom_in_graph_1)
+        self.ui.btn_zoom_out_grpbox_viewer_1.clicked.connect(self.zoom_out_graph_1)
         
-        # self.ui.play_pause_btn_ch3.clicked.connect(self.toggle_play_pause)
+        self.ui.btn_zoom_in_viewer_2.clicked.connect(self.zoom_in_graph_2)
+        self.ui.btn_zoom_out_viewer_2.clicked.connect(self.zoom_out_graph_2)
+        
+        self.ui.btn_zoom_in_grpbox_viewer_2.clicked.connect(self.zoom_in_graph_2)
+        self.ui.btn_zoom_out_grpbox_viewer_2.clicked.connect(self.zoom_out_graph_2)
+        
+        self.ui.btn_add_sig_viewer_1.clicked.connect(self.open_file_1)
+        self.ui.btn_add_sig_viewer_2.clicked.connect(self.open_file_2)
+        
+        self.ui.btn_chng_colr_grpbox_viewer_1.clicked.connect(self.chng_clor_grph_1)
+        
+    def open_file_1(self):
+            # Get file path
+        file_path = QFileDialog.getOpenFileName( self , "open file", "" ,"(*.csv) ")
 
+        # Open file and retrieve data
+        file = open(file_path[0])
+        lines = file.readlines()
 
-    def open_file(self):
-        file = QFileDialog.getOpenFileName(self,"QFileDialog.getOpenFileName()", "","(*.csv) ")
-        if file :
-            print(f"selected file :{file}")
-            # self.selectid_file = file
-            # signal = pd.read_csv(file)
-            # file = file[0]
-            # print (signal.head())
+        # file_name = file_path[0]
+        
+        ###################
+        file_name = os.path.basename(file_path[0][:-4])
+
+        print(f"({file_name})")
+
+        self.add_signal_to_combo_graph_1(file_name)
+        
+        
+        signal = {
+            "color" : "#FFFFFF" ,
+            "name" : file_name, 
+            "display" : True,
+            "speed" : None, 
+            "zoom" : None, 
+        }
+        
+        self.graph_1_signals.append(signal)
+        
+                
+        ###################
+        self.data_1[file_name] = {}
+        self.data_1[file_name]['x_values'] = np.array([x.split(",")[0] for x in lines],dtype=float)
+        self.data_1[file_name]['y_values'] = np.array([y.split(",")[1].strip("/\n") for y in lines],dtype=float)
+#------------------------------ i wanna return a color from the list ---------------------
+        self.data_line_1[file_name] = self.graph1.plot()
+        # self.data_line_1[file_name] = self.graph1.plot(pen = self.pen)
+       
+        self.timer_1 = QtCore.QTimer()
+        self.timer_1.setInterval(50)
+        self.timer_1.timeout.connect(self.update_plot_data_1)
+        self.timer_1.start()  
+
+    def update_plot_data_1(self):
+        for signal in self.data_line_1:
+            x_to_plot = self.data_1[signal]['x_values'][self.index_1 -50 :self.index_1]
+            y_to_plot = self.data_1[signal]['y_values'][self.index_1 -50 :self.index_1]
+            self.data_line_1[signal].setData(x_to_plot, y_to_plot)
+        self.index_1 += 1
+
+    def open_file_2(self):
+        # Get file path
+        file_path = QFileDialog.getOpenFileName( self , "open file", "" ,"(*.csv) ")
+
+        # Open file and retrieve data
+        file = open(file_path[0])
+        lines = file.readlines()
+
+        # file_name = file_path[0]
+        file_name = os.path.basename(file_path[0][:-4])
+
+        print(f"({file_name})")
+
+        self.add_signal_to_combo_graph_2(file_name)
+        
+        self.data_2[file_name] = {}
+        self.data_2[file_name]['x_values'] = np.array([x.split(",")[0] for x in lines],dtype=float)
+        self.data_2[file_name]['y_values'] = np.array([y.split(",")[1].strip("/\n") for y in lines],dtype=float)
+        self.data_line_2[file_name] = self.graph2.plot()    
+       
+        self.timer_2 = QtCore.QTimer()
+        self.timer_2.setInterval(50)
+        self.timer_2.timeout.connect(self.update_plot_data_2)
+        self.timer_2.start()  
+
+    def update_plot_data_2(self):
+        for signal in self.data_line_2:
+            x_to_plot = self.data_2[signal]['x_values'][self.index_2 -50 :self.index_2]
+            y_to_plot = self.data_2[signal]['y_values'][self.index_2 -50 :self.index_2]
+            self.data_line_2[signal].setData(x_to_plot, y_to_plot)
+        self.index_2 += 1
+     
+    def zoom_in_graph_1(self):
+        self.graph1.getViewBox().scaleBy((1 / 1.2, 1 / 1.2))
     
-    
-    def zoom_in(self):
-        pass
+    def zoom_out_graph_1(self):
+        self.graph1.getViewBox().scaleBy((1.2, 1.2))
 
-    def out(self):
-        pass
+    def zoom_in_graph_2(self):
+        self.graph2.getViewBox().scaleBy((1 / 1.2, 1 / 1.2))
     
-    def choose_signal_color(self):
-        pass
+    def zoom_out_graph_2(self):
+        self.graph2.getViewBox().scaleBy((1.2, 1.2))
 
+    def choose_signal_color_grph_1(self ):
+        self.pen= colorchooser.askcolor()[1]
+        
     def play(self):
         pass
     
@@ -104,9 +174,15 @@ class MyWindow(QMainWindow):  #this means is we're gonna take all of the propert
         pass
     
     def faster(self):
+        self.timer_1.setInterval(self.timer_1.interval() // 2)
+        self.timer_2.setInterval(self.timer_2.interval() // 2)
+
         pass
     
     def slower(self):
+        self.timer_1.setInterval(self.timer_1.interval() * 2)
+        self.timer_2.setInterval(self.timer_2.interval() * 2)
+
         pass
     
     def move_up(self):
@@ -115,65 +191,35 @@ class MyWindow(QMainWindow):  #this means is we're gonna take all of the propert
     def move_down(self):
         pass
     
-    def add_signal_tab_to_data_window(self):
-        pass
+    def add_signal_to_combo_graph_1(self , file_name):
+        self.ui.comb_sig_colr_grpbox_viewer_1.addItem(file_name)
+        self.ui.comb_rename_viewer_1.addItem(file_name)
+        self.ui.comb_sig_disp_viewer_1.addItem(file_name)
     
-    def add_signal_row_to_prop_window(self):
-        pass
-    
-    
+    def add_signal_to_combo_graph_2(self , file_name):
+        self.ui.comb_sig_colr_grpbox_viewer_2.addItem(file_name)
+        self.ui.comb_rename_viewer_2.addItem(file_name)
+        self.ui.comb_sig_disp_viewer_2.addItem(file_name)
+        
     def link_graphs(self):
         pass
     
+    def make_report(self):
+        pass
     
-    # def channel1 (self,data):
-    #     self.ui.signal_ch3.setBackground('w')
-    #     self.data_line1 =self.ui.signal_ch3.plot( self.x1,self.y1,pen=self.pen1)
-    #     self.ui.signal_ch3.plotItem.setLimits(xMin =0, xMax=12 , yMin =-0.6, yMax=0.6)
-    #     self.idx1=0
-    #     self.ui.signal_ch3.plotItem.getViewBox().setAutoPan(x=True,y=True)
-    #     self.timer1.setInterval(20)
-    #     self.timer1.timeout.connect(lambda:self.update_plot_data1(self.data_line1,data))
-    #     self.timer1.start()
-    #     self.ui.signal_ch3.show()
-    #     self.ui.signal_ch3.setXRange(0,0.002*len(data))
-    
-    # def read_data1(self,fname):
-    #     path = fname[0]
-    #     if fname[1] == "(*.csv)":
-    #        self.data1 = np.genfromtxt(path, delimiter = ' ')
-    #        self.x1= self.data1[: , 0]
-    #        self.y1 =self.data1[: , 1] 
-    #        self.x1= list(self.x1[:])
-    #        self.y1= list(self.y1[:])
-    #        self.channel1(self.data1)
-    
-            
-    # def load1(self):
-    #     options =  QFileDialog.Options()
-    #     fname = QFileDialog.getOpenFileName(self,"QFileDialog.getOpenFileName()", "",
-    #                     "(*.csv) ", options=options)
-
-    #     if(fname[0]!=''): 
-    #         self.read_data1(fname) 
-    #     else:
-    #         pass 
-    
-    def open_file(self):
+    def chng_clor_grph_1(self):
+        signal_txt = self.ui.comb_sig_colr_grpbox_viewer_1.currentText()
+        for signal in self.graph_1_signals:
+            if signal["name"] == signal_txt:
+                signal["color"] =  self.pen= colorchooser.askcolor()[1]
+                print(signal["color"])
+                self.update_plot_data_2()
         
-        file = QFileDialog.getOpenFileName( self , "open file", "" ,"(*.csv) ")
-
-        if file:
-            print(f"Selected file: {file}")
-
-# def toggle_play_pause(self):
-#         if self.machine.configuration() == [self.play_state]:
-#             self.machine.postEvent(QStateMachine.SignalEvent(self.play_pause_button.clicked))
-#             self.play_animation.start()
-#         else:
-#             self.machine.postEvent(QStateMachine.SignalEvent(self.play_pause_button.clicked))
-#             self.pause_animation.start()
-
+        
+        
+        
+    
+ 
 
 
 
