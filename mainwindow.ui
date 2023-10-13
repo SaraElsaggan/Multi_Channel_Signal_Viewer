@@ -60,13 +60,6 @@
        </widget>
       </item>
       <item>
-       <widget class="QPushButton" name="btn_rest_prop_viewer_1">
-        <property name="text">
-         <string>reset all properties</string>
-        </property>
-       </widget>
-      </item>
-      <item>
        <widget class="QPushButton" name="btn_clear_viewer_1">
         <property name="text">
          <string>clear graph</string>
@@ -182,9 +175,9 @@
          </widget>
         </item>
         <item>
-         <widget class="QPushButton" name="pushButton">
+         <widget class="QPushButton" name="btn_entr_name_viewer_1">
           <property name="text">
-           <string>save</string>
+           <string>enter name</string>
           </property>
          </widget>
         </item>
@@ -336,6 +329,310 @@
      <rect>
       <x>30</x>
       <y>50</y>
+      <width>770</width>
+      <height>300</height>
+     </rect>
+    </property>
+   </widget>
+   <widget class="QGroupBox" name="grp_bx_ctrls_viewer_2">
+    <property name="geometry">
+     <rect>
+      <x>830</x>
+      <y>430</y>
+      <width>401</width>
+      <height>211</height>
+     </rect>
+    </property>
+    <property name="title">
+     <string>Graph viewer 2</string>
+    </property>
+    <widget class="QWidget" name="layoutWidget_2">
+     <property name="geometry">
+      <rect>
+       <x>20</x>
+       <y>160</y>
+       <width>351</width>
+       <height>26</height>
+      </rect>
+     </property>
+     <layout class="QHBoxLayout" name="horz_btns_ctrl__viewer_2">
+      <item>
+       <widget class="QPushButton" name="btn_add_sig_viewer_2">
+        <property name="text">
+         <string>add signal</string>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="QPushButton" name="btn_clear_viewer_2">
+        <property name="text">
+         <string>clear graph</string>
+        </property>
+       </widget>
+      </item>
+     </layout>
+    </widget>
+    <widget class="QWidget" name="formLayoutWidget_6">
+     <property name="geometry">
+      <rect>
+       <x>20</x>
+       <y>20</y>
+       <width>359</width>
+       <height>131</height>
+      </rect>
+     </property>
+     <layout class="QFormLayout" name="form_ctrls_viewer_2">
+      <property name="leftMargin">
+       <number>6</number>
+      </property>
+      <property name="topMargin">
+       <number>6</number>
+      </property>
+      <property name="rightMargin">
+       <number>6</number>
+      </property>
+      <property name="bottomMargin">
+       <number>6</number>
+      </property>
+      <item row="0" column="0">
+       <widget class="QLabel" name="lbl_colr_viewer_2">
+        <property name="text">
+         <string>signal color</string>
+        </property>
+       </widget>
+      </item>
+      <item row="0" column="1">
+       <layout class="QHBoxLayout" name="horizontalLayout_3">
+        <item>
+         <widget class="QComboBox" name="comb_sig_colr_grpbox_viewer_2">
+          <item>
+           <property name="text">
+            <string>chose signal</string>
+           </property>
+          </item>
+         </widget>
+        </item>
+        <item>
+         <widget class="QPushButton" name="btn_chng_colr_grpbox_viewer_2">
+          <property name="text">
+           <string>change color</string>
+          </property>
+         </widget>
+        </item>
+       </layout>
+      </item>
+      <item row="1" column="0">
+       <widget class="QLabel" name="lbl_sig_speed_viewer_2">
+        <property name="text">
+         <string>signal speed</string>
+        </property>
+       </widget>
+      </item>
+      <item row="1" column="1">
+       <layout class="QHBoxLayout" name="horz_btns_speed_viewer_2">
+        <item>
+         <widget class="QPushButton" name="btn_slow_grpbox_viewer_2">
+          <property name="text">
+           <string>slow down</string>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <widget class="QPushButton" name="btn_reset_speed_grpbox_viewer_2">
+          <property name="text">
+           <string>reset</string>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <widget class="QPushButton" name="btn_fast_grpbox_viewer_2">
+          <property name="text">
+           <string>speed up</string>
+          </property>
+         </widget>
+        </item>
+       </layout>
+      </item>
+      <item row="2" column="0">
+       <widget class="QLabel" name="lbl_rename_viewer_2">
+        <property name="text">
+         <string>rename</string>
+        </property>
+       </widget>
+      </item>
+      <item row="3" column="0">
+       <widget class="QLabel" name="lbl_sig_disp_viewer_2">
+        <property name="text">
+         <string>signal display</string>
+        </property>
+       </widget>
+      </item>
+      <item row="2" column="1">
+       <layout class="QHBoxLayout" name="horizontalLayout_4">
+        <item>
+         <widget class="QComboBox" name="comb_rename_viewer_2">
+          <item>
+           <property name="text">
+            <string>choose signal</string>
+           </property>
+          </item>
+         </widget>
+        </item>
+        <item>
+         <widget class="QPushButton" name="btn_entr_name_viewer_2">
+          <property name="text">
+           <string>enter name</string>
+          </property>
+         </widget>
+        </item>
+       </layout>
+      </item>
+      <item row="3" column="1">
+       <widget class="QComboBox" name="comb_sig_disp_viewer_2">
+        <item>
+         <property name="text">
+          <string>choose signal</string>
+         </property>
+        </item>
+       </widget>
+      </item>
+     </layout>
+    </widget>
+   </widget>
+   <widget class="QWidget" name="layoutWidget_5">
+    <property name="geometry">
+     <rect>
+      <x>220</x>
+      <y>700</y>
+      <width>371</width>
+      <height>41</height>
+     </rect>
+    </property>
+    <layout class="QHBoxLayout" name="horz_playback_btns_viewer_2">
+     <property name="spacing">
+      <number>10</number>
+     </property>
+     <item>
+      <widget class="QPushButton" name="btn_srt_begin__viewer_2">
+       <property name="text">
+        <string/>
+       </property>
+       <property name="icon">
+        <iconset>
+         <normaloff>imgs/strt_frm_begin.png</normaloff>imgs/strt_frm_begin.png</iconset>
+       </property>
+       <property name="flat">
+        <bool>true</bool>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QPushButton" name="btn_slow_viewer_2">
+       <property name="text">
+        <string/>
+       </property>
+       <property name="icon">
+        <iconset resource="imgs.qrc">
+         <normaloff>:/imgs/imgs/slow_down.png</normaloff>:/imgs/imgs/slow_down.png</iconset>
+       </property>
+       <property name="flat">
+        <bool>true</bool>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QPushButton" name="btn_zoom_out_viewer_2">
+       <property name="text">
+        <string/>
+       </property>
+       <property name="icon">
+        <iconset resource="imgs.qrc">
+         <normaloff>:/imgs/imgs/aoom_out.png</normaloff>:/imgs/imgs/aoom_out.png</iconset>
+       </property>
+       <property name="flat">
+        <bool>true</bool>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QPushButton" name="btn_play_pasuse_viewer_2">
+       <property name="text">
+        <string/>
+       </property>
+       <property name="icon">
+        <iconset resource="imgs.qrc">
+         <normaloff>:/imgs/imgs/play.png</normaloff>:/imgs/imgs/play.png</iconset>
+       </property>
+       <property name="flat">
+        <bool>true</bool>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QPushButton" name="btn_zoom_in_viewer_2">
+       <property name="text">
+        <string/>
+       </property>
+       <property name="icon">
+        <iconset resource="imgs.qrc">
+         <normaloff>:/imgs/imgs/zoom_in.png</normaloff>:/imgs/imgs/zoom_in.png</iconset>
+       </property>
+       <property name="flat">
+        <bool>true</bool>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QPushButton" name="btn_fast_viewer_2">
+       <property name="text">
+        <string/>
+       </property>
+       <property name="icon">
+        <iconset resource="imgs.qrc">
+         <normaloff>:/imgs/imgs/speed_up.png</normaloff>:/imgs/imgs/speed_up.png</iconset>
+       </property>
+       <property name="flat">
+        <bool>true</bool>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QPushButton" name="btn_move_to_v2_viewer_2">
+       <property name="styleSheet">
+        <string notr="true"/>
+       </property>
+       <property name="text">
+        <string/>
+       </property>
+       <property name="icon">
+        <iconset resource="imgs.qrc">
+         <normaloff>:/imgs/imgs/move_down.png</normaloff>:/imgs/imgs/move_down.png</iconset>
+       </property>
+       <property name="flat">
+        <bool>true</bool>
+       </property>
+      </widget>
+     </item>
+    </layout>
+   </widget>
+   <widget class="QLabel" name="lbl_grph_viewer_2">
+    <property name="geometry">
+     <rect>
+      <x>10</x>
+      <y>360</y>
+      <width>91</width>
+      <height>31</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>graprh viewer 1</string>
+    </property>
+   </widget>
+   <widget class="QWidget" name="widget_2" native="true">
+    <property name="geometry">
+     <rect>
+      <x>30</x>
+      <y>400</y>
       <width>770</width>
       <height>300</height>
      </rect>

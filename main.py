@@ -67,27 +67,76 @@ class MyWindow(QMainWindow):
         self.ui.setupUi(self)  
         
         self.graph1 = PlotWidget(self.ui.centralwidget)
-        self.graph1.setGeometry(10, 10, 750, 300)
+        self.graph1.setGeometry(30, 50, 770, 300)
         self.graph1.setObjectName("Channel1")
         self.graph1.setYRange(-2,2)
         
-        self.timer = QtCore.QTimer()
-        self.timer.setInterval(100) 
-        
-        self.ui.btn_add_sig_viewer_1.clicked.connect(self.upload_data)   
-        # self.ui.btn_add_sig_viewer_1.clicked.connect(self.open_file_1)   
-        self.ui.btn_play_pasuse_viewer_1.clicked.connect(self.play_pause)
+        self.graph2 = PlotWidget(self.ui.centralwidget)
+        self.graph2.setGeometry(30, 400, 770, 300)
+        self.graph2.setObjectName("Channel1")
+        self.graph2.setYRange(-2,2)
 
-        self.ui.btn_zoom_in_viewer_1.clicked.connect(self.zoom_in)
-        self.ui.btn_zoom_out_viewer_1.clicked.connect(self.zoom_out)
+        self.timer_1 = QtCore.QTimer()
+        self.timer_1.setInterval(100) 
+
+        self.timer_2 = QtCore.QTimer()
+        self.timer_2.setInterval(100) 
+        
+
+        self.ui.btn_add_sig_viewer_1.clicked.connect(self.upload_data_grph_1)   
+        # self.ui.btn_add_sig_viewer_1.clicked.connect(self.open_file_1)   
+        self.ui.btn_play_pasuse_viewer_1.clicked.connect(self.play_pause_grph_1)
+
+        self.ui.btn_zoom_in_viewer_1.clicked.connect(self.zoom_in_grph_1)
+        self.ui.btn_zoom_out_viewer_1.clicked.connect(self.zoom_out_grph_1)
        
-        self.ui.btn_fast_viewer_1.clicked.connect(self.faster)
-        self.ui.btn_slow_viewer_1.clicked.connect(self.slower)
+        self.ui.btn_fast_viewer_1.clicked.connect(self.faster_grph_1)
+        self.ui.btn_slow_viewer_1.clicked.connect(self.slower_grph_1)
         
         self.ui.actionreport.triggered.connect(self.generate_report)
-        self.ui.btn_clear_viewer_1.clicked.connect(self.clear)
         
-        self.ui.btn_chng_colr_grpbox_viewer_1.clicked.connect(self.change_sig_color)
+        self.ui.btn_clear_viewer_1.clicked.connect(self.clear_grph_1)
+        
+        self.ui.btn_slow_grpbox_viewer_1.clicked.connect(self.slower_grph_1)
+        self.ui.btn_fast_grpbox_viewer_1.clicked.connect(self.faster_grph_1)
+        
+        self.ui.btn_chng_colr_grpbox_viewer_1.clicked.connect(self.change_sig_color_grph_1)
+        # self.ui.btn_entr_name_viewer_1.clicked.connect(self.signal_rename_grph_1)
+
+        
+
+        self.ui.btn_add_sig_viewer_2.clicked.connect(self.upload_data_grph_2)   
+        # self.ui.btn_add_sig_viewer_2.clicked.connect(self.open_file_1)   
+        self.ui.btn_play_pasuse_viewer_2.clicked.connect(self.play_pause_grph_2)
+
+        self.ui.btn_zoom_in_viewer_2.clicked.connect(self.zoom_in_grph_2)
+        self.ui.btn_zoom_out_viewer_2.clicked.connect(self.zoom_out_grph_2)
+       
+        self.ui.btn_fast_viewer_2.clicked.connect(self.faster_grph_2)
+        self.ui.btn_slow_viewer_2.clicked.connect(self.slower_grph_2)
+        
+        
+        self.ui.btn_clear_viewer_2.clicked.connect(self.clear_grph_2)
+        
+        self.ui.btn_chng_colr_grpbox_viewer_2.clicked.connect(self.change_sig_color_grph_2)
+        # self.ui.btn_entr_name_viewer_2.clicked.connect(self.signal_rename_grph_2)
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
         
         self.i_1 = 1
         self.flag_1 = False
@@ -110,9 +159,9 @@ class MyWindow(QMainWindow):
         self.signals =[]
 
 
-    def clear(self):
+    def clear_grph_1(self):
         self.graph1.clear()
-        self.timer.stop()
+        self.timer_1.stop()
         icon = QtGui.QPixmap("play.png")
         self.ui.btn_play_pasuse_viewer_1.setIcon(QtGui.QIcon(icon))
         self.signals.clear()
@@ -120,7 +169,7 @@ class MyWindow(QMainWindow):
         self.ui.comb_sig_colr_grpbox_viewer_1.clear()
         self.ui.comb_sig_disp_viewer_1.clear()
            
-    def upload_data(self):
+    def upload_data_grph_1(self):
         file_path  , _ = QFileDialog.getOpenFileName( self , "open file", "" ,"(*.csv) ")
         # print(file_path)
         # if file_path:
@@ -137,7 +186,7 @@ class MyWindow(QMainWindow):
 
         print(f"({file_name})")
 
-        self.add_signal_to_combo_graph(file_name)
+        self.add_signal_to_combo_grph_1(file_name)
         
         
         signal = {
@@ -161,14 +210,14 @@ class MyWindow(QMainWindow):
         # signal = [signal for signal in  self                                                  .signals if signal["name"] == file_name]
         # self.plot_signal([signal for signal in self.signals if signal["name"] == file_name])
         # self.plot_signal(file_name)
-        self.plot_signal(signal)
+        self.plot_signal_grph_1(signal)
         print(signal["color"])
         # print([signal["color"] for signal in self.signals if signal["name"] == file_name])
         
         # print(self.x1)
         # print(self.y1)
          
-    def plot_signal(self , signal ) :
+    def plot_signal_grph_1(self , signal ) :
     # def plot_signal(self , file_name ) :
     #     for i_signal in self.signals:
     #         if i_signal["name"] == file_name:
@@ -179,17 +228,17 @@ class MyWindow(QMainWindow):
         signal["data_indices"].append(0)
         signal["idx1"]=0
         self.graph1.plotItem.getViewBox().setAutoPan(x=True,y=True)
-        # self.timer.setInterval()
-        self.timer.timeout.connect(lambda:self.update_plot_data(signal))
-        # self.timer.timeout.connect(lambda:self.update_plot_data(file_name))
-        self.timer.start()
+        # self.timer_1.setInterval()
+        self.timer_1.timeout.connect(lambda:self.update_plot_data_grph_1(signal))
+        # self.timer_1.timeout.connect(lambda:self.update_plot_data(file_name))
+        self.timer_1.start()
         self.graph1.show()
         self.graph1.setXRange(0,0.002*len(signal["data"]))
 
         icon = QtGui.QPixmap("pause.png")
         self.ui.btn_play_pasuse_viewer_1.setIcon(QtGui.QIcon(icon))
        
-    def update_plot_data(self,signal):
+    def update_plot_data_grph_1(self,signal):
     # def update_plot_data(self,file_name):
 
         # for i_signal in self.signals:
@@ -207,39 +256,39 @@ class MyWindow(QMainWindow):
             self.graph1.plotItem.setXRange(max(x, default=0) - 0.5, max(x, default=0))
             signal["data_lines"][i].setData(x, y)
 
-    def play_pause(self):
-        if self.timer.isActive():
-            self.timer.stop()
+    def play_pause_grph_1(self):
+        if self.timer_1.isActive():
+            self.timer_1.stop()
             icon = QtGui.QPixmap("play.png")
             self.ui.btn_play_pasuse_viewer_1.setIcon(QtGui.QIcon(icon))
         else:
-            self.timer.start()
+            self.timer_1.start()
             icon = QtGui.QPixmap("pause.png")
             self.ui.btn_play_pasuse_viewer_1.setIcon(QtGui.QIcon(icon))
 
-    def add_signal_to_combo_graph(self , file_name):
+    def add_signal_to_combo_grph_1(self , file_name):
         self.ui.comb_sig_colr_grpbox_viewer_1.addItem(file_name)
         self.ui.comb_rename_viewer_1.addItem(file_name)
         self.ui.comb_sig_disp_viewer_1.addItem(file_name)
                 
-    def zoom_out(self):
+    def zoom_out_grph_1(self):
           # Increase the visible range 
          self.graph1.getViewBox().scaleBy((1.2, 1.2))
         #  self.graph2.getViewBox().scaleBy((1.2, 1.2))
 
-    def zoom_in(self):
+    def zoom_in_grph_1(self):
          # Decrease the visible range 
          self.graph1.getViewBox().scaleBy((1 / 1.2, 1 / 1.2))
         #  self.graph2.getViewBox().scaleBy((1 / 1.2, 1 / 1.2))
     
-    def faster(self):
+    def faster_grph_1(self):
          # Decrease the timer interval to make updates faster
-        self.timer.setInterval(self.timer.interval() // 2)
+        self.timer_1.setInterval(self.timer_1.interval() // 2)
         # self.timer_2.setInterval(self.timer_2.interval() // 2)
     
-    def slower(self):
+    def slower_grph_1(self):
          # Increase the timer interval to make updates slower
-         self.timer.setInterval(self.timer.interval() * 2)
+         self.timer_1.setInterval(self.timer_1.interval() * 2)
         #  self.timer_2.setInterval(self.timer_2.interval() * 2)
 
     def open_file_1(self):
@@ -279,15 +328,15 @@ class MyWindow(QMainWindow):
         }
         
         self.signals.append(signal)
-        self.add_signal_to_combo_graph(file_name)
+        self.add_signal_to_combo_grph_1(file_name)
         # print(self.signals)
 
 
 
         # self.timer_1 = QtCore.QTimer()
         # self.timer_1.setInterval(50)
-        self.timer.timeout.connect(self.update_plot_data_1)
-        self.timer.start()  
+        self.timer_1.timeout.connect(self.update_plot_data_1)
+        self.timer_1.start()  
 
     def update_plot_data_1(self):
         if(self.flag_1 == True):
@@ -308,48 +357,267 @@ class MyWindow(QMainWindow):
         
         self.graph1.setXRange(self.start ,self.end)
 
-    def export_to_pdf(self):
-        # Get a file path for saving the PDF
-        pdf_file_path, _ = QFileDialog.getSaveFileName(self, "Save PDF Report", "", "PDF Files (*.pdf)")
+    def change_sig_color_grph_1(self):
+        if self.ui.comb_sig_colr_grpbox_viewer_1.currentText() != "chose signal":
+            signal_to_be_changed = self.ui.comb_sig_colr_grpbox_viewer_1.currentText()
+            for signal in self.signals :
+                if signal["name"] == signal_to_be_changed:
+                    signal["color"] = colorchooser.askcolor()[1]
+            
+                    for data_line in signal["data_lines"]:
+                        data_line.setPen(signal["color"])   
+            
+            # # signal["color"] = colorchooser.askcolor()[1]
+            # print(signal_to_be_changed)
+            # print(signal["color"])
 
-        if pdf_file_path:
-            # Create a PDF document
-            doc = SimpleDocTemplate(pdf_file_path, pagesize=letter)
+    # def signal_rename_grph_1(self):
+    #     if self.ui.comb_sig_colr_grpbox_viewer_1.currentText() != "chose signal":
+    #         old_name = self.ui.comb_rename_viewer_1.currentText()
+    #         new_name = input("Enter a signal name: ")
+    #         for signal in self.signals :
+    #                 if signal["name"] == old_name:
+    #                     signal["name"] = new_name
+    #                     self.update_sig_name_in_combo(old_name , signal)
 
-            # Create story elements for the report content
-            styles = getSampleStyleSheet()
-            story = []
-            title = "Signal Data Report"
-            story.append(Paragraph(title, styles["Title"]))
-            story.append(Spacer(1, 12))
 
-            # Add content to the PDF report
-            for signal_name, signal_data in self.data_1.items():
-                signal_statistics = f"Statistics for Signal: {signal_name}"
-                story.append(Paragraph(signal_statistics, styles["Heading2"]))
 
-                # Calculate statistics (mean, std, max, min, duration) for the signal data
-                signal_values = signal_data['y_values']
-                # mean_value = mean(signal_values)
-                # std_deviation = stdev(signal_values)
-                max_value = max(signal_values)
-                min_value = min(signal_values)
-                duration = len(signal_values)  # Duration can be the length of the data
 
-                statistics_text = (
-                    # f"Mean: {mean_value:.2f}<br/>"
-                    # f"Standard Deviation (STD): {std_deviation:.2f}<br/>"
-                    f"Maximum Value: {max_value:.2f}<br/>"
-                    f"Minimum Value: {min_value:.2f}<br/>"
-                    f"Duration: {duration} data points"
-                )
 
-                story.append(Paragraph(statistics_text, styles["Normal"]))
-                story.append(Spacer(1, 12))
 
-            # Build the PDF document
-            doc.build(story)
+    def clear_grph_2(self):
+        self.graph1.clear()
+        self.timer_2.stop()
+        icon = QtGui.QPixmap("play.png")
+        self.ui.btn_play_pasuse_viewer_2.setIcon(QtGui.QIcon(icon))
+        self.signals.clear()
+        self.ui.comb_rename_viewer_2.clear()
+        self.ui.comb_sig_colr_grpbox_viewer_2.clear()
+        self.ui.comb_sig_disp_viewer_2.clear()
+           
+    def upload_data_grph_2(self):
+        file_path  , _ = QFileDialog.getOpenFileName( self , "open file", "" ,"(*.csv) ")
+        # print(file_path)
+        # if file_path:
 
+        color =  colorchooser.askcolor()[1]
+        print(color)
+
+        # self.data = pd.read_csv(file_path)
+        data = np.genfromtxt(file_path, delimiter = ',')
+        x1 = data[:, 0].tolist()
+        y1 = data[:, 1].tolist()
+        # print(x1)
+        file_name = os.path.basename(file_path[:-4])
+
+        print(f"({file_name})")
+
+        self.add_signal_to_combo_grph_2(file_name)
+        
+        
+        signal = {
+            "color" : color ,
+            "name" : file_name, 
+            "display" : True,
+            "data" : data,
+            "x1" : x1,
+            "y1" : y1,
+            "data_lines":[],
+            "data_indices":[], 
+            "idx1" : None
+        }
+        
+        # print(signal["x1"])
+        self.signals.append(signal)
+        # print(self.signals)
+        for i_signal in self.signals:
+            if i_signal["name"] == file_name:
+                signal = i_signal
+        # signal = [signal for signal in  self                                                  .signals if signal["name"] == file_name]
+        # self.plot_signal([signal for signal in self.signals if signal["name"] == file_name])
+        # self.plot_signal(file_name)
+        self.plot_signal_grph_2(signal)
+        print(signal["color"])
+        # print([signal["color"] for signal in self.signals if signal["name"] == file_name])
+        
+        # print(self.x1)
+        # print(self.y1)
+         
+    def plot_signal_grph_2(self , signal ) :
+    # def plot_signal(self , file_name ) :
+    #     for i_signal in self.signals:
+    #         if i_signal["name"] == file_name:
+    #             signal = i_signal
+        data_line = self.graph2.plotItem.plot(signal["x1"], signal["y1"], pen=signal["color"])
+        # print(f'here{signal["color"]}')
+        signal["data_lines"].append(data_line)
+        signal["data_indices"].append(0)
+        signal["idx1"]=0
+        self.graph2.plotItem.getViewBox().setAutoPan(x=True,y=True)
+        # self.timer_2.setInterval()
+        self.timer_2.timeout.connect(lambda:self.update_plot_data_grph_2(signal))
+        # self.timer_2.timeout.connect(lambda:self.update_plot_data(file_name))
+        self.timer_2.start()
+        self.graph2.show()
+        self.graph2.setXRange(0,0.002*len(signal["data"]))
+
+        icon = QtGui.QPixmap("pause.png")
+        self.ui.btn_play_pasuse_viewer_2.setIcon(QtGui.QIcon(icon))
+       
+    def update_plot_data_grph_2(self,signal):
+    # def update_plot_data(self,file_name):
+
+        # for i_signal in self.signals:
+        #     if i_signal["name"] == file_name:
+        #         signal = i_signal
+                
+        for i in range(len(signal["data_lines"])):
+            x = signal["x1"][:signal["data_indices"][i]]
+            y = signal["y1"][:signal["data_indices"][i]]
+            signal["data_indices"][i] += 10  # Update the index for this signal
+            if signal["data_indices"][i] > len(signal["x1"]):
+                signal["data_indices"][i] = 0  # Reset the index for this signal
+            if signal["x1"][signal["data_indices"][i]] > 0.5:
+                self.graph2.setLimits(xMin=min(x, default=0), xMax=max(x, default=0))  # Disable panning over x-limits
+            self.graph2.plotItem.setXRange(max(x, default=0) - 0.5, max(x, default=0))
+            signal["data_lines"][i].setData(x, y)
+
+    def play_pause_grph_2(self):
+        if self.timer_2.isActive():
+            self.timer_2.stop()
+            icon = QtGui.QPixmap("play.png")
+            self.ui.btn_play_pasuse_viewer_2.setIcon(QtGui.QIcon(icon))
+        else:
+            self.timer_2.start()
+            icon = QtGui.QPixmap("pause.png")
+            self.ui.btn_play_pasuse_viewer_2.setIcon(QtGui.QIcon(icon))
+
+    def add_signal_to_combo_grph_2(self , file_name):
+        self.ui.comb_sig_colr_grpbox_viewer_2.addItem(file_name)
+        self.ui.comb_rename_viewer_2.addItem(file_name)
+        self.ui.comb_sig_disp_viewer_2.addItem(file_name)
+                
+    def zoom_out_grph_2(self):
+          # Increase the visible range 
+         self.graph2.getViewBox().scaleBy((1.2, 1.2))
+        #  self.graph2.getViewBox().scaleBy((1.2, 1.2))
+
+    def zoom_in_grph_2(self):
+         # Decrease the visible range 
+         self.graph2.getViewBox().scaleBy((1 / 1.2, 1 / 1.2))
+        #  self.graph2.getViewBox().scaleBy((1 / 1.2, 1 / 1.2))
+    
+    def faster_grph_2(self):
+         # Decrease the timer interval to make updates faster
+        self.timer_2.setInterval(self.timer_2.interval() // 2)
+        # self.timer_2.setInterval(self.timer_2.interval() // 2)
+    
+    def slower_grph_2(self):
+         # Increase the timer interval to make updates slower
+         self.timer_2.setInterval(self.timer_2.interval() * 2)
+        #  self.timer_2.setInterval(self.timer_2.interval() * 2)
+
+    def open_file_2(self):
+        # Get file path
+        file_path = QFileDialog.getOpenFileName( self , "open file", "" ,"(*.csv) ")
+
+        # Open file and retrieve data
+        file = open(file_path[0])
+        lines = file.readlines()
+
+
+        file_name = file_path[0].split("/")[-1][:-4]
+        print(file_name)
+        self.data_2[file_name] = {}
+        self.data_2[file_name]['x_values'] = np.array([x.split(",")[0] for x in lines],dtype=float)
+        self.data_2[file_name]['y_values'] = np.array([y.split(",")[1].strip("/\n") for y in lines],dtype=float)
+
+        self.data_line_2[file_name] = self.graph2.plot()
+        if(len(self.data_line_2) > self.i_2):
+            self.i_2+=1
+            self.flag_2 =True
+           
+        first_value = self.data_2[file_name]['x_values'][0]
+        
+        self.second_value_2 = self.data_2[file_name]['x_values'][1]
+        self.second_value_2 = self.second_value_2 - first_value 
+
+        self.end = self.second_value_2 * 100
+        
+        color =  colorchooser.askcolor()[1]
+        print(color)
+
+        signal = {
+            "color" : color ,
+            "name" : file_name, 
+            "display" : True,
+        }
+        
+        self.signals.append(signal)
+        self.add_signal_to_combo_grph_2(file_name)
+        # print(self.signals)
+
+
+
+        # self.timer_2 = QtCore.QTimer()
+        # self.timer_2.setInterval(50)
+        self.timer_2.timeout.connect(self.update_plot_data_2)
+        self.timer_2.start()  
+
+    def update_plot_data_2(self):
+        if(self.flag_2 == True):
+            self.index_2 = 50
+            self.start  = 0
+            self.end  = self.second_value_2 * 100
+            self.flag_2 = False
+
+            
+        for signal in self.data_line_2:
+            x_to_plot = self.data_2[signal]['x_values'][:self.index_2]
+            y_to_plot = self.data_2[signal]['y_values'][:self.index_2]
+            self.data_line_2[signal].setData(x_to_plot, y_to_plot)
+
+        self.index_2 += 1
+        self.start = self.start + self.second_value_2
+        self.end = self.end + self.second_value_2
+        
+        self.graph2.setXRange(self.start ,self.end)
+
+    
+    # def signal_rename_grph_2(self):
+    #     if self.ui.comb_sig_colr_grpbox_viewer_2.currentText() != "chose signal":
+    #         old_name = self.ui.comb_rename_viewer_2.currentText()
+    #         new_name = input("Enter a signal name: ")
+    #         for signal in self.signals :
+    #                 if signal["name"] == old_name:
+    #                     signal["name"] = new_name
+    #                     # self.update_sig_name_in_combo(old_name , signal)
+    
+    def update_sig_name_in_combo_grph_1(self , old_name , signal):
+        for index in range(self.ui.comb_rename_viewer_1.count()):
+            if self.ui.comb_rename_viewer_1.itemText(index) == old_name:
+                self.ui.comb_rename_viewer_1.setItemText(index,signal["name"] )
+        
+       
+       
+       
+       
+            
+
+    def change_sig_color_grph_2(self):
+        if self.ui.comb_sig_colr_grpbox_viewer_1.currentText() != "chose signal":
+            signal_to_be_changed = self.ui.comb_sig_colr_grpbox_viewer_1.currentText()
+            for signal in self.signals :
+                if signal["name"] == signal_to_be_changed:
+                    signal["color"] = colorchooser.askcolor()[1]
+            
+                    for data_line in signal["data_lines"]:
+                        data_line.setPen(signal["color"])   
+            
+            # # signal["color"] = colorchooser.askcolor()[1]
+            # print(signal_to_be_changed)
+            # print(signal["color"])
+   
     def generate_report(self):
         # Create a file dialog to choose the signals to include in the report
         selected_signals, _ = QFileDialog.getOpenFileNames(self, "Select Signals for Report", "", "CSV Files (*.csv)")
@@ -374,64 +642,48 @@ class MyWindow(QMainWindow):
             self.data_1 = selected_data
             self.export_to_pdf()
 
-    def export_to_pdf(self):
-        # Get a file path for saving the PDF
-        pdf_file_path, _ = QFileDialog.getSaveFileName(self, "Save PDF Report", "", "PDF Files (*.pdf)")
+
+    # def export_to_pdf(self):
+    #     # Get a file path for saving the PDF
+    #     pdf_file_path, _ = QFileDialog.getSaveFileName(self, "Save PDF Report", "", "PDF Files (*.pdf)")
         
-        if pdf_file_path:
-            # Create a PDF document
-            doc = SimpleDocTemplate(pdf_file_path, pagesize=letter)
+    #     if pdf_file_path:
+    #         # Create a PDF document
+    #         doc = SimpleDocTemplate(pdf_file_path, pagesize=letter)
 
-            # Create story elements for the report content
-            styles = getSampleStyleSheet()
-            story = []
-            title = "Signal Data Report"
-            story.append(Paragraph(title, styles["Title"]))
-            story.append(Spacer(1, 12))
+    #         # Create story elements for the report content
+    #         styles = getSampleStyleSheet()
+    #         story = []
+    #         title = "Signal Data Report"
+    #         story.append(Paragraph(title, styles["Title"]))
+    #         story.append(Spacer(1, 12))
 
-            # Add content to the PDF report
-            for signal_name, signal_data in self.data_1.items():
-                signal_statistics = f"Statistics for Signal: {signal_name}"
-                story.append(Paragraph(signal_statistics, styles["Heading2"]))
+    #         # Add content to the PDF report
+    #         for signal_name, signal_data in self.data_1.items():
+    #             signal_statistics = f"Statistics for Signal: {signal_name}"
+    #             story.append(Paragraph(signal_statistics, styles["Heading2"]))
                 
-                # Calculate statistics (mean, std, max, min, duration) for the signal data
-                signal_values = signal_data['y_values']
-                # mean_value = mean(signal_values)
-                # std_deviation = stdev(signal_values)
-                max_value = max(signal_values)
-                min_value = min(signal_values)
-                duration = len(signal_values)  # Duration can be the length of the data
+    #             # Calculate statistics (mean, std, max, min, duration) for the signal data
+    #             signal_values = signal_data['y_values']
+    #             # mean_value = mean(signal_values)
+    #             # std_deviation = stdev(signal_values)
+    #             max_value = max(signal_values)
+    #             min_value = min(signal_values)
+    #             duration = len(signal_values)  # Duration can be the length of the data
                 
-                statistics_text = (
-                    # f"Mean: {mean_value:.2f}<br/>"
-                    # f"Standard Deviation (STD): {std_deviation:.2f}<br/>"
-                    f"Maximum Value: {max_value:.2f}<br/>"
-                    f"Minimum Value: {min_value:.2f}<br/>"
-                    f"Duration: {duration} data points"
-                )
+    #             statistics_text = (
+    #                 # f"Mean: {mean_value:.2f}<br/>"
+    #                 # f"Standard Deviation (STD): {std_deviation:.2f}<br/>"
+    #                 f"Maximum Value: {max_value:.2f}<br/>"
+    #                 f"Minimum Value: {min_value:.2f}<br/>"
+    #                 f"Duration: {duration} data points"
+    #             )
                 
-                story.append(Paragraph(statistics_text, styles["Normal"]))
-                story.append(Spacer(1, 12))
+    #             story.append(Paragraph(statistics_text, styles["Normal"]))
+    #             story.append(Spacer(1, 12))
 
-            # Build the PDF document
-            doc.build(story)
-
-    def change_sig_color(self):
-        if self.ui.comb_sig_colr_grpbox_viewer_1.currentText() != "chose signal":
-            signal_to_be_changed = self.ui.comb_sig_colr_grpbox_viewer_1.currentText()
-            for signal in self.signals :
-                if signal["name"] == signal_to_be_changed:
-                    signal["color"] = colorchooser.askcolor()[1]
-            
-                    for data_line in signal["data_lines"]:
-                        data_line.setPen(signal["color"])   
-            
-            # # signal["color"] = colorchooser.askcolor()[1]
-            # print(signal_to_be_changed)
-            # print(signal["color"])
-
-
-
+    #         # Build the PDF document
+    #         doc.build(story)
 
 '''   
 #------------------------------------------------  
@@ -501,8 +753,8 @@ class MyWindow(QMainWindow):
         # self.graph1.setYRange(-2,2)
 
         # self.timer = QTimer()
-        # self.timer.timeout.connect(self.load_data)
-        # self.timer.start(500)
+        # self.timer_1.timeout.connect(self.load_data)
+        # self.timer_1.start(500)
         # self.graph1.show()
         
     # def update(self):
