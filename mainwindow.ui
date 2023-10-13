@@ -27,7 +27,7 @@
      </rect>
     </property>
     <property name="text">
-     <string>graprh viewer 1</string>
+     <string>graph viewer 1</string>
     </property>
    </widget>
    <widget class="QGroupBox" name="grp_bx_ctrls_viewer_1">
@@ -74,7 +74,7 @@
        <x>20</x>
        <y>20</y>
        <width>359</width>
-       <height>131</height>
+       <height>111</height>
       </rect>
      </property>
      <layout class="QFormLayout" name="form_ctrls_viewer_1">
@@ -93,7 +93,7 @@
       <item row="0" column="0">
        <widget class="QLabel" name="lbl_colr_viewer_1">
         <property name="text">
-         <string>signal color</string>
+         <string>signal</string>
         </property>
        </widget>
       </item>
@@ -112,6 +112,13 @@
          <widget class="QPushButton" name="btn_chng_colr_grpbox_viewer_1">
           <property name="text">
            <string>change color</string>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <widget class="QCheckBox" name="checkBox">
+          <property name="text">
+           <string>show</string>
           </property>
          </widget>
         </item>
@@ -156,13 +163,6 @@
         </property>
        </widget>
       </item>
-      <item row="3" column="0">
-       <widget class="QLabel" name="lbl_sig_disp_viewer_1">
-        <property name="text">
-         <string>signal display</string>
-        </property>
-       </widget>
-      </item>
       <item row="2" column="1">
        <layout class="QHBoxLayout" name="horizontalLayout_2">
         <item>
@@ -182,15 +182,6 @@
          </widget>
         </item>
        </layout>
-      </item>
-      <item row="3" column="1">
-       <widget class="QComboBox" name="comb_sig_disp_viewer_1">
-        <item>
-         <property name="text">
-          <string>choose signal</string>
-         </property>
-        </item>
-       </widget>
       </item>
      </layout>
     </widget>
@@ -305,23 +296,6 @@
        </property>
       </widget>
      </item>
-     <item>
-      <widget class="QPushButton" name="btn_move_to_v2_viewer_1">
-       <property name="styleSheet">
-        <string notr="true"/>
-       </property>
-       <property name="text">
-        <string/>
-       </property>
-       <property name="icon">
-        <iconset resource="imgs.qrc">
-         <normaloff>:/imgs/imgs/move_down.png</normaloff>:/imgs/imgs/move_down.png</iconset>
-       </property>
-       <property name="flat">
-        <bool>true</bool>
-       </property>
-      </widget>
-     </item>
     </layout>
    </widget>
    <widget class="QWidget" name="widget" native="true">
@@ -378,7 +352,7 @@
        <x>20</x>
        <y>20</y>
        <width>359</width>
-       <height>131</height>
+       <height>111</height>
       </rect>
      </property>
      <layout class="QFormLayout" name="form_ctrls_viewer_2">
@@ -419,6 +393,13 @@
           </property>
          </widget>
         </item>
+        <item>
+         <widget class="QCheckBox" name="checkBox_2">
+          <property name="text">
+           <string>show</string>
+          </property>
+         </widget>
+        </item>
        </layout>
       </item>
       <item row="1" column="0">
@@ -456,14 +437,7 @@
       <item row="2" column="0">
        <widget class="QLabel" name="lbl_rename_viewer_2">
         <property name="text">
-         <string>rename</string>
-        </property>
-       </widget>
-      </item>
-      <item row="3" column="0">
-       <widget class="QLabel" name="lbl_sig_disp_viewer_2">
-        <property name="text">
-         <string>signal display</string>
+         <string>move</string>
         </property>
        </widget>
       </item>
@@ -481,20 +455,11 @@
         <item>
          <widget class="QPushButton" name="btn_entr_name_viewer_2">
           <property name="text">
-           <string>enter name</string>
+           <string>move to graph 1</string>
           </property>
          </widget>
         </item>
        </layout>
-      </item>
-      <item row="3" column="1">
-       <widget class="QComboBox" name="comb_sig_disp_viewer_2">
-        <item>
-         <property name="text">
-          <string>choose signal</string>
-         </property>
-        </item>
-       </widget>
       </item>
      </layout>
     </widget>
@@ -596,23 +561,6 @@
        </property>
       </widget>
      </item>
-     <item>
-      <widget class="QPushButton" name="btn_move_to_v2_viewer_2">
-       <property name="styleSheet">
-        <string notr="true"/>
-       </property>
-       <property name="text">
-        <string/>
-       </property>
-       <property name="icon">
-        <iconset resource="imgs.qrc">
-         <normaloff>:/imgs/imgs/move_down.png</normaloff>:/imgs/imgs/move_down.png</iconset>
-       </property>
-       <property name="flat">
-        <bool>true</bool>
-       </property>
-      </widget>
-     </item>
     </layout>
    </widget>
    <widget class="QLabel" name="lbl_grph_viewer_2">
@@ -625,7 +573,7 @@
      </rect>
     </property>
     <property name="text">
-     <string>graprh viewer 1</string>
+     <string>graph viewer 1</string>
     </property>
    </widget>
    <widget class="QWidget" name="widget_2" native="true">

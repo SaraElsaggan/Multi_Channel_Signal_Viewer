@@ -604,8 +604,6 @@ class MyWindow(QMainWindow):
             self.ui.comb_sig_colr_grpbox_viewer_2.addItem(signal["name"])
             self.ui.comb_move_viewer_2.addItem(signal["name"])
             self.ui.comb_sig_disp_viewer_2.addItem(signal["name"])
-
-    
     # def signal_rename_grph_2(self):
     #     if self.ui.comb_sig_colr_grpbox_viewer_2.currentText() != "chose signal":
     #         old_name = self.ui.comb_rename_viewer_2.currentText()
@@ -619,12 +617,6 @@ class MyWindow(QMainWindow):
     #     # for index in range(self.ui.comb_rename_viewer_1.count()):
     #         if self.ui.comb_rename_viewer_1.itemText(index) == old_name:
     #             self.ui.comb_rename_viewer_1.setItemText(index,signal["name"] )
-        
-       
-       
-       
-       
-            
 
     def change_sig_color_grph_2(self):
         if self.ui.comb_sig_colr_grpbox_viewer_1.currentText() != "chose signal":
@@ -640,6 +632,12 @@ class MyWindow(QMainWindow):
             # print(signal_to_be_changed)
             # print(signal["color"])
    
+
+
+    def link_graph(self):
+        
+
+
     def generate_report(self):
         # Create a file dialog to choose the signals to include in the report
         selected_signals, _ = QFileDialog.getOpenFileNames(self, "Select Signals for Report", "", "CSV Files (*.csv)")
