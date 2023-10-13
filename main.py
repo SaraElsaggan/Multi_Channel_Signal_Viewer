@@ -87,6 +87,8 @@ class MyWindow(QMainWindow):
         self.ui.actionreport.triggered.connect(self.generate_report)
         self.ui.btn_clear_viewer_1.clicked.connect(self.clear)
         
+        self.ui.btn_chng_colr_grpbox_viewer_1.clicked.connect(self.change_sig_color)
+        
         self.i_1 = 1
         self.flag_1 = False
         self.data_1 = {}
@@ -153,11 +155,12 @@ class MyWindow(QMainWindow):
         # print(signal["x1"])
         self.signals.append(signal)
         # print(self.signals)
-        # for i_signal in self.signals:
-        #     if signal["name"] == file_name:
-        #         signal = i_signal
+        for i_signal in self.signals:
+            if i_signal["name"] == file_name:
+                signal = i_signal
         # signal = [signal for signal in  self                                                  .signals if signal["name"] == file_name]
         # self.plot_signal([signal for signal in self.signals if signal["name"] == file_name])
+        # self.plot_signal(file_name)
         self.plot_signal(signal)
         print(signal["color"])
         # print([signal["color"] for signal in self.signals if signal["name"] == file_name])
@@ -166,13 +169,19 @@ class MyWindow(QMainWindow):
         # print(self.y1)
          
     def plot_signal(self , signal ) :
-        data_line = self.graph1.plot(signal["x1"], signal["y1"], pen=signal["color"])
+    # def plot_signal(self , file_name ) :
+    #     for i_signal in self.signals:
+    #         if i_signal["name"] == file_name:
+    #             signal = i_signal
+        data_line = self.graph1.plotItem.plot(signal["x1"], signal["y1"], pen=signal["color"])
+        # print(f'here{signal["color"]}')
         signal["data_lines"].append(data_line)
         signal["data_indices"].append(0)
         signal["idx1"]=0
         self.graph1.plotItem.getViewBox().setAutoPan(x=True,y=True)
         # self.timer.setInterval()
         self.timer.timeout.connect(lambda:self.update_plot_data(signal))
+        # self.timer.timeout.connect(lambda:self.update_plot_data(file_name))
         self.timer.start()
         self.graph1.show()
         self.graph1.setXRange(0,0.002*len(signal["data"]))
@@ -181,6 +190,12 @@ class MyWindow(QMainWindow):
         self.ui.btn_play_pasuse_viewer_1.setIcon(QtGui.QIcon(icon))
        
     def update_plot_data(self,signal):
+    # def update_plot_data(self,file_name):
+
+        # for i_signal in self.signals:
+        #     if i_signal["name"] == file_name:
+        #         signal = i_signal
+                
         for i in range(len(signal["data_lines"])):
             x = signal["x1"][:signal["data_indices"][i]]
             y = signal["y1"][:signal["data_indices"][i]]
@@ -400,6 +415,20 @@ class MyWindow(QMainWindow):
 
             # Build the PDF document
             doc.build(story)
+
+    def change_sig_color(self):
+        if self.ui.comb_sig_colr_grpbox_viewer_1.currentText() != "chose signal":
+            signal_to_be_changed = self.ui.comb_sig_colr_grpbox_viewer_1.currentText()
+            for signal in self.signals :
+                if signal["name"] == signal_to_be_changed:
+                    signal["color"] = colorchooser.askcolor()[1]
+            
+                    for data_line in signal["data_lines"]:
+                        data_line.setPen(signal["color"])   
+            
+            # # signal["color"] = colorchooser.askcolor()[1]
+            # print(signal_to_be_changed)
+            # print(signal["color"])
 
 
 
