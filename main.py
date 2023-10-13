@@ -58,7 +58,6 @@ class CheckableComboBox(QComboBox):
         return item.checkState() == Qt.Checked
 
 
-
 class MyWindow(QMainWindow):  
     
     def __init__(self ):
@@ -124,7 +123,14 @@ class MyWindow(QMainWindow):
         self.ui.btn_clear_viewer_2.clicked.connect(self.clear_grph_2)
         
         self.ui.btn_chng_colr_grpbox_viewer_2.clicked.connect(self.change_sig_color_grph_2)
+        self.ui.checkBox.stateChanged.connect(self.show_hide_grph_1)
+        self.ui.checkBox_2.stateChanged.connect(self.show_hide_grph_2)
         # self.ui.btn_entr_name_viewer_2.clicked.connect(self.signal_rename_grph_2)
+        self.ui.checkBox.setChecked(True)
+        self.ui.checkBox_2.setChecked(True)
+        
+        
+        # self.ui.btn_link_graphs.clicked.connect(self.reset_z/oom_grph_1)
         
         self.i_1 = 1
         self.flag_1 = False
@@ -152,7 +158,7 @@ class MyWindow(QMainWindow):
         self.signals_1.clear()
         # self.ui.comb_rename_viewer_1.clear()
         self.ui.comb_sig_colr_grpbox_viewer_1.clear()
-        self.ui.comb_sig_disp_viewer_1.clear()
+        # self.ui.comb_sig_disp_viewer_1.clear()
            
     def upload_data_grph_1(self):
         file_path  , _ = QFileDialog.getOpenFileName( self , "open file", "" ,"(*.csv) ")
@@ -215,6 +221,7 @@ class MyWindow(QMainWindow):
         self.graph1.plotItem.getViewBox().setAutoPan(x=True,y=True)
         # self.timer_1.setInterval()
         self.timer_1.timeout.connect(lambda:self.update_plot_data_grph_1(signal))
+        # self.timer_1.timeout.connect(self.update_plot_data_grph_1(signal))
         # self.timer_1.timeout.connect(lambda:self.update_plot_data(file_name))
         self.timer_1.start()
         self.graph1.show()
@@ -224,20 +231,17 @@ class MyWindow(QMainWindow):
         self.ui.btn_play_pasuse_viewer_1.setIcon(QtGui.QIcon(icon))
        
     def update_plot_data_grph_1(self,signal):
-    # def update_plot_data(self,file_name):
-
-        # for i_signal in self.signals_1:
-        #     if i_signal["name"] == file_name:
-        #         signal = i_signal
-                
+              
         for i in range(len(signal["data_lines"])):
             x = signal["x1"][:signal["data_indices"][i]]
             y = signal["y1"][:signal["data_indices"][i]]
             signal["data_indices"][i] += 10  # Update the index for this signal
+            
             if signal["data_indices"][i] > len(signal["x1"]):
                 signal["data_indices"][i] = 0  # Reset the index for this signal
             if signal["x1"][signal["data_indices"][i]] > 0.5:
                 self.graph1.setLimits(xMin=min(x, default=0), xMax=max(x, default=0))  # Disable panning over x-limits
+            
             self.graph1.plotItem.setXRange(max(x, default=0) - 0.5, max(x, default=0))
             signal["data_lines"][i].setData(x, y)
 
@@ -254,11 +258,11 @@ class MyWindow(QMainWindow):
     def add_signal_to_combo_grph_1(self , file_name):
         self.ui.comb_sig_colr_grpbox_viewer_1.addItem(file_name)
         self.ui.comb_move_viewer_1.addItem(file_name)
-        self.ui.comb_sig_disp_viewer_1.addItem(file_name)
+        # self.ui.comb_sig_disp_viewer_1.addItem(file_name)
                 
     def zoom_out_grph_1(self):
           # Increase the visible range 
-         self.graph1.getViewBox().scaleBy((1.2, 1.2))
+        self.graph1.getViewBox().scaleBy((1.2, 1.2))
         #  self.graph2.getViewBox().scaleBy((1.2, 1.2))
 
     def zoom_in_grph_1(self):
@@ -370,13 +374,26 @@ class MyWindow(QMainWindow):
         
         self.ui.comb_sig_colr_grpbox_viewer_1.clear()
         self.ui.comb_move_viewer_1.clear()
-        self.ui.comb_sig_disp_viewer_1.clear()
+        # self.ui.comb_sig_disp_viewer_1.clear()
 
         for signal in self.signals_1:
             self.ui.comb_sig_colr_grpbox_viewer_1.addItem(signal["name"])
             self.ui.comb_move_viewer_1.addItem(signal["name"])
-            self.ui.comb_sig_disp_viewer_1.addItem(signal["name"])
+            # self.ui.comb_sig_disp_viewer_1.addItem(signal["name"])
 
+    def show_hide_grph_1 (self):
+        signal_to_show_hide = self.ui.comb_sig_colr_grpbox_viewer_1.currentText()
+        for signal in self.signals_1 :
+            if signal["name"] == signal_to_show_hide:
+                if (self.ui.checkBox.isChecked()):
+                    
+                    for data_line in signal["data_lines"]:
+                        data_line.setVisible(True) 
+                            # signal["data_lines"].setVisiable()       
+                            # self.current_signal_v1.data_line.setVisible(True)
+                else:
+                    for data_line in signal["data_lines"]:    # self.current_signal_v1.data_line.setVisible(False)
+                        data_line.setVisible(False)
     
 
 
@@ -424,9 +441,9 @@ class MyWindow(QMainWindow):
         }
         
         # print(signal["x1"])
-        self.signals_1.append(signal)
-        # print(self.signals_1)
-        for i_signal in self.signals_1:
+        self.signals_2.append(signal)
+        # print(self.signals_2)
+        for i_signal in self.signals_2:
             if i_signal["name"] == file_name:
                 signal = i_signal
         # signal = [signal for signal in  self                                                  .signals if signal["name"] == file_name]
@@ -491,7 +508,7 @@ class MyWindow(QMainWindow):
     def add_signal_to_combo_grph_2(self , file_name):
         self.ui.comb_sig_colr_grpbox_viewer_2.addItem(file_name)
         # self.ui.comb_rename_viewer_2.addItem(file_name)
-        self.ui.comb_sig_disp_viewer_2.addItem(file_name)
+        # self.ui.comb_sig_disp_viewer_2.addItem(file_name)
                 
     def zoom_out_grph_2(self):
           # Increase the visible range 
@@ -631,10 +648,33 @@ class MyWindow(QMainWindow):
             # # signal["color"] = colorchooser.askcolor()[1]
             # print(signal_to_be_changed)
             # print(signal["color"])
-   
+    
+    def show_hide_grph_2 (self):
+        signal_to_show_hide = self.ui.comb_sig_colr_grpbox_viewer_2.currentText()
+        for signal in self.signals_2 :
+            if signal["name"] == signal_to_show_hide:
+                if (self.ui.checkBox_2.isChecked()):
+                                        
+                    for data_line in signal["data_lines"]:
+                        data_line.setVisible(True) 
+                            # signal["data_lines"].setVisiable()       
+                            # self.current_signal_v1.data_line.setVisible(True)
+                else:
+                    for data_line in signal["data_lines"]:    # self.current_signal_v1.data_line.setVisible(False)
+                        data_line.setVisible(False)        
+    
+    
+    # def reset_zoom_grph_1(self):
+    #     # Assuming graph1 is the graph you want to reset the zoom for
+    #     initial_x_range = (0, 0.002 * len(self.signals_1[0]["data"]))
+    #     initial_y_range = (min(self.signals_1[0]["y1"]), max(self.signals_1[0]["y1"]))
 
+    #     self.graph1.setXRange(*initial_x_range)
+    #     self.graph1.setYRange(*initial_y_range)
 
-    def link_graph(self):
+    # def link_graph(self):
+    #     # self.graph1.getPlotItem().setLimits()
+    #     pass
         
 
 
@@ -944,7 +984,7 @@ class MyWindow(QMainWindow):
 #     def add_signal_to_combo_graph_1(self , file_name):
 #         self.ui.comb_sig_colr_grpbox_viewer_1.addItem(file_name)
 #         self.ui.comb_rename_viewer_1.addItem(file_name)
-#         self.ui.comb_sig_disp_viewer_1.addItem(file_name)
+        self.ui.comb_sig_disp_viewer_1.addItem(file_name)
     
 #     def add_signal_to_combo_graph_2(self , file_name):
 #         self.ui.comb_sig_colr_grpbox_viewer_2.addItem(file_name)
