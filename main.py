@@ -82,6 +82,10 @@ class MyWindow(QMainWindow):
         self.timer_2 = QtCore.QTimer()
         self.timer_2.setInterval(100) 
         
+        # self.data_lines = []
+        # self.data_indices = []
+        self.signals_1 =[]
+        self.signals_2 =[]
 
         self.ui.btn_add_sig_viewer_1.clicked.connect(self.upload_data_grph_1)   
         # self.ui.btn_add_sig_viewer_1.clicked.connect(self.open_file_1)   
@@ -101,6 +105,7 @@ class MyWindow(QMainWindow):
         self.ui.btn_fast_grpbox_viewer_1.clicked.connect(self.faster_grph_1)
         
         self.ui.btn_chng_colr_grpbox_viewer_1.clicked.connect(self.change_sig_color_grph_1)
+        self.ui.btn_move_viewer_1.clicked.connect(self.move_signal_from_grph_1)
         # self.ui.btn_entr_name_viewer_1.clicked.connect(self.signal_rename_grph_1)
 
         
@@ -121,30 +126,11 @@ class MyWindow(QMainWindow):
         self.ui.btn_chng_colr_grpbox_viewer_2.clicked.connect(self.change_sig_color_grph_2)
         # self.ui.btn_entr_name_viewer_2.clicked.connect(self.signal_rename_grph_2)
         
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
         self.i_1 = 1
         self.flag_1 = False
         self.data_1 = {}
         self.data_line_1 = {}
         
-        self.data_lines = []
-        self.data_indices = []
         
         self.selectid_file = None
         self.end = 0
@@ -156,7 +142,6 @@ class MyWindow(QMainWindow):
 
         self.pen = pg.mkPen(color=(255, 0, 0))
 
-        self.signals =[]
 
 
     def clear_grph_1(self):
@@ -164,8 +149,8 @@ class MyWindow(QMainWindow):
         self.timer_1.stop()
         icon = QtGui.QPixmap("play.png")
         self.ui.btn_play_pasuse_viewer_1.setIcon(QtGui.QIcon(icon))
-        self.signals.clear()
-        self.ui.comb_rename_viewer_1.clear()
+        self.signals_1.clear()
+        # self.ui.comb_rename_viewer_1.clear()
         self.ui.comb_sig_colr_grpbox_viewer_1.clear()
         self.ui.comb_sig_disp_viewer_1.clear()
            
@@ -202,24 +187,24 @@ class MyWindow(QMainWindow):
         }
         
         # print(signal["x1"])
-        self.signals.append(signal)
-        # print(self.signals)
-        for i_signal in self.signals:
+        self.signals_1.append(signal)
+        # print(self.signals_1)
+        for i_signal in self.signals_1:
             if i_signal["name"] == file_name:
                 signal = i_signal
         # signal = [signal for signal in  self                                                  .signals if signal["name"] == file_name]
-        # self.plot_signal([signal for signal in self.signals if signal["name"] == file_name])
+        # self.plot_signal([signal for signal in self.signals_1 if signal["name"] == file_name])
         # self.plot_signal(file_name)
         self.plot_signal_grph_1(signal)
         print(signal["color"])
-        # print([signal["color"] for signal in self.signals if signal["name"] == file_name])
+        # print([signal["color"] for signal in self.signals_1 if signal["name"] == file_name])
         
         # print(self.x1)
         # print(self.y1)
          
     def plot_signal_grph_1(self , signal ) :
     # def plot_signal(self , file_name ) :
-    #     for i_signal in self.signals:
+    #     for i_signal in self.signals_1:
     #         if i_signal["name"] == file_name:
     #             signal = i_signal
         data_line = self.graph1.plotItem.plot(signal["x1"], signal["y1"], pen=signal["color"])
@@ -241,7 +226,7 @@ class MyWindow(QMainWindow):
     def update_plot_data_grph_1(self,signal):
     # def update_plot_data(self,file_name):
 
-        # for i_signal in self.signals:
+        # for i_signal in self.signals_1:
         #     if i_signal["name"] == file_name:
         #         signal = i_signal
                 
@@ -268,7 +253,7 @@ class MyWindow(QMainWindow):
 
     def add_signal_to_combo_grph_1(self , file_name):
         self.ui.comb_sig_colr_grpbox_viewer_1.addItem(file_name)
-        self.ui.comb_rename_viewer_1.addItem(file_name)
+        self.ui.comb_move_viewer_1.addItem(file_name)
         self.ui.comb_sig_disp_viewer_1.addItem(file_name)
                 
     def zoom_out_grph_1(self):
@@ -327,9 +312,9 @@ class MyWindow(QMainWindow):
             "display" : True,
         }
         
-        self.signals.append(signal)
+        self.signals_1.append(signal)
         self.add_signal_to_combo_grph_1(file_name)
-        # print(self.signals)
+        # print(self.signals_1)
 
 
 
@@ -360,28 +345,39 @@ class MyWindow(QMainWindow):
     def change_sig_color_grph_1(self):
         if self.ui.comb_sig_colr_grpbox_viewer_1.currentText() != "chose signal":
             signal_to_be_changed = self.ui.comb_sig_colr_grpbox_viewer_1.currentText()
-            for signal in self.signals :
+            for signal in self.signals_1 :
                 if signal["name"] == signal_to_be_changed:
                     signal["color"] = colorchooser.askcolor()[1]
             
                     for data_line in signal["data_lines"]:
                         data_line.setPen(signal["color"])   
-            
-            # # signal["color"] = colorchooser.askcolor()[1]
-            # print(signal_to_be_changed)
-            # print(signal["color"])
+           
+    def move_signal_from_grph_1(self):
+        if self.ui.comb_move_viewer_1.currentText != "choose signal":
+            signal_to_move = self.ui.comb_move_viewer_1.currentText()
+            for signal in self.signals_1:
+                if signal["name"] == signal_to_move:
+                    for data_line in signal["data_lines"]:
+                        self.graph1.removeItem(data_line)
+                        self.graph2.addItem(data_line)
+                    
+                    self.signals_2.append(signal)
+                    self.signals_1.remove(signal)
+                    self.updata_combo_bxs_grph_1()
+                    self.updata_combo_bxs_grph_2()
+                    
+    def updata_combo_bxs_grph_1(self):
+        
+        self.ui.comb_sig_colr_grpbox_viewer_1.clear()
+        self.ui.comb_move_viewer_1.clear()
+        self.ui.comb_sig_disp_viewer_1.clear()
 
-    # def signal_rename_grph_1(self):
-    #     if self.ui.comb_sig_colr_grpbox_viewer_1.currentText() != "chose signal":
-    #         old_name = self.ui.comb_rename_viewer_1.currentText()
-    #         new_name = input("Enter a signal name: ")
-    #         for signal in self.signals :
-    #                 if signal["name"] == old_name:
-    #                     signal["name"] = new_name
-    #                     self.update_sig_name_in_combo(old_name , signal)
+        for signal in self.signals_1:
+            self.ui.comb_sig_colr_grpbox_viewer_1.addItem(signal["name"])
+            self.ui.comb_move_viewer_1.addItem(signal["name"])
+            self.ui.comb_sig_disp_viewer_1.addItem(signal["name"])
 
-
-
+    
 
 
 
@@ -390,8 +386,8 @@ class MyWindow(QMainWindow):
         self.timer_2.stop()
         icon = QtGui.QPixmap("play.png")
         self.ui.btn_play_pasuse_viewer_2.setIcon(QtGui.QIcon(icon))
-        self.signals.clear()
-        self.ui.comb_rename_viewer_2.clear()
+        self.signals_2.clear()
+        # self.ui.comb_rename_viewer_2.clear()
         self.ui.comb_sig_colr_grpbox_viewer_2.clear()
         self.ui.comb_sig_disp_viewer_2.clear()
            
@@ -428,24 +424,24 @@ class MyWindow(QMainWindow):
         }
         
         # print(signal["x1"])
-        self.signals.append(signal)
-        # print(self.signals)
-        for i_signal in self.signals:
+        self.signals_1.append(signal)
+        # print(self.signals_1)
+        for i_signal in self.signals_1:
             if i_signal["name"] == file_name:
                 signal = i_signal
         # signal = [signal for signal in  self                                                  .signals if signal["name"] == file_name]
-        # self.plot_signal([signal for signal in self.signals if signal["name"] == file_name])
+        # self.plot_signal([signal for signal in self.signals_1 if signal["name"] == file_name])
         # self.plot_signal(file_name)
         self.plot_signal_grph_2(signal)
         print(signal["color"])
-        # print([signal["color"] for signal in self.signals if signal["name"] == file_name])
+        # print([signal["color"] for signal in self.signals_1 if signal["name"] == file_name])
         
         # print(self.x1)
         # print(self.y1)
          
     def plot_signal_grph_2(self , signal ) :
     # def plot_signal(self , file_name ) :
-    #     for i_signal in self.signals:
+    #     for i_signal in self.signals_1:
     #         if i_signal["name"] == file_name:
     #             signal = i_signal
         data_line = self.graph2.plotItem.plot(signal["x1"], signal["y1"], pen=signal["color"])
@@ -467,7 +463,7 @@ class MyWindow(QMainWindow):
     def update_plot_data_grph_2(self,signal):
     # def update_plot_data(self,file_name):
 
-        # for i_signal in self.signals:
+        # for i_signal in self.signals_1:
         #     if i_signal["name"] == file_name:
         #         signal = i_signal
                 
@@ -494,7 +490,7 @@ class MyWindow(QMainWindow):
 
     def add_signal_to_combo_grph_2(self , file_name):
         self.ui.comb_sig_colr_grpbox_viewer_2.addItem(file_name)
-        self.ui.comb_rename_viewer_2.addItem(file_name)
+        # self.ui.comb_rename_viewer_2.addItem(file_name)
         self.ui.comb_sig_disp_viewer_2.addItem(file_name)
                 
     def zoom_out_grph_2(self):
@@ -553,9 +549,9 @@ class MyWindow(QMainWindow):
             "display" : True,
         }
         
-        self.signals.append(signal)
+        self.signals_1.append(signal)
         self.add_signal_to_combo_grph_2(file_name)
-        # print(self.signals)
+        # print(self.signals_1)
 
 
 
@@ -583,20 +579,46 @@ class MyWindow(QMainWindow):
         
         self.graph2.setXRange(self.start ,self.end)
 
+    def move_signal_from_grph_2(self):
+        if self.ui.comb_move_viewer_2.currentText != "choose signal":
+            signal_to_move = self.ui.comb_move_viewer_2.currentText()
+            for signal in self.signals_2:
+                if signal["name"] == signal_to_move:
+                    for data_line in signal["data_lines"]:
+                        self.graph1.removeItem(data_line)
+                        self.graph2.addItem(data_line)
+                    
+                    self.signals_2.append(signal)
+                    self.signals_2.remove(signal)
+                    self.updata_combo_bxs_grph_1()
+                    self.updata_combo_bxs_grph_2()
+                    
+
+    def updata_combo_bxs_grph_2(self):
+        
+        self.ui.comb_sig_colr_grpbox_viewer_2.clear()
+        self.ui.comb_move_viewer_2.clear()
+        self.ui.comb_sig_disp_viewer_2.clear()
+
+        for signal in self.signals_2:
+            self.ui.comb_sig_colr_grpbox_viewer_2.addItem(signal["name"])
+            self.ui.comb_move_viewer_2.addItem(signal["name"])
+            self.ui.comb_sig_disp_viewer_2.addItem(signal["name"])
+
     
     # def signal_rename_grph_2(self):
     #     if self.ui.comb_sig_colr_grpbox_viewer_2.currentText() != "chose signal":
     #         old_name = self.ui.comb_rename_viewer_2.currentText()
     #         new_name = input("Enter a signal name: ")
-    #         for signal in self.signals :
+    #         for signal in self.signals_1 :
     #                 if signal["name"] == old_name:
     #                     signal["name"] = new_name
     #                     # self.update_sig_name_in_combo(old_name , signal)
     
-    def update_sig_name_in_combo_grph_1(self , old_name , signal):
-        for index in range(self.ui.comb_rename_viewer_1.count()):
-            if self.ui.comb_rename_viewer_1.itemText(index) == old_name:
-                self.ui.comb_rename_viewer_1.setItemText(index,signal["name"] )
+    # def update_sig_name_in_combo_grph_1(self , old_name , signal):
+    #     # for index in range(self.ui.comb_rename_viewer_1.count()):
+    #         if self.ui.comb_rename_viewer_1.itemText(index) == old_name:
+    #             self.ui.comb_rename_viewer_1.setItemText(index,signal["name"] )
         
        
        
@@ -607,7 +629,7 @@ class MyWindow(QMainWindow):
     def change_sig_color_grph_2(self):
         if self.ui.comb_sig_colr_grpbox_viewer_1.currentText() != "chose signal":
             signal_to_be_changed = self.ui.comb_sig_colr_grpbox_viewer_1.currentText()
-            for signal in self.signals :
+            for signal in self.signals_1 :
                 if signal["name"] == signal_to_be_changed:
                     signal["color"] = colorchooser.askcolor()[1]
             
@@ -640,7 +662,7 @@ class MyWindow(QMainWindow):
             # For example, create a title, add statistics for each selected signal, etc.
             # Finally, call export_to_pdf to save the report
             self.data_1 = selected_data
-            self.export_to_pdf()
+            # self.export_to_pdf()
 
 
     # def export_to_pdf(self):
@@ -745,7 +767,7 @@ class MyWindow(QMainWindow):
 #         self.pen = pg.mkPen(color=(255, 0, 0))
         
         
-#         self.signals_grph_1 = []
+#         self.signals_1_grph_1 = []
 
         # self.graph1 = PlotWidget(self.ui.centralwidget)
         # self.graph1.setGeometry(30, 50, 770, 300)
