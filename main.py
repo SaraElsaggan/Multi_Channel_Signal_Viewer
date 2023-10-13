@@ -126,11 +126,11 @@ class MyWindow(QMainWindow):
         color =  colorchooser.askcolor()[1]
         print(color)
 
-        self.data = np.genfromtxt(file_path, delimiter = ',')
         # self.data = pd.read_csv(file_path)
-        self.x1 = self.data[:, 0].tolist()
-        self.y1 = self.data[:, 1].tolist()
-        
+        data = np.genfromtxt(file_path, delimiter = ',')
+        x1 = data[:, 0].tolist()
+        y1 = data[:, 1].tolist()
+        # print(x1)
         file_name = os.path.basename(file_path[:-4])
 
         print(f"({file_name})")
@@ -142,44 +142,55 @@ class MyWindow(QMainWindow):
             "color" : color ,
             "name" : file_name, 
             "display" : True,
+            "data" : data,
+            "x1" : x1,
+            "y1" : y1,
+            "data_lines":[],
+            "data_indices":[], 
+            "idx1" : None
         }
         
+        # print(signal["x1"])
         self.signals.append(signal)
-        print(self.signals)
-        
-        
-        self.plot_signal(self.data , color)
-
+        # print(self.signals)
+        # for i_signal in self.signals:
+        #     if signal["name"] == file_name:
+        #         signal = i_signal
+        # signal = [signal for signal in  self                                                  .signals if signal["name"] == file_name]
+        # self.plot_signal([signal for signal in self.signals if signal["name"] == file_name])
+        self.plot_signal(signal)
+        print(signal["color"])
+        # print([signal["color"] for signal in self.signals if signal["name"] == file_name])
         
         # print(self.x1)
         # print(self.y1)
          
-    def plot_signal(self , data  , signal_color ) :
-        data_line = self.graph1.plot(self.x1, self.y1, pen=signal_color)
-        self.data_lines.append(data_line)
-        self.data_indices.append(0)
-        self.idx1=0
+    def plot_signal(self , signal ) :
+        data_line = self.graph1.plot(signal["x1"], signal["y1"], pen=signal["color"])
+        signal["data_lines"].append(data_line)
+        signal["data_indices"].append(0)
+        signal["idx1"]=0
         self.graph1.plotItem.getViewBox().setAutoPan(x=True,y=True)
         # self.timer.setInterval()
-        self.timer.timeout.connect(lambda:self.update_plot_data(data_line,data))
+        self.timer.timeout.connect(lambda:self.update_plot_data(signal))
         self.timer.start()
         self.graph1.show()
-        self.graph1.setXRange(0,0.002*len(data))
+        self.graph1.setXRange(0,0.002*len(signal["data"]))
 
         icon = QtGui.QPixmap("pause.png")
         self.ui.btn_play_pasuse_viewer_1.setIcon(QtGui.QIcon(icon))
        
-    def update_plot_data(self, data_line, data):
-        for i in range(len(self.data_lines)):
-            x = self.x1[:self.data_indices[i]]
-            y = self.y1[:self.data_indices[i]]
-            self.data_indices[i] += 10  # Update the index for this signal
-            if self.data_indices[i] > len(self.x1):
-                self.data_indices[i] = 0  # Reset the index for this signal
-            if self.x1[self.data_indices[i]] > 0.5:
+    def update_plot_data(self,signal):
+        for i in range(len(signal["data_lines"])):
+            x = signal["x1"][:signal["data_indices"][i]]
+            y = signal["y1"][:signal["data_indices"][i]]
+            signal["data_indices"][i] += 10  # Update the index for this signal
+            if signal["data_indices"][i] > len(signal["x1"]):
+                signal["data_indices"][i] = 0  # Reset the index for this signal
+            if signal["x1"][signal["data_indices"][i]] > 0.5:
                 self.graph1.setLimits(xMin=min(x, default=0), xMax=max(x, default=0))  # Disable panning over x-limits
             self.graph1.plotItem.setXRange(max(x, default=0) - 0.5, max(x, default=0))
-            self.data_lines[i].setData(x, y)
+            signal["data_lines"][i].setData(x, y)
 
     def play_pause(self):
         if self.timer.isActive():
@@ -196,12 +207,12 @@ class MyWindow(QMainWindow):
         self.ui.comb_rename_viewer_1.addItem(file_name)
         self.ui.comb_sig_disp_viewer_1.addItem(file_name)
                 
-    def zoom_in(self):
+    def zoom_ou(self):
           # Increase the visible range 
          self.graph1.getViewBox().scaleBy((1.2, 1.2))
         #  self.graph2.getViewBox().scaleBy((1.2, 1.2))
 
-    def zoom_out(self):
+    def zoom_in(self):
          # Decrease the visible range 
          self.graph1.getViewBox().scaleBy((1 / 1.2, 1 / 1.2))
         #  self.graph2.getViewBox().scaleBy((1 / 1.2, 1 / 1.2))
@@ -254,7 +265,7 @@ class MyWindow(QMainWindow):
         
         self.signals.append(signal)
         self.add_signal_to_combo_graph(file_name)
-        print(self.signals)
+        # print(self.signals)
 
 
 
