@@ -207,7 +207,7 @@ class MyWindow(QMainWindow):
         self.ui.comb_rename_viewer_1.addItem(file_name)
         self.ui.comb_sig_disp_viewer_1.addItem(file_name)
                 
-    def zoom_ou(self):
+    def zoom_out(self):
           # Increase the visible range 
          self.graph1.getViewBox().scaleBy((1.2, 1.2))
         #  self.graph2.getViewBox().scaleBy((1.2, 1.2))
