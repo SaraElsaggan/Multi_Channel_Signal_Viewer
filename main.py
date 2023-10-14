@@ -119,18 +119,23 @@ class MyWindow(QMainWindow):
         self.ui.btn_fast_viewer_2.clicked.connect(self.faster_grph_2)
         self.ui.btn_slow_viewer_2.clicked.connect(self.slower_grph_2)
         
+        self.ui.btn_move_viewer_2.clicked.connect(self.move_signal_from_grph_2)
         
         self.ui.btn_clear_viewer_2.clicked.connect(self.clear_grph_2)
         
         self.ui.btn_chng_colr_grpbox_viewer_2.clicked.connect(self.change_sig_color_grph_2)
-        self.ui.checkBox.stateChanged.connect(self.show_hide_grph_1)
-        self.ui.checkBox_2.stateChanged.connect(self.show_hide_grph_2)
+        self.ui.chk_bx_sig_show_1.stateChanged.connect(self.show_hide_grph_1)
+        self.ui.chk_bx_sig_show_2.stateChanged.connect(self.show_hide_grph_2)
         # self.ui.btn_entr_name_viewer_2.clicked.connect(self.signal_rename_grph_2)
-        self.ui.checkBox.setChecked(True)
-        self.ui.checkBox_2.setChecked(True)
+        self.ui.chk_bx_sig_show_1.setChecked(True)
+        self.ui.chk_bx_sig_show_2.setChecked(True)
         
-        
+        self.ui.btn_link_graphs.clicked.connect(self.link_graphs)
+        # self.ui.btn_link_graphs.clicked.connect(self.find_max_1)
         # self.ui.btn_link_graphs.clicked.connect(self.reset_z/oom_grph_1)
+        
+        self.ui.btn_srt_begin__viewer_1.clicked.connect(self.replay_1)
+        self.ui.btn_srt_begin__viewer_2.clicked.connect(self.replay_2)
         
         self.i_1 = 1
         self.flag_1 = False
@@ -147,8 +152,9 @@ class MyWindow(QMainWindow):
         self.second_value_2 = 0
 
         self.pen = pg.mkPen(color=(255, 0, 0))
-
-
+        
+        
+        self.islinked = True
 
     def clear_grph_1(self):
         self.graph1.clear()
@@ -156,94 +162,94 @@ class MyWindow(QMainWindow):
         icon = QtGui.QPixmap("play.png")
         self.ui.btn_play_pasuse_viewer_1.setIcon(QtGui.QIcon(icon))
         self.signals_1.clear()
-        # self.ui.comb_rename_viewer_1.clear()
-        self.ui.comb_sig_colr_grpbox_viewer_1.clear()
-        # self.ui.comb_sig_disp_viewer_1.clear()
+        self.updata_combo_bxs_grph_1()
+        # self.ui.comb_sig_apperance_viewer_1.clear()
+        # self.ui.comb_sig_apperance_viewer_1.addItem("choose signal")
            
     def upload_data_grph_1(self):
         file_path  , _ = QFileDialog.getOpenFileName( self , "open file", "" ,"(*.csv) ")
-        # print(file_path)
-        # if file_path:
 
-        color =  colorchooser.askcolor()[1]
-        print(color)
-
-        # self.data = pd.read_csv(file_path)
-        data = np.genfromtxt(file_path, delimiter = ',')
-        x1 = data[:, 0].tolist()
-        y1 = data[:, 1].tolist()
-        # print(x1)
-        file_name = os.path.basename(file_path[:-4])
-
-        print(f"({file_name})")
-
-        self.add_signal_to_combo_grph_1(file_name)
         
+
+        data = np.genfromtxt(file_path, delimiter = ',')
+        x = data[:, 0].tolist()
+        y = data[:, 1].tolist()
+        file_name = os.path.basename(file_path[:-4])
+        # print(f"({file_name})")
+
         
         signal = {
-            "color" : color ,
+            "color" : "#ffffff" ,
             "name" : file_name, 
             "display" : True,
             "data" : data,
-            "x1" : x1,
-            "y1" : y1,
+            "x" : x,
+            "y" : y,
             "data_lines":[],
             "data_indices":[], 
-            "idx1" : None
+            "idx" : None
         }
         
-        # print(signal["x1"])
+        # print(signal["x"])
         self.signals_1.append(signal)
-        # print(self.signals_1)
-        for i_signal in self.signals_1:
-            if i_signal["name"] == file_name:
-                signal = i_signal
-        # signal = [signal for signal in  self                                                  .signals if signal["name"] == file_name]
-        # self.plot_signal([signal for signal in self.signals_1 if signal["name"] == file_name])
-        # self.plot_signal(file_name)
-        self.plot_signal_grph_1(signal)
-        print(signal["color"])
-        # print([signal["color"] for signal in self.signals_1 if signal["name"] == file_name])
         
-        # print(self.x1)
-        # print(self.y1)
+        self.updata_combo_bxs_grph_1()
+
+        # self.plot_signal_grph_1(signal)
+        print(signal["color"])
+        self.replay_1()
          
-    def plot_signal_grph_1(self , signal ) :
-    # def plot_signal(self , file_name ) :
-    #     for i_signal in self.signals_1:
-    #         if i_signal["name"] == file_name:
-    #             signal = i_signal
-        data_line = self.graph1.plotItem.plot(signal["x1"], signal["y1"], pen=signal["color"])
-        # print(f'here{signal["color"]}')
-        signal["data_lines"].append(data_line)
-        signal["data_indices"].append(0)
-        signal["idx1"]=0
+    def plot_signal_grph_1(self ) :
+    
+        for signal in self.signals_1:
+            data_line = self.graph1.plotItem.plot(signal["x"], signal["y"], pen=signal["color"])
+            # print(f'here{signal["color"]}')
+            signal["data_lines"].append(data_line)
+            signal["data_indices"].append(0)
+            signal["idx"]=0
         self.graph1.plotItem.getViewBox().setAutoPan(x=True,y=True)
         # self.timer_1.setInterval()
-        self.timer_1.timeout.connect(lambda:self.update_plot_data_grph_1(signal))
-        # self.timer_1.timeout.connect(self.update_plot_data_grph_1(signal))
-        # self.timer_1.timeout.connect(lambda:self.update_plot_data(file_name))
+        self.timer_1.timeout.connect(lambda:self.update_plot_data_grph_1(self.signals_1))
         self.timer_1.start()
         self.graph1.show()
-        self.graph1.setXRange(0,0.002*len(signal["data"]))
+        self.graph1.setXRange(0 , 0.002*len(signal["data"]))
+        # self.graph1.setYRange(min(signal["y"]) , max(signal["y"]))
 
         icon = QtGui.QPixmap("pause.png")
         self.ui.btn_play_pasuse_viewer_1.setIcon(QtGui.QIcon(icon))
        
-    def update_plot_data_grph_1(self,signal):
-              
-        for i in range(len(signal["data_lines"])):
-            x = signal["x1"][:signal["data_indices"][i]]
-            y = signal["y1"][:signal["data_indices"][i]]
-            signal["data_indices"][i] += 10  # Update the index for this signal
+    def update_plot_data_grph_1(self,signals):
+        for signal in signals:
+            for i in range(len(signal["data_lines"])):
+                x = signal["x"][:signal["data_indices"][i]]
+                y = signal["y"][:signal["data_indices"][i]]
+                signal["data_indices"][i] += 10  # Update the index for this signal
+                
+                # if signal["data_indices"][i] > len(signal["x"]):
+                #     signal["data_indices"][i] = 0  # Reset the index for this signal
+                # if signal["x"][signal["data_indices"][i]] > 0.5:
+                #     self.graph1.setLimits(xMin=min(x, default=0), xMax=max(x, default=0))  # Disable panning over x-limits
+                
+                self.graph1.setXRange(max(x, default=0) - 0.5, max(x, default=0))
+                self.graph1.setYRange(min(signal["y"]), max(signal["y"]))
+
+                signal["data_lines"][i].setData(x, y)
+                
+                
+        # for i in range(len(signal["data_lines"])):
+        #     x = signal["x"][:signal["data_indices"][i]]
+        #     y = signal["y"][:signal["data_indices"][i]]
+        #     signal["data_indices"][i] += 10  # Update the index for this signal
             
-            if signal["data_indices"][i] > len(signal["x1"]):
-                signal["data_indices"][i] = 0  # Reset the index for this signal
-            if signal["x1"][signal["data_indices"][i]] > 0.5:
-                self.graph1.setLimits(xMin=min(x, default=0), xMax=max(x, default=0))  # Disable panning over x-limits
+        #     if signal["data_indices"][i] > len(signal["x"]):
+        #         signal["data_indices"][i] = 0  # Reset the index for this signal
+        #     if signal["x"][signal["data_indices"][i]] > 0.5:
+        #         self.graph1.setLimits(xMin=min(x, default=0), xMax=max(x, default=0))  # Disable panning over x-limits
             
-            self.graph1.plotItem.setXRange(max(x, default=0) - 0.5, max(x, default=0))
-            signal["data_lines"][i].setData(x, y)
+        #     self.graph1.setXRange(max(x, default=0) - 0.5, max(x, default=0))
+        #     self.graph1.setYRange(min(signal["y"]) , max(signal["y"]))
+
+        #     signal["data_lines"][i].setData(x, y)
 
     def play_pause_grph_1(self):
         if self.timer_1.isActive():
@@ -256,24 +262,28 @@ class MyWindow(QMainWindow):
             self.ui.btn_play_pasuse_viewer_1.setIcon(QtGui.QIcon(icon))
 
     def add_signal_to_combo_grph_1(self , file_name):
-        self.ui.comb_sig_colr_grpbox_viewer_1.addItem(file_name)
+        self.ui.comb_sig_apperance_viewer_1.addItem(file_name)
         self.ui.comb_move_viewer_1.addItem(file_name)
-        # self.ui.comb_sig_disp_viewer_1.addItem(file_name)
-                
+        self.ui.comb_sig_speed_viewer_1.addItem(file_name)
+               
     def zoom_out_grph_1(self):
-          # Increase the visible range 
+        # Increase the visible range 
         self.graph1.getViewBox().scaleBy((1.2, 1.2))
-        #  self.graph2.getViewBox().scaleBy((1.2, 1.2))
-
+        if self.islinked:
+            self.graph2.getViewBox().scaleBy((1.2, 1.2))
+        
+       
     def zoom_in_grph_1(self):
          # Decrease the visible range 
-         self.graph1.getViewBox().scaleBy((1 / 1.2, 1 / 1.2))
-        #  self.graph2.getViewBox().scaleBy((1 / 1.2, 1 / 1.2))
+        self.graph1.getViewBox().scaleBy((1 / 1.2, 1 / 1.2))
+        if self.islinked:
+            self.graph2.getViewBox().scaleBy((1 / 1.2, 1 / 1.2))
+            
+            
     
     def faster_grph_1(self):
-         # Decrease the timer interval to make updates faster
+        # Decrease the timer interval to make updates faster
         self.timer_1.setInterval(self.timer_1.interval() // 2)
-        # self.timer_2.setInterval(self.timer_2.interval() // 2)
     
     def slower_grph_1(self):
          # Increase the timer interval to make updates slower
@@ -346,16 +356,6 @@ class MyWindow(QMainWindow):
         
         self.graph1.setXRange(self.start ,self.end)
 
-    def change_sig_color_grph_1(self):
-        if self.ui.comb_sig_colr_grpbox_viewer_1.currentText() != "chose signal":
-            signal_to_be_changed = self.ui.comb_sig_colr_grpbox_viewer_1.currentText()
-            for signal in self.signals_1 :
-                if signal["name"] == signal_to_be_changed:
-                    signal["color"] = colorchooser.askcolor()[1]
-            
-                    for data_line in signal["data_lines"]:
-                        data_line.setPen(signal["color"])   
-           
     def move_signal_from_grph_1(self):
         if self.ui.comb_move_viewer_1.currentText != "choose signal":
             signal_to_move = self.ui.comb_move_viewer_1.currentText()
@@ -363,29 +363,44 @@ class MyWindow(QMainWindow):
                 if signal["name"] == signal_to_move:
                     for data_line in signal["data_lines"]:
                         self.graph1.removeItem(data_line)
-                        self.graph2.addItem(data_line)
+                        # self.graph2.addItem(data_line)
                     
                     self.signals_2.append(signal)
                     self.signals_1.remove(signal)
                     self.updata_combo_bxs_grph_1()
                     self.updata_combo_bxs_grph_2()
+                    self.plot_signal_grph_2()
                     
     def updata_combo_bxs_grph_1(self):
         
-        self.ui.comb_sig_colr_grpbox_viewer_1.clear()
+        self.ui.comb_sig_apperance_viewer_1.clear()
         self.ui.comb_move_viewer_1.clear()
-        # self.ui.comb_sig_disp_viewer_1.clear()
+        self.ui.comb_sig_speed_viewer_1.clear()
+
+        self.ui.comb_sig_apperance_viewer_1.addItem("choose signal")
+        self.ui.comb_move_viewer_1.addItem("choose signal")
+        self.ui.comb_sig_speed_viewer_1.addItem("choose signal")
 
         for signal in self.signals_1:
-            self.ui.comb_sig_colr_grpbox_viewer_1.addItem(signal["name"])
+            self.ui.comb_sig_apperance_viewer_1.addItem(signal["name"])
             self.ui.comb_move_viewer_1.addItem(signal["name"])
-            # self.ui.comb_sig_disp_viewer_1.addItem(signal["name"])
-
+            self.ui.comb_sig_speed_viewer_1.addItem(signal["name"])
+                    
+    def change_sig_color_grph_1(self):
+        if self.ui.comb_sig_apperance_viewer_1.currentText() != "chose signal":
+            signal_to_be_changed = self.ui.comb_sig_apperance_viewer_1.currentText()
+            for signal in self.signals_1 :
+                if signal["name"] == signal_to_be_changed:
+                    signal["color"] = colorchooser.askcolor()[1]
+            
+                    for data_line in signal["data_lines"]:
+                        data_line.setPen(signal["color"])   
+           
     def show_hide_grph_1 (self):
-        signal_to_show_hide = self.ui.comb_sig_colr_grpbox_viewer_1.currentText()
+        signal_to_show_hide = self.ui.comb_sig_apperance_viewer_1.currentText()
         for signal in self.signals_1 :
             if signal["name"] == signal_to_show_hide:
-                if (self.ui.checkBox.isChecked()):
+                if (self.ui.chk_bx_sig_show_1.isChecked()):
                     
                     for data_line in signal["data_lines"]:
                         data_line.setVisible(True) 
@@ -395,105 +410,188 @@ class MyWindow(QMainWindow):
                     for data_line in signal["data_lines"]:    # self.current_signal_v1.data_line.setVisible(False)
                         data_line.setVisible(False)
     
+    def find_max_min_1(self):
+        max_number = float('-inf')  # Start with negative infinity
+        min_number = float('-inf')  # Start with negative infinity
 
+# Iterate through the list of dictionaries
+        for signal in self.signals_1:
+            y_list = signal.get("y", [])  # Get the "x" list from the dictionary
+
+            # Find the maximum number in the current "x" list
+            if y_list:
+                current_max = max(y_list)
+                current_min = min(y_list)
+                
+                # Update the maximum number if the current maximum is greater
+                if current_max > max_number:
+                    max_number = current_max
+                    
+                if current_min < min_number:
+                    min_number = current_min
+                    
+        return max_number , min_number                    
+        # The variable max_number now contains the maximum number from all "x" lists
+        # print("Maximum number:", max_number)
+
+    def replay_1(self):
+        self.graph1.clear()
+        self.plot_signal_grph_1()
 
 
     def clear_grph_2(self):
-        self.graph1.clear()
+        self.graph2.clear()
         self.timer_2.stop()
         icon = QtGui.QPixmap("play.png")
         self.ui.btn_play_pasuse_viewer_2.setIcon(QtGui.QIcon(icon))
         self.signals_2.clear()
-        # self.ui.comb_rename_viewer_2.clear()
-        self.ui.comb_sig_colr_grpbox_viewer_2.clear()
-        self.ui.comb_sig_disp_viewer_2.clear()
-           
+        self.updata_combo_bxs_grph_2()
+
+
+
+
     def upload_data_grph_2(self):
         file_path  , _ = QFileDialog.getOpenFileName( self , "open file", "" ,"(*.csv) ")
-        # print(file_path)
-        # if file_path:
 
-        color =  colorchooser.askcolor()[1]
-        print(color)
-
-        # self.data = pd.read_csv(file_path)
-        data = np.genfromtxt(file_path, delimiter = ',')
-        x1 = data[:, 0].tolist()
-        y1 = data[:, 1].tolist()
-        # print(x1)
-        file_name = os.path.basename(file_path[:-4])
-
-        print(f"({file_name})")
-
-        self.add_signal_to_combo_grph_2(file_name)
         
+
+        data = np.genfromtxt(file_path, delimiter = ',')
+        x = data[:, 0].tolist()
+        y = data[:, 1].tolist()
+        file_name = os.path.basename(file_path[:-4])
+        # print(f"({file_name})")
+
         
         signal = {
-            "color" : color ,
+            "color" : "#ffffff" ,
             "name" : file_name, 
             "display" : True,
             "data" : data,
-            "x1" : x1,
-            "y1" : y1,
+            "x" : x,
+            "y" : y,
             "data_lines":[],
             "data_indices":[], 
-            "idx1" : None
+            "idx" : None
         }
         
-        # print(signal["x1"])
+        # print(signal["x"])
         self.signals_2.append(signal)
-        # print(self.signals_2)
-        for i_signal in self.signals_2:
-            if i_signal["name"] == file_name:
-                signal = i_signal
-        # signal = [signal for signal in  self                                                  .signals if signal["name"] == file_name]
-        # self.plot_signal([signal for signal in self.signals_1 if signal["name"] == file_name])
-        # self.plot_signal(file_name)
-        self.plot_signal_grph_2(signal)
-        print(signal["color"])
-        # print([signal["color"] for signal in self.signals_1 if signal["name"] == file_name])
         
-        # print(self.x1)
-        # print(self.y1)
+        self.updata_combo_bxs_grph_2()
+
+        # self.plot_signal_grph_2(signal)
+        print(signal["color"])
+        self.replay_2()
+        
          
-    def plot_signal_grph_2(self , signal ) :
-    # def plot_signal(self , file_name ) :
-    #     for i_signal in self.signals_1:
-    #         if i_signal["name"] == file_name:
-    #             signal = i_signal
-        data_line = self.graph2.plotItem.plot(signal["x1"], signal["y1"], pen=signal["color"])
-        # print(f'here{signal["color"]}')
-        signal["data_lines"].append(data_line)
-        signal["data_indices"].append(0)
-        signal["idx1"]=0
+    def plot_signal_grph_2(self ) :
+    
+        for signal in self.signals_2:
+            data_line = self.graph2.plotItem.plot(signal["x"], signal["y"], pen=signal["color"])
+            # print(f'here{signal["color"]}')
+            signal["data_lines"].append(data_line)
+            signal["data_indices"].append(0)
+            signal["idx"]=0
         self.graph2.plotItem.getViewBox().setAutoPan(x=True,y=True)
         # self.timer_2.setInterval()
-        self.timer_2.timeout.connect(lambda:self.update_plot_data_grph_2(signal))
-        # self.timer_2.timeout.connect(lambda:self.update_plot_data(file_name))
+        self.timer_2.timeout.connect(lambda:self.update_plot_data_grph_2(self.signals_2))
         self.timer_2.start()
         self.graph2.show()
-        self.graph2.setXRange(0,0.002*len(signal["data"]))
+        self.graph2.setXRange(0 , 0.002*len(signal["data"]))
+        # self.graph2.setYRange(min(signal["y"]) , max(signal["y"]))
 
         icon = QtGui.QPixmap("pause.png")
         self.ui.btn_play_pasuse_viewer_2.setIcon(QtGui.QIcon(icon))
        
-    def update_plot_data_grph_2(self,signal):
-    # def update_plot_data(self,file_name):
-
-        # for i_signal in self.signals_1:
-        #     if i_signal["name"] == file_name:
-        #         signal = i_signal
+    def update_plot_data_grph_2(self,signals):
+        for signal in signals:
+            for i in range(len(signal["data_lines"])):
+                x = signal["x"][:signal["data_indices"][i]]
+                y = signal["y"][:signal["data_indices"][i]]
+                signal["data_indices"][i] += 10  # Update the index for this signal
                 
-        for i in range(len(signal["data_lines"])):
-            x = signal["x1"][:signal["data_indices"][i]]
-            y = signal["y1"][:signal["data_indices"][i]]
-            signal["data_indices"][i] += 10  # Update the index for this signal
-            if signal["data_indices"][i] > len(signal["x1"]):
-                signal["data_indices"][i] = 0  # Reset the index for this signal
-            if signal["x1"][signal["data_indices"][i]] > 0.5:
-                self.graph2.setLimits(xMin=min(x, default=0), xMax=max(x, default=0))  # Disable panning over x-limits
-            self.graph2.plotItem.setXRange(max(x, default=0) - 0.5, max(x, default=0))
-            signal["data_lines"][i].setData(x, y)
+                # if signal["data_indices"][i] > len(signal["x"]):
+                #     signal["data_indices"][i] = 0  # Reset the index for this signal
+                # if signal["x"][signal["data_indices"][i]] > 0.5:
+                #     self.graph2.setLimits(xMin=min(x, default=0), xMax=max(x, default=0))  # Disable panning over x-limits
+                
+                self.graph2.setXRange(max(x, default=0) - 0.5, max(x, default=0))
+                self.graph2.setYRange(min(signal["y"]), max(signal["y"]))
+
+                signal["data_lines"][i].setData(x, y)
+         
+    # def upload_data_grph_2(self):
+    #     file_path  , _ = QFileDialog.getOpenFileName( self , "open file", "" ,"(*.csv) ")
+
+    #     color =  colorchooser.askcolor()[1]
+    #     # print(color)
+
+    #     # self.data = pd.read_csv(file_path)
+    #     data = np.genfromtxt(file_path, delimiter = ',')
+    #     x = data[:, 0].tolist()
+    #     y = data[:, 1].tolist()
+    #     # print(x)
+    #     file_name = os.path.basename(file_path[:-4])
+
+    #     # print(f"({file_name})")
+
+        
+        
+    #     signal = {
+    #         "color" : "color" ,
+    #         "name" : file_name, 
+    #         "display" : True,
+    #         "data" : data,
+    #         "x" : x,
+    #         "y" : y,
+    #         "data_lines":[],
+    #         "data_indices":[], 
+    #         "idx" : None
+    #     }
+        
+
+    #     self.signals_2.append(signal)
+    #     self.updata_combo_bxs_grph_2()
+
+    #     # for i_signal in self.signals_:
+    #     #     if i_signal["name"] == file_name:
+    #     #         signal = i_signal
+
+    #     # self.plot_signal_grph_2(signal)
+    #     # print(signal["color"])
+           
+    # def plot_signal_grph_2(self , signal ) :
+    
+    #     data_line = self.graph2.plotItem.plot(signal["x"], signal["y"], pen=signal["color"])
+    #     # print(f'here{signal["color"]}')
+    #     signal["data_lines"].append(data_line)
+    #     signal["data_indices"].append(0)
+    #     signal["idx"]=0
+    #     self.graph2.plotItem.getViewBox().setAutoPan(x=True,y=True)
+    #     # self.timer_2.setInterval()
+    #     self.timer_2.timeout.connect(lambda:self.update_plot_data_grph_2(signal))
+    #     self.timer_2.start()
+    #     self.graph2.show()
+    #     self.graph2.setXRange(0,0.002*len(signal["data"]))
+
+    #     icon = QtGui.QPixmap("pause.png")
+    #     self.ui.btn_play_pasuse_viewer_2.setIcon(QtGui.QIcon(icon))
+       
+    # def update_plot_data_grph_2(self,signal):
+                
+    #     for i in range(len(signal["data_lines"])):
+    #         x = signal["x"][:signal["data_indices"][i]]
+    #         y = signal["y"][:signal["data_indices"][i]]
+    #         signal["data_indices"][i] += 10  # Update the index for this signal
+    #         if signal["data_indices"][i] > len(signal["x"]):
+    #             signal["data_indices"][i] = 0  # Reset the index for this signal
+    #         if signal["x"][signal["data_indices"][i]] > 0.5:
+    #             self.graph2.setLimits(xMin=min(x, default=0), xMax=max(x, default=0))  # Disable panning over x-limits
+            
+    #         self.graph2.setXRange(max(x, default=0) - 0.5, max(x, default=0))
+    #         self.graph2.setYRange(min(signal["y"]) , max(signal["y"]))
+    #         signal["data_lines"][i].setData(x, y)
+
 
     def play_pause_grph_2(self):
         if self.timer_2.isActive():
@@ -506,18 +604,24 @@ class MyWindow(QMainWindow):
             self.ui.btn_play_pasuse_viewer_2.setIcon(QtGui.QIcon(icon))
 
     def add_signal_to_combo_grph_2(self , file_name):
-        self.ui.comb_sig_colr_grpbox_viewer_2.addItem(file_name)
-        # self.ui.comb_rename_viewer_2.addItem(file_name)
-        # self.ui.comb_sig_disp_viewer_2.addItem(file_name)
-                
+        self.ui.comb_sig_apperance_viewer_2.addItem(file_name)
+        self.ui.comb_move_viewer_2.addItem(file_name)
+        self.ui.comb_sig_speed_viewer_2.addItem(file_name)
+               
     def zoom_out_grph_2(self):
           # Increase the visible range 
-         self.graph2.getViewBox().scaleBy((1.2, 1.2))
+        self.graph2.getViewBox().scaleBy((1.2, 1.2))
+        if self.islinked:
+            self.graph1.getViewBox().scaleBy((1.2, 1.2))
+            
         #  self.graph2.getViewBox().scaleBy((1.2, 1.2))
 
     def zoom_in_grph_2(self):
          # Decrease the visible range 
-         self.graph2.getViewBox().scaleBy((1 / 1.2, 1 / 1.2))
+        self.graph2.getViewBox().scaleBy((1 / 1.2, 1 / 1.2))
+        if self.islinked:
+            self.graph1.getViewBox().scaleBy((1 / 1.2, 1 / 1.2))
+            
         #  self.graph2.getViewBox().scaleBy((1 / 1.2, 1 / 1.2))
     
     def faster_grph_2(self):
@@ -602,42 +706,32 @@ class MyWindow(QMainWindow):
             for signal in self.signals_2:
                 if signal["name"] == signal_to_move:
                     for data_line in signal["data_lines"]:
-                        self.graph1.removeItem(data_line)
-                        self.graph2.addItem(data_line)
+                        self.graph2.removeItem(data_line)
+                        self.graph1.addItem(data_line)
                     
                     self.signals_2.append(signal)
                     self.signals_2.remove(signal)
                     self.updata_combo_bxs_grph_1()
                     self.updata_combo_bxs_grph_2()
-                    
 
     def updata_combo_bxs_grph_2(self):
         
-        self.ui.comb_sig_colr_grpbox_viewer_2.clear()
+        self.ui.comb_sig_apperance_viewer_2.clear()
         self.ui.comb_move_viewer_2.clear()
-        self.ui.comb_sig_disp_viewer_2.clear()
+        self.ui.comb_sig_speed_viewer_2.clear()
+
+        self.ui.comb_sig_apperance_viewer_2.addItem("choose signal")
+        self.ui.comb_move_viewer_2.addItem("choose signal")
+        self.ui.comb_sig_speed_viewer_2.addItem("choose signal")
 
         for signal in self.signals_2:
-            self.ui.comb_sig_colr_grpbox_viewer_2.addItem(signal["name"])
+            self.ui.comb_sig_apperance_viewer_2.addItem(signal["name"])
             self.ui.comb_move_viewer_2.addItem(signal["name"])
-            self.ui.comb_sig_disp_viewer_2.addItem(signal["name"])
-    # def signal_rename_grph_2(self):
-    #     if self.ui.comb_sig_colr_grpbox_viewer_2.currentText() != "chose signal":
-    #         old_name = self.ui.comb_rename_viewer_2.currentText()
-    #         new_name = input("Enter a signal name: ")
-    #         for signal in self.signals_1 :
-    #                 if signal["name"] == old_name:
-    #                     signal["name"] = new_name
-    #                     # self.update_sig_name_in_combo(old_name , signal)
+            self.ui.comb_sig_speed_viewer_2.addItem(signal["name"])
     
-    # def update_sig_name_in_combo_grph_1(self , old_name , signal):
-    #     # for index in range(self.ui.comb_rename_viewer_1.count()):
-    #         if self.ui.comb_rename_viewer_1.itemText(index) == old_name:
-    #             self.ui.comb_rename_viewer_1.setItemText(index,signal["name"] )
-
     def change_sig_color_grph_2(self):
-        if self.ui.comb_sig_colr_grpbox_viewer_1.currentText() != "chose signal":
-            signal_to_be_changed = self.ui.comb_sig_colr_grpbox_viewer_1.currentText()
+        if self.ui.comb_sig_apperance_viewer_1.currentText() != "chose signal":
+            signal_to_be_changed = self.ui.comb_sig_apperance_viewer_1.currentText()
             for signal in self.signals_1 :
                 if signal["name"] == signal_to_be_changed:
                     signal["color"] = colorchooser.askcolor()[1]
@@ -650,10 +744,10 @@ class MyWindow(QMainWindow):
             # print(signal["color"])
     
     def show_hide_grph_2 (self):
-        signal_to_show_hide = self.ui.comb_sig_colr_grpbox_viewer_2.currentText()
+        signal_to_show_hide = self.ui.comb_sig_apperance_viewer_2.currentText()
         for signal in self.signals_2 :
             if signal["name"] == signal_to_show_hide:
-                if (self.ui.checkBox_2.isChecked()):
+                if (self.ui.chk_bx_sig_show_2.isChecked()):
                                         
                     for data_line in signal["data_lines"]:
                         data_line.setVisible(True) 
@@ -662,21 +756,39 @@ class MyWindow(QMainWindow):
                 else:
                     for data_line in signal["data_lines"]:    # self.current_signal_v1.data_line.setVisible(False)
                         data_line.setVisible(False)        
-    
-    
-    # def reset_zoom_grph_1(self):
-    #     # Assuming graph1 is the graph you want to reset the zoom for
-    #     initial_x_range = (0, 0.002 * len(self.signals_1[0]["data"]))
-    #     initial_y_range = (min(self.signals_1[0]["y1"]), max(self.signals_1[0]["y1"]))
-
-    #     self.graph1.setXRange(*initial_x_range)
-    #     self.graph1.setYRange(*initial_y_range)
-
-    # def link_graph(self):
-    #     # self.graph1.getPlotItem().setLimits()
-    #     pass
+        
+        
+        
         
 
+    def replay_2(self):
+        self.graph2.clear()
+        self.plot_signal_grph_2()
+        
+        
+    def link_graphs(self):
+        if  self.islinked == False:
+            self.islinked = True
+            self.timer_1.setInterval(100)
+            self.timer_2.setInterval(100)
+            
+            self.replay_1()
+            self.replay_2()
+        else:
+            self.islinked = False
+            
+        
+        # x_range1 = self.graph1.getViewBox().viewRange()[0]
+        # self.graph2.getViewBox().setXRange(x_range1[0], x_range1[1])
+        
+        # self.graph2.setXRange(*self.graph1.getViewBox().viewRange()[0])
+        
+        
+        # self.graph1.setRange(xRange=self.graph2.viewRange()[0], yRange=self.graph2.viewRange()[1])
+        # self.graph1.autoPixelRange()
+        # self.graph1.setXRange(self.graph2.getViewBox().viewRange()[0])
+        # self.graph1.setYRange(self.graph2.getViewBox().viewRange()[1])
+        
 
     def generate_report(self):
         # Create a file dialog to choose the signals to include in the report
@@ -701,8 +813,6 @@ class MyWindow(QMainWindow):
             # Finally, call export_to_pdf to save the report
             self.data_1 = selected_data
             # self.export_to_pdf()
-
-
     # def export_to_pdf(self):
     #     # Get a file path for saving the PDF
     #     pdf_file_path, _ = QFileDialog.getSaveFileName(self, "Save PDF Report", "", "PDF Files (*.pdf)")
@@ -982,7 +1092,7 @@ class MyWindow(QMainWindow):
 #         pass
     
 #     def add_signal_to_combo_graph_1(self , file_name):
-#         self.ui.comb_sig_colr_grpbox_viewer_1.addItem(file_name)
+#         self.ui.comb_sig_apperance_viewer_1.addItem(file_name)
 #         self.ui.comb_rename_viewer_1.addItem(file_name)
         self.ui.comb_sig_disp_viewer_1.addItem(file_name)
     
@@ -998,7 +1108,7 @@ class MyWindow(QMainWindow):
 #         pass
     
 #     def chng_clor_grph_1(self):
-#         signal_txt = self.ui.comb_sig_colr_grpbox_viewer_1.currentText()
+#         signal_txt = self.ui.comb_sig_apperance_viewer_1.currentText()
 #         for signal in self.graph_1_signals:
 #             if signal["name"] == signal_txt:
 #                 signal["color"] =  self.pen= colorchooser.askcolor()[1]
@@ -1007,9 +1117,6 @@ class MyWindow(QMainWindow):
 '''
        
        
-       
-        
-        
         
     
  
