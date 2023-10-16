@@ -1,2 +1,3 @@
-self.timer_1.setInterval(100) 
-            
+
+# # from reportlab.lib.styles import getSampleStyleSheet
+# from reportlab.lib import colors
