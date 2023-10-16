@@ -1,14 +1,20 @@
 from reportlab.lib.pagesizes import letter
-from reportlab.platypus import SimpleDocTemplate, Paragraph, Spacer
+from reportlab.platypus import SimpleDocTemplate, Paragraph, Spacer,Table, TableStyle
 from reportlab.lib.styles import getSampleStyleSheet
+from reportlab.lib import colors
+from reportlab.pdfgen import canvas
+from reportlab.lib.utils import ImageReader
+from PIL import Image
+from tabulate import tabulate
 from PyQt5 import QtCore, QtGui, QtWidgets
 import os
 import re
-import time#IMPORTS
+import time
 import csv
 import sys
-from PyQt5.QtWidgets import QApplication, QMainWindow, QVBoxLayout,QPushButton,  QWidget, QDesktopWidget, QFileDialog, QTableWidgetItem , QComboBox
-from PyQt5.QtGui import QIcon 
+from PyPDF2 import PdfFileWriter, PdfFileReader
+from PyQt5.QtWidgets import QApplication, QMainWindow, QVBoxLayout,QPushButton, QShortcut ,QWidget, QDesktopWidget, QFileDialog, QTableWidgetItem , QComboBox,QMessageBox
+from PyQt5.QtGui import QIcon  ,QKeySequence
 from PyQt5.QtCore import QEvent, QObject, QTimer, Qt
 from PyQt5 import QtCore
 import numpy as np
@@ -16,12 +22,16 @@ from mainwindow import Ui_MainWindow
 from tkinter import *
 from tkinter import colorchooser
 from pyqtgraph import PlotWidget
+import pyqtgraph.exporters as exporters
 from PyQt5.QtWidgets import QApplication, QMainWindow, QVBoxLayout, QWidget , QDesktopWidget , QFileDialog
 from PyQt5.QtCore import QStateMachine, QState, QPropertyAnimation
 from PyQt5.QtCore import QDateTime, Qt
-
+import io
+from statistics import mean,stdev
+import matplotlib.pyplot as plt
 import pyqtgraph as pg
 import pandas as pd
+import numpy as np
 
 class CheckableComboBox(QComboBox):
     def __init__(self):
@@ -100,15 +110,17 @@ class MyWindow(QMainWindow):
         
         self.ui.btn_clear_viewer_1.clicked.connect(self.clear_grph_1)
         
-        self.ui.btn_slow_grpbox_viewer_1.clicked.connect(self.slower_grph_1)
-        self.ui.btn_fast_grpbox_viewer_1.clicked.connect(self.faster_grph_1)
+        # self.ui.btn_slow_grpbox_viewer_1.clicked.connect(self.slower_grph_1)
+        # self.ui.btn_fast_grpbox_viewer_1.clicked.connect(self.faster_grph_1)
         
         self.ui.btn_chng_colr_grpbox_viewer_1.clicked.connect(self.change_sig_color_grph_1)
         self.ui.btn_move_viewer_1.clicked.connect(self.move_signal_from_grph_1)
         # self.ui.btn_entr_name_viewer_1.clicked.connect(self.signal_rename_grph_1)
-
+        
+        self.ui.act_add_sig_viewer_1.triggered.connect(self.upload_data_grph_1)
         
 
+        self.ui.act_add_sig_viewer_2.triggered.connect(self.upload_data_grph_2)
         self.ui.btn_add_sig_viewer_2.clicked.connect(self.upload_data_grph_2)   
         # self.ui.btn_add_sig_viewer_2.clicked.connect(self.open_file_1)   
         self.ui.btn_play_pasuse_viewer_2.clicked.connect(self.play_pause_grph_2)
@@ -137,6 +149,25 @@ class MyWindow(QMainWindow):
         self.ui.btn_srt_begin__viewer_1.clicked.connect(self.replay_1)
         self.ui.btn_srt_begin__viewer_2.clicked.connect(self.replay_2)
         
+        
+        self.ui.btn_play_pasuse_viewer_1.setToolTip("paly")
+        self.ui.btn_play_pasuse_viewer_2.setToolTip("paly")
+        
+        self.ui.btn_fast_viewer_1.setToolTip("faster")
+        self.ui.btn_slow_viewer_1.setToolTip("slower")
+
+        self.ui.btn_slow_viewer_2.setToolTip("slower")
+        self.ui.btn_slow_viewer_2.setToolTip("slower")
+        
+        self.ui.btn_srt_begin__viewer_1.setToolTip("replay")
+        self.ui.btn_srt_begin__viewer_2.setToolTip("replay")
+        
+        self.ui.btn_zoom_in_viewer_1.setToolTip("zoom in")
+        self.ui.btn_zoom_out_viewer_1.setToolTip("zoom out")
+        
+        self.ui.btn_zoom_in_viewer_2.setToolTip("zoom in")
+        self.ui.btn_zoom_out_viewer_2.setToolTip("zoom out")
+        
         self.i_1 = 1
         self.flag_1 = False
         self.data_1 = {}
@@ -154,7 +185,17 @@ class MyWindow(QMainWindow):
         self.pen = pg.mkPen(color=(255, 0, 0))
         
         
-        self.islinked = True
+        self.islinked = False
+
+        # shortcuts
+        QShortcut(QKeySequence("Ctrl+p"), self).activated.connect(self.generate_report)
+        QShortcut(QKeySequence("Ctrl+l"), self).activated.connect(self.link_graphs)
+        QShortcut(QKeySequence("Ctrl+c"), self).activated.connect(self.clear_all)
+
+
+    def clear_all(self):
+        self.clear_grph_2()
+        self.clear_grph_1()
 
     def clear_grph_1(self):
         self.graph1.clear()
@@ -163,6 +204,10 @@ class MyWindow(QMainWindow):
         self.ui.btn_play_pasuse_viewer_1.setIcon(QtGui.QIcon(icon))
         self.signals_1.clear()
         self.updata_combo_bxs_grph_1()
+        
+        if self.islinked:
+            self.clear_grph_2()
+        
         # self.ui.comb_sig_apperance_viewer_1.clear()
         # self.ui.comb_sig_apperance_viewer_1.addItem("choose signal")
            
@@ -207,12 +252,12 @@ class MyWindow(QMainWindow):
             signal["data_lines"].append(data_line)
             signal["data_indices"].append(0)
             signal["idx"]=0
+            self.graph1.setXRange(0 , 0.002*len(signal["data"]))
         self.graph1.plotItem.getViewBox().setAutoPan(x=True,y=True)
         # self.timer_1.setInterval()
         self.timer_1.timeout.connect(lambda:self.update_plot_data_grph_1(self.signals_1))
         self.timer_1.start()
         self.graph1.show()
-        self.graph1.setXRange(0 , 0.002*len(signal["data"]))
         # self.graph1.setYRange(min(signal["y"]) , max(signal["y"]))
 
         icon = QtGui.QPixmap("pause.png")
@@ -225,8 +270,8 @@ class MyWindow(QMainWindow):
                 y = signal["y"][:signal["data_indices"][i]]
                 signal["data_indices"][i] += 10  # Update the index for this signal
                 
-                # if signal["data_indices"][i] > len(signal["x"]):
-                #     signal["data_indices"][i] = 0  # Reset the index for this signal
+                # if signal["data_indices"][0] > len(signal["x"]):
+                    # signal["data_indices"][i] = 0  # Reset the index for this signal
                 # if signal["x"][signal["data_indices"][i]] > 0.5:
                 #     self.graph1.setLimits(xMin=min(x, default=0), xMax=max(x, default=0))  # Disable panning over x-limits
                 
@@ -234,7 +279,6 @@ class MyWindow(QMainWindow):
                 self.graph1.setYRange(min(signal["y"]), max(signal["y"]))
 
                 signal["data_lines"][i].setData(x, y)
-                
                 
         # for i in range(len(signal["data_lines"])):
         #     x = signal["x"][:signal["data_indices"][i]]
@@ -255,40 +299,47 @@ class MyWindow(QMainWindow):
         if self.timer_1.isActive():
             self.timer_1.stop()
             icon = QtGui.QPixmap("play.png")
+            self.ui.btn_play_pasuse_viewer_1.setToolTip("paly")
             self.ui.btn_play_pasuse_viewer_1.setIcon(QtGui.QIcon(icon))
         else:
             self.timer_1.start()
             icon = QtGui.QPixmap("pause.png")
+            self.ui.btn_play_pasuse_viewer_1.setToolTip("pause")
             self.ui.btn_play_pasuse_viewer_1.setIcon(QtGui.QIcon(icon))
+        
+        if self.islinked:
+            self.play_pause_grph_2
 
     def add_signal_to_combo_grph_1(self , file_name):
         self.ui.comb_sig_apperance_viewer_1.addItem(file_name)
         self.ui.comb_move_viewer_1.addItem(file_name)
-        self.ui.comb_sig_speed_viewer_1.addItem(file_name)
                
     def zoom_out_grph_1(self):
         # Increase the visible range 
         self.graph1.getViewBox().scaleBy((1.2, 1.2))
         if self.islinked:
-            self.graph2.getViewBox().scaleBy((1.2, 1.2))
-        
+            self.zoom_out_grph_2()
        
     def zoom_in_grph_1(self):
          # Decrease the visible range 
         self.graph1.getViewBox().scaleBy((1 / 1.2, 1 / 1.2))
         if self.islinked:
-            self.graph2.getViewBox().scaleBy((1 / 1.2, 1 / 1.2))
-            
+            self.zoom_in_grph_2()            
             
     
     def faster_grph_1(self):
         # Decrease the timer interval to make updates faster
         self.timer_1.setInterval(self.timer_1.interval() // 2)
+        
+        if self.islinked :
+            self.faster_grph_2()
     
     def slower_grph_1(self):
          # Increase the timer interval to make updates slower
-         self.timer_1.setInterval(self.timer_1.interval() * 2)
+        self.timer_1.setInterval(self.timer_1.interval() * 2)
         #  self.timer_2.setInterval(self.timer_2.interval() * 2)
+        if self.islinked :
+            self.slower_grph_2()
 
     def open_file_1(self):
         # Get file path
@@ -363,7 +414,7 @@ class MyWindow(QMainWindow):
                 if signal["name"] == signal_to_move:
                     for data_line in signal["data_lines"]:
                         self.graph1.removeItem(data_line)
-                        # self.graph2.addItem(data_line)
+                        self.graph2.addItem(data_line)
                     
                     self.signals_2.append(signal)
                     self.signals_1.remove(signal)
@@ -375,16 +426,13 @@ class MyWindow(QMainWindow):
         
         self.ui.comb_sig_apperance_viewer_1.clear()
         self.ui.comb_move_viewer_1.clear()
-        self.ui.comb_sig_speed_viewer_1.clear()
 
         self.ui.comb_sig_apperance_viewer_1.addItem("choose signal")
         self.ui.comb_move_viewer_1.addItem("choose signal")
-        self.ui.comb_sig_speed_viewer_1.addItem("choose signal")
 
         for signal in self.signals_1:
             self.ui.comb_sig_apperance_viewer_1.addItem(signal["name"])
             self.ui.comb_move_viewer_1.addItem(signal["name"])
-            self.ui.comb_sig_speed_viewer_1.addItem(signal["name"])
                     
     def change_sig_color_grph_1(self):
         if self.ui.comb_sig_apperance_viewer_1.currentText() != "chose signal":
@@ -437,6 +485,8 @@ class MyWindow(QMainWindow):
     def replay_1(self):
         self.graph1.clear()
         self.plot_signal_grph_1()
+        if self.islinked:
+            self.replay_2()
 
 
     def clear_grph_2(self):
@@ -492,12 +542,14 @@ class MyWindow(QMainWindow):
             signal["data_lines"].append(data_line)
             signal["data_indices"].append(0)
             signal["idx"]=0
+            
+            #that was not here it was outside loop same for grph1
+            self.graph2.setXRange(0 , 0.002*len(signal["data"]))
         self.graph2.plotItem.getViewBox().setAutoPan(x=True,y=True)
         # self.timer_2.setInterval()
         self.timer_2.timeout.connect(lambda:self.update_plot_data_grph_2(self.signals_2))
         self.timer_2.start()
         self.graph2.show()
-        self.graph2.setXRange(0 , 0.002*len(signal["data"]))
         # self.graph2.setYRange(min(signal["y"]) , max(signal["y"]))
 
         icon = QtGui.QPixmap("pause.png")
@@ -597,16 +649,17 @@ class MyWindow(QMainWindow):
         if self.timer_2.isActive():
             self.timer_2.stop()
             icon = QtGui.QPixmap("play.png")
+            self.ui.btn_play_pasuse_viewer_2.setToolTip("paly")
             self.ui.btn_play_pasuse_viewer_2.setIcon(QtGui.QIcon(icon))
         else:
             self.timer_2.start()
             icon = QtGui.QPixmap("pause.png")
+            self.ui.btn_play_pasuse_viewer_2.setToolTip("pause")
             self.ui.btn_play_pasuse_viewer_2.setIcon(QtGui.QIcon(icon))
 
     def add_signal_to_combo_grph_2(self , file_name):
         self.ui.comb_sig_apperance_viewer_2.addItem(file_name)
         self.ui.comb_move_viewer_2.addItem(file_name)
-        self.ui.comb_sig_speed_viewer_2.addItem(file_name)
                
     def zoom_out_grph_2(self):
           # Increase the visible range 
@@ -709,7 +762,7 @@ class MyWindow(QMainWindow):
                         self.graph2.removeItem(data_line)
                         self.graph1.addItem(data_line)
                     
-                    self.signals_2.append(signal)
+                    self.signals_1.append(signal)
                     self.signals_2.remove(signal)
                     self.updata_combo_bxs_grph_1()
                     self.updata_combo_bxs_grph_2()
@@ -718,21 +771,18 @@ class MyWindow(QMainWindow):
         
         self.ui.comb_sig_apperance_viewer_2.clear()
         self.ui.comb_move_viewer_2.clear()
-        self.ui.comb_sig_speed_viewer_2.clear()
 
         self.ui.comb_sig_apperance_viewer_2.addItem("choose signal")
         self.ui.comb_move_viewer_2.addItem("choose signal")
-        self.ui.comb_sig_speed_viewer_2.addItem("choose signal")
 
         for signal in self.signals_2:
             self.ui.comb_sig_apperance_viewer_2.addItem(signal["name"])
             self.ui.comb_move_viewer_2.addItem(signal["name"])
-            self.ui.comb_sig_speed_viewer_2.addItem(signal["name"])
     
     def change_sig_color_grph_2(self):
-        if self.ui.comb_sig_apperance_viewer_1.currentText() != "chose signal":
-            signal_to_be_changed = self.ui.comb_sig_apperance_viewer_1.currentText()
-            for signal in self.signals_1 :
+        if self.ui.comb_sig_apperance_viewer_2.currentText() != "chose signal":
+            signal_to_be_changed = self.ui.comb_sig_apperance_viewer_2.currentText()
+            for signal in self.signals_2 :
                 if signal["name"] == signal_to_be_changed:
                     signal["color"] = colorchooser.askcolor()[1]
             
@@ -769,15 +819,34 @@ class MyWindow(QMainWindow):
     def link_graphs(self):
         if  self.islinked == False:
             self.islinked = True
+            self.ui.btn_link_graphs.setText("disable link graphs")
+            self.ui.btn_srt_begin__viewer_2.setEnabled(False)
+            self.ui.btn_slow_viewer_2.setEnabled(False)
+            self.ui.btn_zoom_out_viewer_2.setEnabled(False)
+            self.ui.btn_play_pasuse_viewer_2.setEnabled(False)
+            self.ui.btn_play_pasuse_viewer_2.setEnabled(False)
+            self.ui.btn_fast_viewer_2.setEnabled(False)
+            self.ui.btn_zoom_in_viewer_2.setEnabled(False)
             self.timer_1.setInterval(100)
             self.timer_2.setInterval(100)
             
             self.replay_1()
             self.replay_2()
+            
+            # self.timer_1.setInterval(100) 
+            # self.timer_2.setInterval(100) 
         else:
+            self.ui.btn_link_graphs.setText("link graphs")
+            self.ui.btn_srt_begin__viewer_2.setEnabled(True)
+            self.ui.btn_slow_viewer_2.setEnabled(True)
+            self.ui.btn_zoom_out_viewer_2.setEnabled(True)
+            self.ui.btn_play_pasuse_viewer_2.setEnabled(True)
+            self.ui.btn_play_pasuse_viewer_2.setEnabled(True)
+            self.ui.btn_fast_viewer_2.setEnabled(True)
+            self.ui.btn_zoom_in_viewer_2.setEnabled(True)
             self.islinked = False
             
-        
+     
         # x_range1 = self.graph1.getViewBox().viewRange()[0]
         # self.graph2.getViewBox().setXRange(x_range1[0], x_range1[1])
         
@@ -788,33 +857,162 @@ class MyWindow(QMainWindow):
         # self.graph1.autoPixelRange()
         # self.graph1.setXRange(self.graph2.getViewBox().viewRange()[0])
         # self.graph1.setYRange(self.graph2.getViewBox().viewRange()[1])
+      
+    
+    
+    def captureGraphImage(self, ):
+        data_items1 = self.graph1.getPlotItem().listDataItems()
+       
+        data_items2 = self.graph2.getPlotItem().listDataItems()
+    
+        if len(data_items1)> 0 :
+            exporter = exporters.ImageExporter(self.graph1.scene())
         
+            # Set the file suffix to specify the export type
+            exporter.params.fileSuffix = 'png'
+
+            # Set the filename
+            export_filename = 'img1.png'
+
+            # Export the graph to the specified filename
+            exporter.export(export_filename)
+        if len(data_items2)> 0 :
+            exporter = exporters.ImageExporter(self.graph2.scene())
+        
+            # Set the file suffix to specify the export type
+            exporter.params.fileSuffix = 'png'
+
+            # Set the filename
+            export_filename = 'img2.png'
+
+            # Export the graph to the specified filename
+            exporter.export(export_filename)
 
     def generate_report(self):
-        # Create a file dialog to choose the signals to include in the report
-        selected_signals, _ = QFileDialog.getOpenFileNames(self, "Select Signals for Report", "", "CSV Files (*.csv)")
+        # Prompt the user to choose a file path for saving the PDF
+        pdf_file_path, _ = QFileDialog.getSaveFileName(self, "Save PDF Report", "", "PDF Files (*.pdf)")
+        stat1= self.cal_statistics(self.graph1)
+        stat2= self.cal_statistics(self.graph2)
+        table1 = tabulate(stat1, headers='Graph1 statistics', tablefmt='pretty')
+        table2 = tabulate(stat2, headers='Graph2 statistics', tablefmt='pretty')
+        if pdf_file_path:
+            self.captureGraphImage()
+            c = canvas.Canvas(pdf_file_path, pagesize=letter)  # Use the selected PDF file path
+
+            # Add a header with the same file name as the PDF
+            file_name = pdf_file_path.split("/")[-1].replace(".pdf", " ")
+            # Set font and size for the title
+            c.setFont("Helvetica-Bold", 24)
         
-        if selected_signals:
-            # Create a dictionary to hold selected signal data
-            selected_data = {}
+            # Get the text width of the title
+            title_width = c.stringWidth(file_name, "Helvetica-Bold", 24)
+        
+            # Calculate the x-coordinate to center the title
+            x_centered = (letter[0] - title_width) / 2
+        
+            # Draw the centered and larger title
+            c.drawString(x_centered, 750, file_name)
 
-            # Open and read the selected CSV files
-            for file_path in selected_signals:
-                file = open(file_path)
-                lines = file.readlines()
-                file_name = file_path
-                selected_data[file_name] = {}
-                selected_data[file_name]['x_values'] = np.array([x.split(",")[0] for x in lines], dtype=float)
-                selected_data[file_name]['y_values'] = np.array([y.split(",")[1].strip("/\n") for y in lines], dtype=float)
+            # Display the images in smaller sizes
+            imag = ImageReader('img1.png')
+            imag2 = ImageReader('img2.png')
+            image_width = 500  # Set the width for the images
+            image_height = 180  # Set the height for the images
+            c.drawImage(imag, 50, 550, width=image_width, height=image_height)
+            c.drawImage(imag2, 50, 350, width=image_width, height=image_height)
 
-            # Generate the PDF report with statistics
-            # You can customize the report generation code based on your requirements
-            # For example, create a title, add statistics for each selected signal, etc.
-            # Finally, call export_to_pdf to save the report
-            self.data_1 = selected_data
-            # self.export_to_pdf()
-    # def export_to_pdf(self):
-    #     # Get a file path for saving the PDF
+            c.save()
+      
+      
+    def cal_statistics(self,graph):
+        data_item = graph.getPlotItem().listDataItems()[0]  
+        x_values, y_values = data_item.getData()
+
+        mean_value = mean(y_values)
+        std_deviation = stdev(y_values)
+        duration = len(y_values)
+        min_value = min(y_values)
+        max_value = max(y_values)
+
+        statistics = {
+            'mean': mean_value,
+            'std': std_deviation,
+            'duration': duration,
+            'min': min_value,
+            'max': max_value
+        }
+
+        return statistics
+        
+    def gen_listpdf(self):
+        pdf_file_path, _ = QFileDialog.getSaveFileName(self, "Save PDF Report", "", "PDF Files (*.pdf)")
+        doc = SimpleDocTemplate(pdf_file_path, pagesize=letter)
+        elements=[]
+        # Generate statistics tables
+        stat1 = self.cal_statistics(self.graph1)
+        stat2 = self.cal_statistics(self.graph2)
+        # Define headers for the tables
+        headers = ["Statistic", "Value"]
+
+        # Convert the dictionaries into a list of (key, value) pairs
+        data1 = list(stat1.items())
+        data2 = list(stat2.items())
+
+        # Use tabulate to format the tables
+        table1 = tabulate(data1, headers, tablefmt='grid')
+        table2 = tabulate(data2, headers, tablefmt='grid')
+
+        # Create a Table for table1
+        table1 = Table([table1.split('\n')], colWidths=[100, 200], style=[
+                ('BACKGROUND', (0, 0), (-1, 0), colors.grey),
+                ('TEXTCOLOR', (0, 0), (-1, 0), colors.whitesmoke),
+                ('ALIGN', (0, 0), (-1, -1), 'CENTER'),
+                ('FONTNAME', (0, 0), (-1, 0), 'Helvetica-Bold'),
+                ('BOTTOMPADDING', (0, 0), (-1, 0), 12),
+                ('BACKGROUND', (0, 1), (-1, -1), colors.beige),
+                ('GRID', (0, 0), (-1, -1), 1, colors.black)
+            ])
+        elements.append(table1)
+
+        # Create a Table for table2
+        table2 = Table([table2.split('\n')], colWidths=[100, 200], style=[
+                ('BACKGROUND', (0, 0), (-1, 0), colors.grey),
+                ('TEXTCOLOR', (0, 0), (-1, 0), colors.whitesmoke),
+                ('ALIGN', (0, 0), (-1, -1), 'CENTER'),
+                ('FONTNAME', (0, 0), (-1, 0), 'Helvetica-Bold'),
+                ('BOTTOMPADDING', (0, 0), (-1, 0), 12),
+                ('BACKGROUND', (0, 1), (-1, -1), colors.beige),
+                ('GRID', (0, 0), (-1, -1), 1, colors.black)
+            ])
+        elements.append(table2)
+        # Build the PDF document
+        doc.build(elements)
+
+    # def generate_report(self):
+    #     # Create a file dialog to choose the signals to include in the report
+    #     selected_signals, _ = QFileDialog.getOpenFileNames(self, "Select Signals for Report", "", "CSV Files (*.csv)")
+        
+    #     if selected_signals:
+    #         # Create a dictionary to hold selected signal data
+    #         selected_data = {}
+
+    #         # Open and read the selected CSV files
+    #         for file_path in selected_signals:
+    #             file = open(file_path)
+    #             lines = file.readlines()
+    #             file_name = file_path
+    #             selected_data[file_name] = {}
+    #             selected_data[file_name]['x_values'] = np.array([x.split(",")[0] for x in lines], dtype=float)
+    #             selected_data[file_name]['y_values'] = np.array([y.split(",")[1].strip("/\n") for y in lines], dtype=float)
+
+    #         # Generate the PDF report with statistics
+    #         # You can customize the report generation code based on your requirements
+    #         # For example, create a title, add statistics for each selected signal, etc.
+    #         # Finally, call export_to_pdf to save the report
+    #         self.data_1 = selected_data
+    #         # self.export_to_pdf()
+    # # def export_to_pdf(self):
+    # #     # Get a file path for saving the PDF
     #     pdf_file_path, _ = QFileDialog.getSaveFileName(self, "Save PDF Report", "", "PDF Files (*.pdf)")
         
     #     if pdf_file_path:

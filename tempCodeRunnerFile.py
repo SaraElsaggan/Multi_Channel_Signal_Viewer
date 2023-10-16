@@ -1,2 +1,2 @@
-ange()[0]
-        # self.graph2.getViewBox().setXRange(x_rang
+self.timer_1.setInterval(100) 
+            
