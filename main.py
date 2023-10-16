@@ -1,3 +1,4 @@
+import tempfile
 from reportlab.platypus import SimpleDocTemplate, Image, Table, TableStyle, PageBreak
 from reportlab.lib.units import inch
 import tkinter as tk
@@ -26,7 +27,7 @@ import time
 import csv
 import sys
 from PyPDF2 import PdfFileWriter, PdfFileReader
-from PyQt5.QtWidgets import QApplication, QMainWindow, QVBoxLayout, QPushButton, QShortcut, QWidget, QDesktopWidget, QFileDialog
+from PyQt5.QtWidgets import  QMessageBox ,  QApplication, QMainWindow, QVBoxLayout, QPushButton, QShortcut, QWidget, QDesktopWidget, QFileDialog
 from PyQt5.QtGui import QIcon, QKeySequence, QPixmap, QImage
 from PyQt5.QtCore import QEvent, QObject, QTimer, Qt
 import numpy as np
@@ -100,6 +101,7 @@ class MyWindow(QMainWindow):
 
         self.timer_1 = QtCore.QTimer()
         self.timer_1.setInterval(100) 
+        
 
         self.timer_2 = QtCore.QTimer()
         self.timer_2.setInterval(100) 
@@ -193,18 +195,19 @@ class MyWindow(QMainWindow):
         self.islinked = False
 
         # shortcuts
-        QShortcut(QKeySequence("Ctrl+p"), self).activated.connect(self.generate_report)
+        QShortcut(QKeySequence("Ctrl+p"), self).activated.connect(self.report)
         QShortcut(QKeySequence("Ctrl+l"), self).activated.connect(self.link_graphs)
         QShortcut(QKeySequence("Ctrl+c"), self).activated.connect(self.clear_all)
 
-        QShortcut(QKeySequence("Ctrl + +"), self).activated.connect(self.zoom_in_all)
-        QShortcut(QKeySequence("Ctrl + -"), self).activated.connect(self.zoom_out_all)
+        QShortcut(QKeySequence("Ctrl++"), self).activated.connect(self.zoom_in_all)
+        QShortcut(QKeySequence("Ctrl+-"), self).activated.connect(self.zoom_out_all)
 
-        QShortcut(QKeySequence("Ctrl + ["), self).activated.connect(self.slow_all_graphs)
-        QShortcut(QKeySequence("Ctrl + ]"), self).activated.connect(self.fast_all_graphs)
+        QShortcut(QKeySequence("Ctrl+["), self).activated.connect(self.slow_all_graphs)
+        QShortcut(QKeySequence("Ctrl+]"), self).activated.connect(self.fast_all_graphs)
 
-        self.ui.actionreport.triggered.connect(self.repo)
-        # self.ui.actionreport.triggered.connect(self.create_pdf)
+        self.ui.btn_report_grph_1.clicked.connect(self.report_grph_1)
+        self.ui.btn_report_grph_2.clicked.connect(self.report_grph_2)
+        self.ui.actionreport.triggered.connect(self.report)
         # self.ui.actionreport.triggered.connect(self.capture_snapshot)
         # self.ui.actionreport.triggered.connect(self.captureGraphImage)
 
@@ -805,9 +808,7 @@ class MyWindow(QMainWindow):
             self.ui.btn_zoom_in_viewer_2.setEnabled(False)
             self.timer_1.setInterval(100)
             self.timer_2.setInterval(100)
-            print(self.timer_1.interval())
-            print(self.timer_2.interval())
-            
+        
             self.replay_1()
             self.replay_2()
             
@@ -888,8 +889,8 @@ class MyWindow(QMainWindow):
 
             c.save()
       
-    def cal_statistics(self,graph):
-        data_item = graph.getPlotItem().listDataItems()[0]  
+    def cal_statistics_1(self):
+        data_item = self.graph1.getPlotItem().listDataItems()[0]  
         x_values, y_values = data_item.getData()
 
         mean_value = mean(y_values)
@@ -908,6 +909,85 @@ class MyWindow(QMainWindow):
 
         return statistics
         
+    def cal_statistics_2(self):
+        data_item = self.graph2.getPlotItem().listDataItems()[0]  
+        x_values, y_values = data_item.getData()
+
+        mean_value = mean(y_values)
+        std_deviation = stdev(y_values)
+        duration = len(y_values)
+        min_value = min(y_values)
+        max_value = max(y_values)
+
+        statistics = {
+            'mean': mean_value,
+            'std': std_deviation,
+            'duration': duration,
+            'min': min_value,
+            'max': max_value
+        }
+
+        return statistics
+
+    def report(self):
+        if len(self.signals_1 )>0 and len(self.signals_2)>0:
+            
+            file_path, _ = QFileDialog.getSaveFileName(None, "Save PDF", "", "PDF Files (*.pdf);;All Files (*)")
+    
+            img_1, img_2 = self.capture_snapshot()
+            pdf = FPDF()
+            
+            pdf.add_page()
+            
+            pdf.image(img_1, 5, 10, 190)
+            os.remove(img_1)
+
+            table_x_1 = 5
+            table_y_1 = 100
+
+            data_dict1  = self.cal_statistics_1()
+            pdf.set_xy(table_x_1, table_y_1)
+            pdf.set_font("Arial", size=12)
+            pdf.cell(0, 8, "Data Table 1", ln=True, align="C")
+            pdf.ln(10)
+                
+            for key, value in data_dict1.items():
+                pdf.cell(100, 10, str(key), border=1)
+                pdf.cell(0, 10, str(value), border=1)
+                pdf.ln()
+                
+                
+                
+                
+            pdf.add_page()
+            pdf.image(img_2, 5, 10, 190)
+            os.remove(img_2)
+            
+            table_x_2 = 5
+            table_y_2 = 100
+            
+            
+
+            data_dict2  = self.cal_statistics_2()
+            pdf.set_xy(table_x_2, table_y_2)
+            pdf.set_font("Arial", size=12)
+            pdf.cell(0, 8, "Data Table 2", ln=True, align="C")
+            pdf.ln(10)
+            
+
+            for key, value in data_dict2.items():
+                pdf.cell(100, 10 , str(key), border=1)
+                pdf.cell(0, 10, str(value), border=1)
+                pdf.ln()
+            
+            pdf.output( file_path, "F")
+        else :
+            message_box = QMessageBox()
+            message_box.setWindowTitle("error")
+            message_box.setText("one pf the graphs is empty or both")
+            message_box.exec_()  # Display the message box
+
+            
     def gen_listpdf(self):
         pdf_file_path, _ = QFileDialog.getSaveFileName(self, "Save PDF Report", "", "PDF Files (*.pdf)")
         doc = SimpleDocTemplate(pdf_file_path, pagesize=letter)
@@ -953,17 +1033,27 @@ class MyWindow(QMainWindow):
         doc.build(elements)
 
     def capture_snapshot(self):
-        exporter = pg.exporters.ImageExporter(self.graph1.plotItem)
-        exporter.parameters()['width'] = 100   # (note this also affects height parameter)
+        exporter = exporters.ImageExporter(self.graph1.plotItem)
+        # exporter.parameters()['width'] = 100   # (note this also affects height parameter)
+        exporter.parameters()['width'] = self.graph2.width()    # (note this also affects height parameter)
+        exporter.parameters()['height'] = self.graph2.height()   # (note this also affects height parameter)
 
 # save to file
-        exporter.export('fileName.png')
+        img1_path = "img1.png"
+        img_1 = exporter.export(img1_path)
         
-        exporter = pg.exporters.ImageExporter(self.graph2.plotItem)
-        exporter.parameters()['width'] = 100   # (note this also affects height parameter)
+        exporter = exporters.ImageExporter(self.graph2.plotItem)
+        exporter.parameters()['width'] = self.graph1.width()    # (note this also affects height parameter)
+        exporter.parameters()['height'] = self.graph1.height()   # (note this also affects height parameter)
 
 # save to file
-        exporter.export('fileName2.png')
+        img2_path = "img2.png"
+        img_2 = exporter.export(img2_path)
+        
+        return img1_path , img2_path
+        
+        
+        
         # self.create_pdf()
         # Capture the snapshot from graph1
         # graph_view_1 = self.graph1.getViewBox()
@@ -987,32 +1077,119 @@ class MyWindow(QMainWindow):
         pdf.write(4, f'{day}')
         pdf.ln(5)
 
-    def repo(self):
-        pdf = FPDF() # A4 (210 by 297 mm)
-        WIDTH = 210
-        HEIGHT = 297
+    def report_grph_1(self ):    
+        if len(self.signals_1)>0:
+            file_path, _ = QFileDialog.getSaveFileName(None, "Save PDF", "", "PDF Files (*.pdf);;All Files (*)")
+    
+            img_1, img_2 = self.capture_snapshot()
+            pdf = FPDF()
+        
+        # Add a page
+            pdf.add_page()
+            
+            pdf.image(img_1, 5, 10, 190)
+            
+            os.remove(img_1)
+            
+            table_x = 5
+            table_y = 100
+            
+            data_dict1  = self.cal_statistics_1()
+            pdf.set_xy(table_x, table_y)
+            pdf.set_font("Arial", size=12)
+            pdf.cell(0, 10, "Data Table 1", ln=True, align="C")
+            pdf.ln(10)
 
-        # states = ['Massachusetts', 'New Hampshire']
+            for key, value in data_dict1.items():
+                pdf.cell(100, 10, str(key), border=1)
+                pdf.cell(0, 10, str(value), border=1)
+                pdf.ln()
 
-        ''' First Page '''
-        pdf.add_page()
-        # pdf.image("fileName.png", 0, 0, WIDTH)
-        # create_title(day, pdf)
+            
+            pdf.output( file_path, "F")
+        else:
+            message_box = QMessageBox()
+            message_box.setWindowTitle("error")
+            message_box.setText("the graphs is empty")
+            message_box.exec_() 
+    def report_grph_2(self ):   
+        if len(self.signals_2)>0: 
+            file_path, _ = QFileDialog.getSaveFileName(None, "Save PDF", "", "PDF Files (*.pdf);;All Files (*)")
+    
+            img_1, img_2 = self.capture_snapshot()
+            pdf = FPDF()
+        
+        # Add a page
+            pdf.add_page()
+            
+            pdf.image(img_2, 5, 10, 190)
+            
+            os.remove(img_2)
+            
+            table_x = 5
+            table_y = 100
+            
+            data_dict1  = self.cal_statistics_2()
+            pdf.set_xy(table_x, table_y)
+            pdf.set_font("Arial", size=12)
+            pdf.cell(0, 10, "Data Table 1", ln=True, align="C")
+            pdf.ln(10)
 
-        # plot_usa_case_map("./tmp/usa_cases.png", day=day)
-        # prev_days = 250
-        # plot_states(states, days=prev_days, filename="./tmp/cases.png", end_date=day)
-        # plot_states(states, days=prev_days, mode=Mode.DEATHS, filename="./tmp/deaths.png", end_date=day)
+            for key, value in data_dict1.items():
+                pdf.cell(100, 10, str(key), border=1)
+                pdf.cell(0, 10, str(value), border=1)
+                pdf.ln()
 
-        pdf.image("fileName.png", 5, 10, 190)
-        pdf.image("fileName2.png", 5, 140, 195) 
+            
+            pdf.output( file_path, "F")
+    
+        else:
+            message_box = QMessageBox()
+            message_box.setWindowTitle("error")
+            message_box.setText("the graphs is empty")
+            message_box.exec_()     
+
         
-        pdf.output( "tut.pdf", "F")
         
-        
-        
-        
-        
+
+    def ret_stat_table(self):
+        # Generate statistics tables
+        stat1 = self.cal_statistics(self.graph1)
+        stat2 = self.cal_statistics(self.graph2)
+        # Define headers for the tables
+        headers = ["Statistic", "Value"]
+
+        # Convert the dictionaries into a list of (key, value) pairs
+        data1 = list(stat1.items())
+        data2 = list(stat2.items())
+
+        # Use tabulate to format the tables
+        table1 = tabulate(data1, headers, tablefmt='grid')
+        table2 = tabulate(data2, headers, tablefmt='grid')
+
+        # Create a Table for table1
+        table1 = Table([table1.split('\n')], colWidths=[100, 200], style=[
+                ('BACKGROUND', (0, 0), (-1, 0), colors.grey),
+                ('TEXTCOLOR', (0, 0), (-1, 0), colors.whitesmoke),
+                ('ALIGN', (0, 0), (-1, -1), 'CENTER'),
+                ('FONTNAME', (0, 0), (-1, 0), 'Helvetica-Bold'),
+                ('BOTTOMPADDING', (0, 0), (-1, 0), 12),
+                ('BACKGROUND', (0, 1), (-1, -1), colors.beige),
+                ('GRID', (0, 0), (-1, -1), 1, colors.black)
+            ])
+
+        # Create a Table for table2
+        table2 = Table([table2.split('\n')], colWidths=[100, 200], style=[
+                ('BACKGROUND', (0, 0), (-1, 0), colors.grey),
+                ('TEXTCOLOR', (0, 0), (-1, 0), colors.whitesmoke),
+                ('ALIGN', (0, 0), (-1, -1), 'CENTER'),
+                ('FONTNAME', (0, 0), (-1, 0), 'Helvetica-Bold'),
+                ('BOTTOMPADDING', (0, 0), (-1, 0), 12),
+                ('BACKGROUND', (0, 1), (-1, -1), colors.beige),
+                ('GRID', (0, 0), (-1, -1), 1, colors.black)
+            ])
+        return table1,table2
+
     def create_pdf(self ):
         # Open a file dialog to select where to save the PDF
         file_path, _ = QFileDialog.getSaveFileName(self, "Save PDF", "", "PDF Files (*.pdf)")

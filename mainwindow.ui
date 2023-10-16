@@ -66,6 +66,13 @@
         </property>
        </widget>
       </item>
+      <item>
+       <widget class="QPushButton" name="btn_report_grph_1">
+        <property name="text">
+         <string>report</string>
+        </property>
+       </widget>
+      </item>
      </layout>
     </widget>
     <widget class="QWidget" name="formLayoutWidget_5">
@@ -185,6 +192,13 @@
      </property>
      <item>
       <widget class="QPushButton" name="btn_srt_begin__viewer_1">
+       <property name="toolTip">
+        <string>replay</string>
+       </property>
+       <property name="whatsThis">
+        <string>stast from beging
+</string>
+       </property>
        <property name="text">
         <string/>
        </property>
@@ -227,6 +241,10 @@
      </item>
      <item>
       <widget class="QPushButton" name="btn_play_pasuse_viewer_1">
+       <property name="toolTip">
+        <string>paly
+</string>
+       </property>
        <property name="text">
         <string/>
        </property>
@@ -434,6 +452,13 @@
        <widget class="QPushButton" name="btn_clear_viewer_2">
         <property name="text">
          <string>clear graph</string>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="QPushButton" name="btn_report_grph_2">
+        <property name="text">
+         <string>report</string>
         </property>
        </widget>
       </item>
