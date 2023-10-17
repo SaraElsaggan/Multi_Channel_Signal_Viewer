@@ -50,16 +50,17 @@ class MyWindow(QMainWindow):
         super(MyWindow , self).__init__()
         self.ui = Ui_MainWindow()
         self.ui.setupUi(self)  
+        # self.ui.horizontalLayout_6.
         
         self.graph1 = PlotWidget(self.ui.centralwidget)
-        self.graph1.setGeometry(30, 50, 770, 300)
-        self.graph1.setObjectName("Channel1")
-        self.graph1.setYRange(-2,2)
+        # self.graph1.setGeometry(30, 50, 770, 300)
+        # self.graph1.setObjectName("Channel1")
+        # self.graph1.setYRange(-2,2)
         
         self.graph2 = PlotWidget(self.ui.centralwidget)
-        self.graph2.setGeometry(30, 400, 770, 300)
-        self.graph2.setObjectName("Channel1")
-        self.graph2.setYRange(-2,2)
+        # self.graph2.setGeometry(30, 400, 770, 300)
+        # self.graph2.setObjectName("Channel1")
+        # self.graph2.setYRange(-2,2)
 
         self.timer_1 = QtCore.QTimer()
         self.timer_1.setInterval(100) 
