@@ -14,8 +14,38 @@ from PyQt5 import QtCore, QtGui, QtWidgets
 class Ui_MainWindow(object):
     def setupUi(self, MainWindow):
         MainWindow.setObjectName("MainWindow")
-        MainWindow.resize(1741, 852)
+        MainWindow.resize(1741, 805)
+        font = QtGui.QFont()
+        font.setBold(True)
+        MainWindow.setFont(font)
         MainWindow.setFocusPolicy(QtCore.Qt.NoFocus)
+        MainWindow.setStyleSheet("QGroupBox  {\n"
+"    border: 1px solid gray;\n"
+"    border-color: #FF17365D;\n"
+"    margin-top: 27px;\n"
+"    font-size: 14px;\n"
+"    border-radius: 5px;\n"
+"}\n"
+"\n"
+"QGroupBox::title  {\n"
+"    subcontrol-origin: margin;\n"
+"    subcontrol-position: top center;\n"
+"    padding: 5px 8000px 5px 8000px;\n"
+"    background-color:rgb(78, 82, 145);\n"
+"    color: rgb(255, 255, 255);\n"
+"}\n"
+"\n"
+"QPushButton {\n"
+"    border: 2px solid rgb(89, 118, 199);\n"
+"    color: black;\n"
+"    border-radius: 3px;\n"
+"    padding: 5px 10px;\n"
+"}\n"
+"\n"
+"QPushButton:hover {\n"
+"    background-color: lightblue;\n"
+"}\n"
+"")
         self.centralwidget = QtWidgets.QWidget(MainWindow)
         self.centralwidget.setObjectName("centralwidget")
         self.lbl_grph_viewer_1 = QtWidgets.QLabel(self.centralwidget)
@@ -26,15 +56,28 @@ class Ui_MainWindow(object):
         self.lbl_grph_viewer_1.setObjectName("lbl_grph_viewer_1")
         self.grp_bx_ctrls_viewer_1 = QtWidgets.QGroupBox(self.centralwidget)
         self.grp_bx_ctrls_viewer_1.setGeometry(QtCore.QRect(930, 90, 511, 221))
+        font = QtGui.QFont()
+        font.setPointSize(-1)
+        font.setBold(True)
+        self.grp_bx_ctrls_viewer_1.setFont(font)
+        self.grp_bx_ctrls_viewer_1.setStyleSheet("border-color: qlineargradient(spread:pad, x1:0, y1:0, x2:1, y2:0, stop:0 rgba(0, 0, 0, 255), stop:1 rgba(255, 255, 255, 255));")
+        self.grp_bx_ctrls_viewer_1.setCheckable(False)
         self.grp_bx_ctrls_viewer_1.setObjectName("grp_bx_ctrls_viewer_1")
         self.formLayoutWidget_5 = QtWidgets.QWidget(self.grp_bx_ctrls_viewer_1)
-        self.formLayoutWidget_5.setGeometry(QtCore.QRect(20, 20, 481, 191))
+        self.formLayoutWidget_5.setGeometry(QtCore.QRect(0, 30, 511, 191))
         self.formLayoutWidget_5.setObjectName("formLayoutWidget_5")
         self.form_ctrls_viewer_1 = QtWidgets.QFormLayout(self.formLayoutWidget_5)
         self.form_ctrls_viewer_1.setContentsMargins(6, 6, 6, 6)
         self.form_ctrls_viewer_1.setVerticalSpacing(6)
         self.form_ctrls_viewer_1.setObjectName("form_ctrls_viewer_1")
+        spacerItem = QtWidgets.QSpacerItem(20, 40, QtWidgets.QSizePolicy.Minimum, QtWidgets.QSizePolicy.Expanding)
+        self.form_ctrls_viewer_1.setItem(0, QtWidgets.QFormLayout.FieldRole, spacerItem)
         self.lbl_colr_viewer_1 = QtWidgets.QLabel(self.formLayoutWidget_5)
+        font = QtGui.QFont()
+        font.setPointSize(10)
+        font.setBold(True)
+        self.lbl_colr_viewer_1.setFont(font)
+        self.lbl_colr_viewer_1.setStyleSheet("")
         self.lbl_colr_viewer_1.setObjectName("lbl_colr_viewer_1")
         self.form_ctrls_viewer_1.setWidget(1, QtWidgets.QFormLayout.LabelRole, self.lbl_colr_viewer_1)
         self.horizontalLayout = QtWidgets.QHBoxLayout()
@@ -45,25 +88,49 @@ class Ui_MainWindow(object):
         sizePolicy.setVerticalStretch(0)
         sizePolicy.setHeightForWidth(self.comb_sig_apperance_viewer_1.sizePolicy().hasHeightForWidth())
         self.comb_sig_apperance_viewer_1.setSizePolicy(sizePolicy)
+        self.comb_sig_apperance_viewer_1.setStyleSheet(" border: 2px solid rgb(89, 118, 199);\n"
+"border-radius:6px")
         self.comb_sig_apperance_viewer_1.setObjectName("comb_sig_apperance_viewer_1")
-        self.comb_sig_apperance_viewer_1.addItem("")
         self.horizontalLayout.addWidget(self.comb_sig_apperance_viewer_1)
-        spacerItem = QtWidgets.QSpacerItem(10, 20, QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Minimum)
-        self.horizontalLayout.addItem(spacerItem)
+        spacerItem1 = QtWidgets.QSpacerItem(10, 20, QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Minimum)
+        self.horizontalLayout.addItem(spacerItem1)
         self.btn_chng_colr_grpbox_viewer_1 = QtWidgets.QPushButton(self.formLayoutWidget_5)
+        font = QtGui.QFont()
+        font.setBold(True)
+        self.btn_chng_colr_grpbox_viewer_1.setFont(font)
         self.btn_chng_colr_grpbox_viewer_1.setCursor(QtGui.QCursor(QtCore.Qt.PointingHandCursor))
+        self.btn_chng_colr_grpbox_viewer_1.setStyleSheet("QPushButton {\n"
+"    border: 2px solid rgb(89, 118, 199);\n"
+"    color: black;\n"
+"    border-radius: 3px;\n"
+"    padding: 5px 10px;\n"
+"}\n"
+"\n"
+"QPushButton:hover {\n"
+"    background-color: lightblue;\n"
+"}\n"
+" ")
         self.btn_chng_colr_grpbox_viewer_1.setObjectName("btn_chng_colr_grpbox_viewer_1")
         self.horizontalLayout.addWidget(self.btn_chng_colr_grpbox_viewer_1)
-        spacerItem1 = QtWidgets.QSpacerItem(20, 20, QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Minimum)
-        self.horizontalLayout.addItem(spacerItem1)
+        spacerItem2 = QtWidgets.QSpacerItem(20, 20, QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Minimum)
+        self.horizontalLayout.addItem(spacerItem2)
         self.chk_bx_sig_show_1 = QtWidgets.QCheckBox(self.formLayoutWidget_5)
+        font = QtGui.QFont()
+        font.setBold(True)
+        self.chk_bx_sig_show_1.setFont(font)
         self.chk_bx_sig_show_1.setCursor(QtGui.QCursor(QtCore.Qt.PointingHandCursor))
         self.chk_bx_sig_show_1.setObjectName("chk_bx_sig_show_1")
         self.horizontalLayout.addWidget(self.chk_bx_sig_show_1)
-        spacerItem2 = QtWidgets.QSpacerItem(18, 20, QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Minimum)
-        self.horizontalLayout.addItem(spacerItem2)
+        spacerItem3 = QtWidgets.QSpacerItem(18, 20, QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Minimum)
+        self.horizontalLayout.addItem(spacerItem3)
         self.form_ctrls_viewer_1.setLayout(1, QtWidgets.QFormLayout.FieldRole, self.horizontalLayout)
+        spacerItem4 = QtWidgets.QSpacerItem(20, 40, QtWidgets.QSizePolicy.Minimum, QtWidgets.QSizePolicy.Expanding)
+        self.form_ctrls_viewer_1.setItem(2, QtWidgets.QFormLayout.FieldRole, spacerItem4)
         self.lbl_move_viewer_1 = QtWidgets.QLabel(self.formLayoutWidget_5)
+        font = QtGui.QFont()
+        font.setPointSize(10)
+        font.setBold(True)
+        self.lbl_move_viewer_1.setFont(font)
         self.lbl_move_viewer_1.setObjectName("lbl_move_viewer_1")
         self.form_ctrls_viewer_1.setWidget(3, QtWidgets.QFormLayout.LabelRole, self.lbl_move_viewer_1)
         self.horizontalLayout_2 = QtWidgets.QHBoxLayout()
@@ -74,45 +141,97 @@ class Ui_MainWindow(object):
         sizePolicy.setVerticalStretch(0)
         sizePolicy.setHeightForWidth(self.comb_move_viewer_1.sizePolicy().hasHeightForWidth())
         self.comb_move_viewer_1.setSizePolicy(sizePolicy)
+        self.comb_move_viewer_1.setStyleSheet(" border: 2px solid rgb(89, 118, 199);\n"
+"border-radius:6px")
         self.comb_move_viewer_1.setObjectName("comb_move_viewer_1")
-        self.comb_move_viewer_1.addItem("")
         self.horizontalLayout_2.addWidget(self.comb_move_viewer_1)
         self.btn_move_viewer_1 = QtWidgets.QPushButton(self.formLayoutWidget_5)
+        font = QtGui.QFont()
+        font.setBold(True)
+        self.btn_move_viewer_1.setFont(font)
         self.btn_move_viewer_1.setCursor(QtGui.QCursor(QtCore.Qt.PointingHandCursor))
+        self.btn_move_viewer_1.setStyleSheet("QPushButton {\n"
+"    border: 2px solid rgb(89, 118, 199);\n"
+"    color: black;\n"
+"    border-radius: 3px;\n"
+"    padding: 5px 10px;\n"
+"}\n"
+"\n"
+"QPushButton:hover {\n"
+"    background-color: lightblue;\n"
+"}")
         self.btn_move_viewer_1.setObjectName("btn_move_viewer_1")
         self.horizontalLayout_2.addWidget(self.btn_move_viewer_1)
-        spacerItem3 = QtWidgets.QSpacerItem(90, 20, QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Minimum)
-        self.horizontalLayout_2.addItem(spacerItem3)
+        spacerItem5 = QtWidgets.QSpacerItem(90, 20, QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Minimum)
+        self.horizontalLayout_2.addItem(spacerItem5)
         self.form_ctrls_viewer_1.setLayout(3, QtWidgets.QFormLayout.FieldRole, self.horizontalLayout_2)
         self.horz_btns_ctrl__viewer_1 = QtWidgets.QHBoxLayout()
         self.horz_btns_ctrl__viewer_1.setObjectName("horz_btns_ctrl__viewer_1")
-        spacerItem4 = QtWidgets.QSpacerItem(40, 20, QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Minimum)
-        self.horz_btns_ctrl__viewer_1.addItem(spacerItem4)
+        spacerItem6 = QtWidgets.QSpacerItem(40, 20, QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Minimum)
+        self.horz_btns_ctrl__viewer_1.addItem(spacerItem6)
         self.btn_add_sig_viewer_1 = QtWidgets.QPushButton(self.formLayoutWidget_5)
+        font = QtGui.QFont()
+        font.setBold(True)
+        self.btn_add_sig_viewer_1.setFont(font)
         self.btn_add_sig_viewer_1.setCursor(QtGui.QCursor(QtCore.Qt.PointingHandCursor))
+        self.btn_add_sig_viewer_1.setStyleSheet("QPushButton {\n"
+"    border: 2px solid rgb(89, 118, 199);\n"
+"    color: black;\n"
+"    border-radius: 3px;\n"
+"    padding: 5px 10px;\n"
+"}\n"
+"\n"
+"QPushButton:hover {\n"
+"    background-color: lightblue;\n"
+"}\n"
+"")
         self.btn_add_sig_viewer_1.setObjectName("btn_add_sig_viewer_1")
         self.horz_btns_ctrl__viewer_1.addWidget(self.btn_add_sig_viewer_1)
         self.btn_clear_viewer_1 = QtWidgets.QPushButton(self.formLayoutWidget_5)
+        font = QtGui.QFont()
+        font.setBold(True)
+        self.btn_clear_viewer_1.setFont(font)
         self.btn_clear_viewer_1.setCursor(QtGui.QCursor(QtCore.Qt.PointingHandCursor))
+        self.btn_clear_viewer_1.setStyleSheet("QPushButton {\n"
+"    border: 2px solid rgb(89, 118, 199);\n"
+"    color: black;\n"
+"    border-radius: 3px;\n"
+"    padding: 5px 10px;\n"
+"}\n"
+"\n"
+"QPushButton:hover {\n"
+"    background-color: lightblue;\n"
+"}")
         self.btn_clear_viewer_1.setObjectName("btn_clear_viewer_1")
         self.horz_btns_ctrl__viewer_1.addWidget(self.btn_clear_viewer_1)
-        self.btn_report_grph_1 = QtWidgets.QPushButton(self.formLayoutWidget_5)
-        self.btn_report_grph_1.setCursor(QtGui.QCursor(QtCore.Qt.PointingHandCursor))
-        self.btn_report_grph_1.setObjectName("btn_report_grph_1")
-        self.horz_btns_ctrl__viewer_1.addWidget(self.btn_report_grph_1)
-        spacerItem5 = QtWidgets.QSpacerItem(40, 20, QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Minimum)
-        self.horz_btns_ctrl__viewer_1.addItem(spacerItem5)
-        self.form_ctrls_viewer_1.setLayout(6, QtWidgets.QFormLayout.FieldRole, self.horz_btns_ctrl__viewer_1)
-        spacerItem6 = QtWidgets.QSpacerItem(20, 40, QtWidgets.QSizePolicy.Minimum, QtWidgets.QSizePolicy.Expanding)
-        self.form_ctrls_viewer_1.setItem(0, QtWidgets.QFormLayout.FieldRole, spacerItem6)
-        spacerItem7 = QtWidgets.QSpacerItem(20, 40, QtWidgets.QSizePolicy.Minimum, QtWidgets.QSizePolicy.Expanding)
-        self.form_ctrls_viewer_1.setItem(2, QtWidgets.QFormLayout.FieldRole, spacerItem7)
+        self.btn_snap_grph_1 = QtWidgets.QPushButton(self.formLayoutWidget_5)
+        font = QtGui.QFont()
+        font.setBold(True)
+        self.btn_snap_grph_1.setFont(font)
+        self.btn_snap_grph_1.setCursor(QtGui.QCursor(QtCore.Qt.PointingHandCursor))
+        self.btn_snap_grph_1.setStyleSheet("QPushButton {\n"
+"    border: 2px solid rgb(89, 118, 199);\n"
+"    color: black;\n"
+"    border-radius: 3px;\n"
+"    padding: 5px 10px;\n"
+"}\n"
+"\n"
+"QPushButton:hover {\n"
+"    background-color: lightblue;\n"
+"}")
+        self.btn_snap_grph_1.setObjectName("btn_snap_grph_1")
+        self.horz_btns_ctrl__viewer_1.addWidget(self.btn_snap_grph_1)
+        spacerItem7 = QtWidgets.QSpacerItem(40, 20, QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Minimum)
+        self.horz_btns_ctrl__viewer_1.addItem(spacerItem7)
+        self.form_ctrls_viewer_1.setLayout(5, QtWidgets.QFormLayout.FieldRole, self.horz_btns_ctrl__viewer_1)
         spacerItem8 = QtWidgets.QSpacerItem(20, 40, QtWidgets.QSizePolicy.Minimum, QtWidgets.QSizePolicy.Expanding)
         self.form_ctrls_viewer_1.setItem(4, QtWidgets.QFormLayout.FieldRole, spacerItem8)
-        spacerItem9 = QtWidgets.QSpacerItem(20, 40, QtWidgets.QSizePolicy.Minimum, QtWidgets.QSizePolicy.Expanding)
-        self.form_ctrls_viewer_1.setItem(5, QtWidgets.QFormLayout.FieldRole, spacerItem9)
         self.btn_link_graphs = QtWidgets.QPushButton(self.centralwidget)
-        self.btn_link_graphs.setGeometry(QtCore.QRect(1120, 370, 111, 41))
+        self.btn_link_graphs.setGeometry(QtCore.QRect(1000, 360, 111, 41))
+        font = QtGui.QFont()
+        font.setPointSize(10)
+        font.setBold(True)
+        self.btn_link_graphs.setFont(font)
         self.btn_link_graphs.setCursor(QtGui.QCursor(QtCore.Qt.PointingHandCursor))
         self.btn_link_graphs.setObjectName("btn_link_graphs")
         self.layoutWidget_4 = QtWidgets.QWidget(self.centralwidget)
@@ -227,17 +346,20 @@ class Ui_MainWindow(object):
         self.widget_2.setObjectName("widget_2")
         self.grp_bx_ctrls_viewer_2 = QtWidgets.QGroupBox(self.centralwidget)
         self.grp_bx_ctrls_viewer_2.setGeometry(QtCore.QRect(930, 450, 511, 231))
+        font = QtGui.QFont()
+        font.setPointSize(-1)
+        font.setBold(True)
+        self.grp_bx_ctrls_viewer_2.setFont(font)
         self.grp_bx_ctrls_viewer_2.setObjectName("grp_bx_ctrls_viewer_2")
         self.formLayoutWidget_6 = QtWidgets.QWidget(self.grp_bx_ctrls_viewer_2)
-        self.formLayoutWidget_6.setGeometry(QtCore.QRect(30, 20, 471, 201))
+        self.formLayoutWidget_6.setGeometry(QtCore.QRect(0, 30, 511, 201))
         self.formLayoutWidget_6.setObjectName("formLayoutWidget_6")
         self.form_ctrls_viewer_2 = QtWidgets.QFormLayout(self.formLayoutWidget_6)
         self.form_ctrls_viewer_2.setContentsMargins(6, 6, 6, 6)
         self.form_ctrls_viewer_2.setVerticalSpacing(6)
         self.form_ctrls_viewer_2.setObjectName("form_ctrls_viewer_2")
-        self.lbl_colr_viewer_2 = QtWidgets.QLabel(self.formLayoutWidget_6)
-        self.lbl_colr_viewer_2.setObjectName("lbl_colr_viewer_2")
-        self.form_ctrls_viewer_2.setWidget(1, QtWidgets.QFormLayout.LabelRole, self.lbl_colr_viewer_2)
+        spacerItem9 = QtWidgets.QSpacerItem(20, 40, QtWidgets.QSizePolicy.Minimum, QtWidgets.QSizePolicy.Expanding)
+        self.form_ctrls_viewer_2.setItem(0, QtWidgets.QFormLayout.FieldRole, spacerItem9)
         self.horizontalLayout_3 = QtWidgets.QHBoxLayout()
         self.horizontalLayout_3.setObjectName("horizontalLayout_3")
         self.comb_sig_apperance_viewer_2 = QtWidgets.QComboBox(self.formLayoutWidget_6)
@@ -246,25 +368,39 @@ class Ui_MainWindow(object):
         sizePolicy.setVerticalStretch(0)
         sizePolicy.setHeightForWidth(self.comb_sig_apperance_viewer_2.sizePolicy().hasHeightForWidth())
         self.comb_sig_apperance_viewer_2.setSizePolicy(sizePolicy)
+        self.comb_sig_apperance_viewer_2.setStyleSheet(" border: 2px solid rgb(89, 118, 199);\n"
+"border-radius:6px")
         self.comb_sig_apperance_viewer_2.setObjectName("comb_sig_apperance_viewer_2")
-        self.comb_sig_apperance_viewer_2.addItem("")
         self.horizontalLayout_3.addWidget(self.comb_sig_apperance_viewer_2)
         spacerItem10 = QtWidgets.QSpacerItem(10, 20, QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Minimum)
         self.horizontalLayout_3.addItem(spacerItem10)
         self.btn_chng_colr_grpbox_viewer_2 = QtWidgets.QPushButton(self.formLayoutWidget_6)
+        font = QtGui.QFont()
+        font.setBold(True)
+        self.btn_chng_colr_grpbox_viewer_2.setFont(font)
         self.btn_chng_colr_grpbox_viewer_2.setCursor(QtGui.QCursor(QtCore.Qt.PointingHandCursor))
         self.btn_chng_colr_grpbox_viewer_2.setObjectName("btn_chng_colr_grpbox_viewer_2")
         self.horizontalLayout_3.addWidget(self.btn_chng_colr_grpbox_viewer_2)
         spacerItem11 = QtWidgets.QSpacerItem(20, 20, QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Minimum)
         self.horizontalLayout_3.addItem(spacerItem11)
         self.chk_bx_sig_show_2 = QtWidgets.QCheckBox(self.formLayoutWidget_6)
+        font = QtGui.QFont()
+        font.setBold(True)
+        self.chk_bx_sig_show_2.setFont(font)
         self.chk_bx_sig_show_2.setCursor(QtGui.QCursor(QtCore.Qt.PointingHandCursor))
+        self.chk_bx_sig_show_2.setStyleSheet("selection-background-color: qradialgradient(spread:pad, cx:0.5, cy:0.5, radius:0.5, fx:0.5, fy:0.5, stop:0 rgba(0, 85, 255, 255), stop:1 rgba(255, 255, 255, 255));")
         self.chk_bx_sig_show_2.setObjectName("chk_bx_sig_show_2")
         self.horizontalLayout_3.addWidget(self.chk_bx_sig_show_2)
         spacerItem12 = QtWidgets.QSpacerItem(18, 20, QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Minimum)
         self.horizontalLayout_3.addItem(spacerItem12)
         self.form_ctrls_viewer_2.setLayout(1, QtWidgets.QFormLayout.FieldRole, self.horizontalLayout_3)
+        spacerItem13 = QtWidgets.QSpacerItem(20, 40, QtWidgets.QSizePolicy.Minimum, QtWidgets.QSizePolicy.Expanding)
+        self.form_ctrls_viewer_2.setItem(2, QtWidgets.QFormLayout.FieldRole, spacerItem13)
         self.lbl_move_viewer_2 = QtWidgets.QLabel(self.formLayoutWidget_6)
+        font = QtGui.QFont()
+        font.setPointSize(10)
+        font.setBold(True)
+        self.lbl_move_viewer_2.setFont(font)
         self.lbl_move_viewer_2.setObjectName("lbl_move_viewer_2")
         self.form_ctrls_viewer_2.setWidget(4, QtWidgets.QFormLayout.LabelRole, self.lbl_move_viewer_2)
         self.horizontalLayout_4 = QtWidgets.QHBoxLayout()
@@ -275,43 +411,66 @@ class Ui_MainWindow(object):
         sizePolicy.setVerticalStretch(0)
         sizePolicy.setHeightForWidth(self.comb_move_viewer_2.sizePolicy().hasHeightForWidth())
         self.comb_move_viewer_2.setSizePolicy(sizePolicy)
+        self.comb_move_viewer_2.setStyleSheet(" border: 2px solid rgb(89, 118, 199);\n"
+"border-radius:6px")
         self.comb_move_viewer_2.setObjectName("comb_move_viewer_2")
-        self.comb_move_viewer_2.addItem("")
         self.horizontalLayout_4.addWidget(self.comb_move_viewer_2)
         self.btn_move_viewer_2 = QtWidgets.QPushButton(self.formLayoutWidget_6)
+        font = QtGui.QFont()
+        font.setBold(True)
+        self.btn_move_viewer_2.setFont(font)
         self.btn_move_viewer_2.setCursor(QtGui.QCursor(QtCore.Qt.PointingHandCursor))
         self.btn_move_viewer_2.setObjectName("btn_move_viewer_2")
         self.horizontalLayout_4.addWidget(self.btn_move_viewer_2)
-        spacerItem13 = QtWidgets.QSpacerItem(90, 20, QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Minimum)
-        self.horizontalLayout_4.addItem(spacerItem13)
+        spacerItem14 = QtWidgets.QSpacerItem(90, 20, QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Minimum)
+        self.horizontalLayout_4.addItem(spacerItem14)
         self.form_ctrls_viewer_2.setLayout(4, QtWidgets.QFormLayout.FieldRole, self.horizontalLayout_4)
+        spacerItem15 = QtWidgets.QSpacerItem(20, 40, QtWidgets.QSizePolicy.Minimum, QtWidgets.QSizePolicy.Expanding)
+        self.form_ctrls_viewer_2.setItem(5, QtWidgets.QFormLayout.FieldRole, spacerItem15)
+        spacerItem16 = QtWidgets.QSpacerItem(20, 40, QtWidgets.QSizePolicy.Minimum, QtWidgets.QSizePolicy.Expanding)
+        self.form_ctrls_viewer_2.setItem(6, QtWidgets.QFormLayout.FieldRole, spacerItem16)
         self.horz_btns_ctrl__viewer_2 = QtWidgets.QHBoxLayout()
         self.horz_btns_ctrl__viewer_2.setObjectName("horz_btns_ctrl__viewer_2")
-        spacerItem14 = QtWidgets.QSpacerItem(40, 20, QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Minimum)
-        self.horz_btns_ctrl__viewer_2.addItem(spacerItem14)
+        spacerItem17 = QtWidgets.QSpacerItem(40, 20, QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Minimum)
+        self.horz_btns_ctrl__viewer_2.addItem(spacerItem17)
         self.btn_add_sig_viewer_2 = QtWidgets.QPushButton(self.formLayoutWidget_6)
+        font = QtGui.QFont()
+        font.setBold(True)
+        self.btn_add_sig_viewer_2.setFont(font)
         self.btn_add_sig_viewer_2.setCursor(QtGui.QCursor(QtCore.Qt.PointingHandCursor))
         self.btn_add_sig_viewer_2.setObjectName("btn_add_sig_viewer_2")
         self.horz_btns_ctrl__viewer_2.addWidget(self.btn_add_sig_viewer_2)
         self.btn_clear_viewer_2 = QtWidgets.QPushButton(self.formLayoutWidget_6)
+        font = QtGui.QFont()
+        font.setBold(True)
+        self.btn_clear_viewer_2.setFont(font)
         self.btn_clear_viewer_2.setCursor(QtGui.QCursor(QtCore.Qt.PointingHandCursor))
         self.btn_clear_viewer_2.setObjectName("btn_clear_viewer_2")
         self.horz_btns_ctrl__viewer_2.addWidget(self.btn_clear_viewer_2)
-        self.btn_report_grph_2 = QtWidgets.QPushButton(self.formLayoutWidget_6)
-        self.btn_report_grph_2.setCursor(QtGui.QCursor(QtCore.Qt.PointingHandCursor))
-        self.btn_report_grph_2.setObjectName("btn_report_grph_2")
-        self.horz_btns_ctrl__viewer_2.addWidget(self.btn_report_grph_2)
-        spacerItem15 = QtWidgets.QSpacerItem(40, 20, QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Minimum)
-        self.horz_btns_ctrl__viewer_2.addItem(spacerItem15)
+        self.btn_snap_grph_2 = QtWidgets.QPushButton(self.formLayoutWidget_6)
+        font = QtGui.QFont()
+        font.setBold(True)
+        self.btn_snap_grph_2.setFont(font)
+        self.btn_snap_grph_2.setCursor(QtGui.QCursor(QtCore.Qt.PointingHandCursor))
+        self.btn_snap_grph_2.setObjectName("btn_snap_grph_2")
+        self.horz_btns_ctrl__viewer_2.addWidget(self.btn_snap_grph_2)
+        spacerItem18 = QtWidgets.QSpacerItem(40, 20, QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Minimum)
+        self.horz_btns_ctrl__viewer_2.addItem(spacerItem18)
         self.form_ctrls_viewer_2.setLayout(7, QtWidgets.QFormLayout.FieldRole, self.horz_btns_ctrl__viewer_2)
-        spacerItem16 = QtWidgets.QSpacerItem(20, 40, QtWidgets.QSizePolicy.Minimum, QtWidgets.QSizePolicy.Expanding)
-        self.form_ctrls_viewer_2.setItem(0, QtWidgets.QFormLayout.FieldRole, spacerItem16)
-        spacerItem17 = QtWidgets.QSpacerItem(20, 40, QtWidgets.QSizePolicy.Minimum, QtWidgets.QSizePolicy.Expanding)
-        self.form_ctrls_viewer_2.setItem(2, QtWidgets.QFormLayout.FieldRole, spacerItem17)
-        spacerItem18 = QtWidgets.QSpacerItem(20, 40, QtWidgets.QSizePolicy.Minimum, QtWidgets.QSizePolicy.Expanding)
-        self.form_ctrls_viewer_2.setItem(5, QtWidgets.QFormLayout.FieldRole, spacerItem18)
-        spacerItem19 = QtWidgets.QSpacerItem(20, 40, QtWidgets.QSizePolicy.Minimum, QtWidgets.QSizePolicy.Expanding)
-        self.form_ctrls_viewer_2.setItem(6, QtWidgets.QFormLayout.FieldRole, spacerItem19)
+        self.lbl_colr_viewer_2 = QtWidgets.QLabel(self.formLayoutWidget_6)
+        font = QtGui.QFont()
+        font.setPointSize(10)
+        font.setBold(True)
+        self.lbl_colr_viewer_2.setFont(font)
+        self.lbl_colr_viewer_2.setObjectName("lbl_colr_viewer_2")
+        self.form_ctrls_viewer_2.setWidget(1, QtWidgets.QFormLayout.LabelRole, self.lbl_colr_viewer_2)
+        self.btn_repo = QtWidgets.QPushButton(self.centralwidget)
+        self.btn_repo.setGeometry(QtCore.QRect(1260, 360, 111, 41))
+        font = QtGui.QFont()
+        font.setPointSize(10)
+        font.setBold(True)
+        self.btn_repo.setFont(font)
+        self.btn_repo.setObjectName("btn_repo")
         MainWindow.setCentralWidget(self.centralwidget)
         self.menubar = QtWidgets.QMenuBar(MainWindow)
         self.menubar.setGeometry(QtCore.QRect(0, 0, 1741, 26))
@@ -349,15 +508,13 @@ class Ui_MainWindow(object):
         self.lbl_grph_viewer_1.setText(_translate("MainWindow", "Graph viewer 1"))
         self.grp_bx_ctrls_viewer_1.setTitle(_translate("MainWindow", "Graph viewer 1"))
         self.lbl_colr_viewer_1.setText(_translate("MainWindow", "Signal"))
-        self.comb_sig_apperance_viewer_1.setItemText(0, _translate("MainWindow", "choose signal"))
         self.btn_chng_colr_grpbox_viewer_1.setText(_translate("MainWindow", "Change color"))
         self.chk_bx_sig_show_1.setText(_translate("MainWindow", "Show"))
         self.lbl_move_viewer_1.setText(_translate("MainWindow", "Move signal"))
-        self.comb_move_viewer_1.setItemText(0, _translate("MainWindow", "choose signal"))
         self.btn_move_viewer_1.setText(_translate("MainWindow", "Move to graph 2"))
         self.btn_add_sig_viewer_1.setText(_translate("MainWindow", "Add signal"))
         self.btn_clear_viewer_1.setText(_translate("MainWindow", "Clear graph"))
-        self.btn_report_grph_1.setText(_translate("MainWindow", "Report"))
+        self.btn_snap_grph_1.setText(_translate("MainWindow", "Screenshot"))
         self.btn_link_graphs.setText(_translate("MainWindow", "Link graphs"))
         self.btn_srt_begin__viewer_1.setToolTip(_translate("MainWindow", "replay"))
         self.btn_srt_begin__viewer_1.setWhatsThis(_translate("MainWindow", "stast from beging\n"
@@ -366,16 +523,15 @@ class Ui_MainWindow(object):
 ""))
         self.lbl_grph_viewer_2.setText(_translate("MainWindow", "Graph viewer 2"))
         self.grp_bx_ctrls_viewer_2.setTitle(_translate("MainWindow", "Graph viewer 2"))
-        self.lbl_colr_viewer_2.setText(_translate("MainWindow", "Signal"))
-        self.comb_sig_apperance_viewer_2.setItemText(0, _translate("MainWindow", "choose signal"))
         self.btn_chng_colr_grpbox_viewer_2.setText(_translate("MainWindow", "Change color"))
         self.chk_bx_sig_show_2.setText(_translate("MainWindow", "Show"))
         self.lbl_move_viewer_2.setText(_translate("MainWindow", "Move signal"))
-        self.comb_move_viewer_2.setItemText(0, _translate("MainWindow", "choose signal"))
         self.btn_move_viewer_2.setText(_translate("MainWindow", "Move to graph 1"))
         self.btn_add_sig_viewer_2.setText(_translate("MainWindow", "Add signal"))
         self.btn_clear_viewer_2.setText(_translate("MainWindow", "Clear graph"))
-        self.btn_report_grph_2.setText(_translate("MainWindow", "Report"))
+        self.btn_snap_grph_2.setText(_translate("MainWindow", "Screenshot"))
+        self.lbl_colr_viewer_2.setText(_translate("MainWindow", "Signal"))
+        self.btn_repo.setText(_translate("MainWindow", "Report"))
         self.menufile.setTitle(_translate("MainWindow", "file"))
         self.minu_add_sig.setTitle(_translate("MainWindow", "add signal"))
         self.actionproperties.setText(_translate("MainWindow", "properties"))

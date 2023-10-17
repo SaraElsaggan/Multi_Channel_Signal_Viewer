@@ -153,6 +153,8 @@ class MyWindow(QMainWindow):
         
         
         self.islinked = False
+        self.counter_1 = 1
+        self.counter_2 = 1
 
         QShortcut(QKeySequence("Ctrl+p"), self).activated.connect(self.report)
         QShortcut(QKeySequence("Ctrl+l"), self).activated.connect(self.link_graphs)
@@ -164,9 +166,14 @@ class MyWindow(QMainWindow):
         QShortcut(QKeySequence("Ctrl+["), self).activated.connect(self.slow_all_graphs)
         QShortcut(QKeySequence("Ctrl+]"), self).activated.connect(self.fast_all_graphs)
 
-        self.ui.btn_report_grph_1.clicked.connect(self.report_grph_1)
-        self.ui.btn_report_grph_2.clicked.connect(self.report_grph_2)
+        self.ui.btn_snap_grph_1.clicked.connect(self.capture_snapshot_1)
+        self.ui.btn_snap_grph_2.clicked.connect(self.capture_snapshot_2)
+        self.ui.btn_repo.clicked.connect(self.report)
+        # self.ui.btn_report_grph_2.clicked.connect(self.report_grph_2)
         self.ui.actionreport.triggered.connect(self.report)
+        
+        self.snapshots_1 = []
+        self.snapshots_2 = []
 
     def fast_all_graphs(self):
         self.faster_grph_1()
@@ -231,6 +238,7 @@ class MyWindow(QMainWindow):
         self.replay_1()
          
     def plot_signal_grph_1(self ) :
+        
     
         for signal in self.signals_1:
             data_line = self.graph1.plotItem.plot(signal["x"], signal["y"], pen=signal["color"])
@@ -241,11 +249,34 @@ class MyWindow(QMainWindow):
         self.timer_1.timeout.connect(lambda:self.update_plot_data_grph_1(self.signals_1))
         self.timer_1.start()
         self.graph1.show()
+        # max_y , min_y = self.find_max_min_1()
+        max_y , min_y = self.find_max_min_y_grph_1()
+        self.graph1.plotItem.vb.setLimits(xMin=min(signal["x"]), xMax=max(signal["x"]), yMin=min_y, yMax=max_y)
+        # self.graph1.plotItem.vb.setLimits(xMin=min(signal["x"]), xMax=max(signal["x"]), yMin=min(signal["y"]), yMax=max(signal["y"]))
         self.graph1.setXRange(0 , 0.002*len(signal["data"]))
 
+        # x_data_length = len(self.signals_1[0]["data"]) if self.signals_1 else 1
+        # initial_x_range = (0, 0.002 * x_data_length)  # Adjust 0.002 based on your data's range
+        # self.graph1.setXRange(*initial_x_range)
+
+        
         icon = QtGui.QPixmap("pause.png")
         self.ui.btn_play_pasuse_viewer_1.setIcon(QtGui.QIcon(icon))
-       
+        
+        
+    def find_max_min_y_grph_1(self):
+        # Initialize variables to store max and min y values
+        max_y = float('-inf')  # Initialize with negative infinity
+        min_y = float('inf')   # Initialize with positive infinity
+
+        for signal in self.signals_1 :
+            if "y" in signal and signal["y"]:
+                max_y = max(max_y, max(signal["y"]))
+                min_y = min(min_y, min(signal["y"]))
+
+        return max_y, min_y
+    
+    
     def update_plot_data_grph_1(self,signals):
         for signal in signals:
             for i in range(len(signal["data_lines"])):
@@ -254,12 +285,35 @@ class MyWindow(QMainWindow):
                 signal["data_indices"][i] += 10  # Update the index for this signal
                 
                 
-                self.graph1.setXRange(max(x, default=0) - 0.5, max(x, default=0))
-                self.graph1.setYRange(min(signal["y"]), max(signal["y"]))
+                # self.graph1.setXRange(max(x, default=0) - 0.5, max(x, default=0))
+                # self.graph1.setYRange(min(signal["y"]), max(signal["y"]))
 
                 signal["data_lines"][i].setData(x, y)
                 
-            
+    def find_max_min_1(self):
+        max_number = float('-inf')  # Start with negative infinity
+        min_number = float('-inf')  # Start with negative infinity
+
+# Iterate through the list of dictionaries
+        for signal in self.signals_1:
+            y_list = signal.get("y", [])  # Get the "x" list from the dictionary
+
+            # Find the maximum number in the current "x" list
+            if y_list:
+                current_max = max(y_list)
+                current_min = min(y_list)
+                
+                # Update the maximum number if the current maximum is greater
+                if current_max > max_number:
+                    max_number = current_max
+                    
+                if current_min < min_number:
+                    min_number = current_min
+                    
+        return max_number , min_number                    
+        # The variable max_number now contains the maximum number from all "x" lists
+        # print("Maximum number:", max_number)
+
             
 
 
@@ -284,7 +338,12 @@ class MyWindow(QMainWindow):
                
     def zoom_out_grph_1(self):
         # Increase the visible range 
+        # max_y  , min_y= self.find_max_min_1()
+        # self.graph1.yAxis.setRange(min_y, max_y)
+        # self.graph1.xAxis.setRange(0, max_x)
+        # self.graph1.set
         self.graph1.getViewBox().scaleBy((1.2, 1.2))
+        set 
         if self.islinked:
             self.zoom_out_grph_2()
        
@@ -367,7 +426,6 @@ class MyWindow(QMainWindow):
         self.graph1.setXRange(self.start ,self.end)
 
     def move_signal_from_grph_1(self):
-        if self.ui.comb_move_viewer_1.currentText != "choose signal":
             signal_to_move = self.ui.comb_move_viewer_1.currentText()
             for signal in self.signals_1:
                 if signal["name"] == signal_to_move:
@@ -385,16 +443,14 @@ class MyWindow(QMainWindow):
         
         self.ui.comb_sig_apperance_viewer_1.clear()
         self.ui.comb_move_viewer_1.clear()
+        
+        reversed_signals = self.signals_1[::-1]
 
-        self.ui.comb_sig_apperance_viewer_1.addItem("choose signal")
-        self.ui.comb_move_viewer_1.addItem("choose signal")
-
-        for signal in self.signals_1:
-            self.ui.comb_sig_apperance_viewer_1.addItem(signal["name"])
-            self.ui.comb_move_viewer_1.addItem(signal["name"])
-                    
+        for signal in reversed_signals:
+            self.ui.comb_sig_apperance_viewer_1.addItem( signal["name"])
+            self.ui.comb_move_viewer_1.addItem( signal["name"])
+        
     def change_sig_color_grph_1(self):
-        if self.ui.comb_sig_apperance_viewer_1.currentText() != "choose signal":
             signal_to_be_changed = self.ui.comb_sig_apperance_viewer_1.currentText()
             for signal in self.signals_1 :
                 if signal["name"] == signal_to_be_changed:
@@ -471,14 +527,21 @@ class MyWindow(QMainWindow):
             signal["data_lines"].append(data_line)
             signal["data_indices"].append(0)
             signal["idx"]=0
-             
         self.graph2.plotItem.getViewBox().setAutoPan(x=True,y=True)
         self.timer_2.timeout.connect(lambda:self.update_plot_data_grph_2(self.signals_2))
         self.timer_2.start()
         self.graph2.show()
-        self.graph2.setYRange(min(signal["y"]) , max(signal["y"]))
-
+        # max_y , min_y = self.find_max_min_2()
+        max_y , min_y = self.find_max_min_y_grph_2()
+        self.graph2.plotItem.vb.setLimits(xMin=min(signal["x"]), xMax=max(signal["x"]), yMin=min_y, yMax=max_y)
+        # self.graph2.plotItem.vb.setLimits(xMin=min(signal["x"]), xMax=max(signal["x"]), yMin=min(signal["y"]), yMax=max(signal["y"]))
         self.graph2.setXRange(0 , 0.002*len(signal["data"]))
+
+        # x_data_length = len(self.signals_2[0]["data"]) if self.signals_1 else 1
+        # initial_x_range = (0, 0.002 * x_data_length)  # Adjust 0.002 based on your data's range
+        # self.graph2.setXRange(*initial_x_range)
+
+        
         icon = QtGui.QPixmap("pause.png")
         self.ui.btn_play_pasuse_viewer_2.setIcon(QtGui.QIcon(icon))
        
@@ -489,12 +552,24 @@ class MyWindow(QMainWindow):
                 y = signal["y"][:signal["data_indices"][i]]
                 signal["data_indices"][i] += 10  # Update the index for this signal
                 
-                self.graph2.setXRange(max(x, default=0) - 0.5, max(x, default=0))
-                self.graph2.setYRange(min(signal["y"]), max(signal["y"]))
+                # self.graph2.setXRange(max(x, default=0) - 0.5, max(x, default=0))
+                # self.graph2.setYRange(min(signal["y"]), max(signal["y"]))
 
                 signal["data_lines"][i].setData(x, y)
          
-         
+    
+    def find_max_min_y_grph_2(self):
+        # Initialize variables to store max and min y values
+        max_y = float('-inf')  # Initialize with negative infinity
+        min_y = float('inf')   # Initialize with positive infinity
+
+        for signal in self.signals_2 :
+            if "y" in signal and signal["y"]:
+                max_y = max(max_y, max(signal["y"]))
+                min_y = min(min_y, min(signal["y"]))
+
+        return max_y, min_y
+    
          
          
          
@@ -535,7 +610,6 @@ class MyWindow(QMainWindow):
 
  
     def move_signal_from_grph_2(self):
-        if self.ui.comb_move_viewer_2.currentText != "choose signal":
             signal_to_move = self.ui.comb_move_viewer_2.currentText()
             for signal in self.signals_2:
                 if signal["name"] == signal_to_move:
@@ -552,16 +626,14 @@ class MyWindow(QMainWindow):
         
         self.ui.comb_sig_apperance_viewer_2.clear()
         self.ui.comb_move_viewer_2.clear()
+        
+        reversed_signals = self.signals_1[::-1]
 
-        self.ui.comb_sig_apperance_viewer_2.addItem("choose signal")
-        self.ui.comb_move_viewer_2.addItem("choose signal")
-
-        for signal in self.signals_2:
+        for signal in reversed_signals:
             self.ui.comb_sig_apperance_viewer_2.addItem(signal["name"])
             self.ui.comb_move_viewer_2.addItem(signal["name"])
     
     def change_sig_color_grph_2(self):
-        if self.ui.comb_sig_apperance_viewer_2.currentText() != "choose signal":
             signal_to_be_changed = self.ui.comb_sig_apperance_viewer_2.currentText()
             for signal in self.signals_2 :
                 if signal["name"] == signal_to_be_changed:
@@ -585,13 +657,13 @@ class MyWindow(QMainWindow):
         
         
         
-        
+    
 
     def replay_2(self):
         self.graph2.clear()
         self.plot_signal_grph_2()
         
-        
+    
     def link_graphs(self):
         if  self.islinked == False:
             self.islinked = True
@@ -633,11 +705,11 @@ class MyWindow(QMainWindow):
         max_value = max(y_values)
 
         statistics = {
-            'mean': mean_value,
-            'std': std_deviation,
-            'duration': duration,
-            'min': min_value,
-            'max': max_value
+            'mean': round(mean_value , 2),
+            'std': round(std_deviation , 2),
+            'duration': round(duration , 2),
+            'min': round(min_value , 2),
+            'max': round(max_value , 2)
         }
 
         return statistics
@@ -653,111 +725,111 @@ class MyWindow(QMainWindow):
         max_value = max(y_values)
 
         statistics = {
-            'mean': mean_value,
-            'std': std_deviation,
-            'duration': duration,
-            'min': min_value,
-            'max': max_value
+            'mean':round( mean_value , 2),
+            'std':round( std_deviation , 2),
+            'duration':round( duration , 2),
+            'min':round( min_value , 2),
+            'max':round( max_value , 2)
         }
 
         return statistics
 
-    def report(self):
-        if len(self.signals_1 )>0 and len(self.signals_2)>0:
+    # def report(self):
+    #     if len(self.signals_1 )>0 and len(self.signals_2)>0:
             
-            file_path, _ = QFileDialog.getSaveFileName(None, "Save PDF", "", "PDF Files (*.pdf);;All Files (*)")
+    #         file_path, _ = QFileDialog.getSaveFileName(None, "Save PDF", "", "PDF Files (*.pdf);;All Files (*)")
     
-            img_1, img_2 = self.capture_snapshot()
-            pdf = FPDF()
+    #         img_1, img_2 = self.capture_snapshot()
+    #         pdf = FPDF()
             
-            pdf.add_page()
+    #         pdf.add_page()
             
-            pdf.image(img_1, 5, 10, 190)
-            os.remove(img_1)
+    #         pdf.image(img_1, 5, 10, 190)
+    #         os.remove(img_1)
 
-            table_x_1 = 5
-            table_y_1 = 100
+    #         table_x_1 = 5
+    #         table_y_1 = 100
 
-            data_dict1  = self.cal_statistics_1()
-            pdf.set_xy(table_x_1, table_y_1)
-            pdf.set_font("Arial", size=12)
-            pdf.cell(0, 8, "Data Table 1", ln=True, align="C")
-            pdf.ln(10)
+    #         data_dict1  = self.cal_statistics_1()
+    #         pdf.set_xy(table_x_1, table_y_1)
+    #         pdf.set_font("Arial", size=12)
+    #         pdf.cell(0, 8, "Data Table 1", ln=True, align="C")
+    #         pdf.ln(10)
                 
-            for key, value in data_dict1.items():
-                pdf.cell(100, 10, str(key), border=1)
-                pdf.cell(0, 10, str(value), border=1)
-                pdf.ln()
-                
-                
+    #         for key, value in data_dict1.items():
+    #             pdf.cell(100, 10, str(key), border=1)
+    #             pdf.cell(0, 10, str(value), border=1)
+    #             pdf.ln()
                 
                 
-            pdf.add_page()
-            pdf.image(img_2, 5, 10, 190)
-            os.remove(img_2)
+                
+                
+    #         pdf.add_page()
+    #         pdf.image(img_2, 5, 10, 190)
+    #         os.remove(img_2)
             
-            table_x_2 = 5
-            table_y_2 = 100
+    #         table_x_2 = 5
+    #         table_y_2 = 100
             
-            
-
-            data_dict2  = self.cal_statistics_2()
-            pdf.set_xy(table_x_2, table_y_2)
-            pdf.set_font("Arial", size=12)
-            pdf.cell(0, 8, "Data Table 2", ln=True, align="C")
-            pdf.ln(10)
             
 
-            for key, value in data_dict2.items():
-                pdf.cell(100, 10 , str(key), border=1)
-                pdf.cell(0, 10, str(value), border=1)
-                pdf.ln()
+    #         data_dict2  = self.cal_statistics_2()
+    #         pdf.set_xy(table_x_2, table_y_2)
+    #         pdf.set_font("Arial", size=12)
+    #         pdf.cell(0, 8, "Data Table 2", ln=True, align="C")
+    #         pdf.ln(10)
             
-            pdf.output( file_path, "F")
-        else :
-            message_box = QMessageBox()
-            message_box.setWindowTitle("error")
-            message_box.setText("one pf the graphs is empty or both")
-            message_box.exec_()  # Display the message box
+
+    #         for key, value in data_dict2.items():
+    #             pdf.cell(100, 10 , str(key), border=1)
+    #             pdf.cell(0, 10, str(value), border=1)
+    #             pdf.ln()
+            
+    #         pdf.output( file_path, "F")
+    #     else :
+    #         message_box = QMessageBox()
+    #         message_box.setWindowTitle("error")
+    #         message_box.setText("one pf the graphs is empty or both")
+    #         message_box.exec_()  # Display the message box
 
             
-    def capture_snapshot(self):
+    def capture_snapshot_1(self):
         exporter = exporters.ImageExporter(self.graph1.plotItem)
-        exporter.parameters()['width'] = self.graph2.width()    # (note this also affects height parameter)
-        exporter.parameters()['height'] = self.graph2.height()   # (note this also affects height parameter)
-
-# save to file
-        img1_path = "img1.png"
-        img_1 = exporter.export(img1_path)
-        
-        exporter = exporters.ImageExporter(self.graph2.plotItem)
         exporter.parameters()['width'] = self.graph1.width()    # (note this also affects height parameter)
         exporter.parameters()['height'] = self.graph1.height()   # (note this also affects height parameter)
-
 # save to file
-        img2_path = "img2.png"
-        img_2 = exporter.export(img2_path)
+        img1_path = f"grah1_snap_{self.counter_1}.png"
+        exporter.export(img1_path)
+        self.snapshots_1.append(img1_path)
+        self.counter_1 += 1 
+        self.ui.btn_repo.setEnabled(True)
         
-        return img1_path , img2_path
         
         
+    def capture_snapshot_2(self):
+        exporter = exporters.ImageExporter(self.graph2.plotItem)
+        exporter.parameters()['width'] = self.graph2.width()    # (note this also affects height parameter)
+        exporter.parameters()['height'] = self.graph2.height()   # (note this also affects height parameter)
+# save to file
+        img2_path = f"grah2_snap_{self.counter_2}.png"
+        exporter.export(img2_path)
+        self.snapshots_2.append(img2_path)
+        self.counter_2 += 1 
+        self.ui.btn_repo.setEnabled(True)
         
     
 
-    def report_grph_1(self ):    
-        if len(self.signals_1)>0:
-            file_path, _ = QFileDialog.getSaveFileName(None, "Save PDF", "", "PDF Files (*.pdf);;All Files (*)")
-    
-            img_1, img_2 = self.capture_snapshot()
-            pdf = FPDF()
+    def report(self ):    
+        file_path, _ = QFileDialog.getSaveFileName(None, "Save PDF", "", "PDF Files (*.pdf);;All Files (*)")
+        pdf = FPDF()
         
-        # Add a page
+        for snap in self.snapshots_1:
+            
             pdf.add_page()
-            
-            pdf.image(img_1, 5, 10, 190)
-            
-            os.remove(img_1)
-            
+            pdf.image(snap, 5, 10, 190)
+            os.remove(snap)
+            self.snapshots_1.remove(snap)
+        
             table_x = 5
             table_y = 100
             
@@ -772,49 +844,71 @@ class MyWindow(QMainWindow):
                 pdf.cell(0, 10, str(value), border=1)
                 pdf.ln()
 
-            
-            pdf.output( file_path, "F")
-        else:
-            message_box = QMessageBox()
-            message_box.setWindowTitle("error")
-            message_box.setText("the graphs is empty")
-            message_box.exec_() 
-    def report_grph_2(self ):   
-        if len(self.signals_2)>0: 
-            file_path, _ = QFileDialog.getSaveFileName(None, "Save PDF", "", "PDF Files (*.pdf);;All Files (*)")
-    
-            img_1, img_2 = self.capture_snapshot()
-            pdf = FPDF()
-        
-        # Add a page
+                
+                
+        for snap in self.snapshots_2:
+                
             pdf.add_page()
-            
-            pdf.image(img_2, 5, 10, 190)
-            
-            os.remove(img_2)
-            
+            pdf.image(snap, 5, 10, 190)
+            os.remove(snap)
+            self.snapshots_2.remove(snap)
+        
             table_x = 5
             table_y = 100
             
-            data_dict1  = self.cal_statistics_2()
+            data_dict2  = self.cal_statistics_2()
             pdf.set_xy(table_x, table_y)
             pdf.set_font("Arial", size=12)
-            pdf.cell(0, 10, "Data Table 1", ln=True, align="C")
+            pdf.cell(0, 10, "Data Table 2", ln=True, align="C")
             pdf.ln(10)
 
-            for key, value in data_dict1.items():
+            for key, value in data_dict2.items():
                 pdf.cell(100, 10, str(key), border=1)
                 pdf.cell(0, 10, str(value), border=1)
                 pdf.ln()
+        
+        pdf.output( file_path, "F")
+        self.ui.btn_repo.setEnabled(False)
+    
+  
+  
+  
+    # def report_grph_2(self ):   
+    #     if len(self.signals_2)>0: 
+    #         file_path, _ = QFileDialog.getSaveFileName(None, "Save PDF", "", "PDF Files (*.pdf);;All Files (*)")
+    
+    #         img_1, img_2 = self.capture_snapshot()
+    #         pdf = FPDF()
+        
+    #     # Add a page
+    #         pdf.add_page()
+            
+    #         pdf.image(img_2, 5, 10, 190)
+            
+    #         os.remove(img_2)
+            
+    #         table_x = 5
+    #         table_y = 100
+            
+    #         data_dict1  = self.cal_statistics_2()
+    #         pdf.set_xy(table_x, table_y)
+    #         pdf.set_font("Arial", size=12)
+    #         pdf.cell(0, 10, "Data Table 1", ln=True, align="C")
+    #         pdf.ln(10)
+
+    #         for key, value in data_dict1.items():
+    #             pdf.cell(100, 10, str(key), border=1)
+    #             pdf.cell(0, 10, str(value), border=1)
+    #             pdf.ln()
 
             
-            pdf.output( file_path, "F")
+    #         pdf.output( file_path, "F")
     
-        else:
-            message_box = QMessageBox()
-            message_box.setWindowTitle("error")
-            message_box.setText("the graphs is empty")
-            message_box.exec_()     
+    #     else:
+    #         message_box = QMessageBox()
+    #         message_box.setWindowTitle("error")
+    #         message_box.setText("the graphs is empty")
+    #         message_box.exec_()     
 
         
         
@@ -823,6 +917,7 @@ def main():
     window = MyWindow() 
     window.setWindowIcon(QIcon("C:/Users/Sara/Desktop/DSP_tasks/sara_multi_channel_signal_viewer/imgs/app_icon.png"))
     window.setWindowTitle("signal viewer")
+    window.showMaximized()
     window.show()
     sys.exit(app.exec_())
 
