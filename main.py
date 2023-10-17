@@ -191,7 +191,7 @@ class MyWindow(QMainWindow):
     def slow_all_graphs(self):
         self.slower_grph_1()
         self.slower_grph_2()
-        
+
     def zoom_in_all(self):
         self.zoom_in_grph_1()
         self.zoom_in_grph_2()
@@ -300,6 +300,7 @@ class MyWindow(QMainWindow):
                 signal["data_lines"][i].setData(x, y)
                 
     def find_max_min_1(self):
+
         max_number = float('-inf')  # Start with negative infinity
         min_number = float('-inf')  # Start with negative infinity
 
@@ -323,6 +324,7 @@ class MyWindow(QMainWindow):
         # The variable max_number now contains the maximum number from all "x" lists
         # print("Maximum number:", max_number)
 
+    # def 
             
 
 
@@ -636,7 +638,7 @@ class MyWindow(QMainWindow):
         self.ui.comb_sig_apperance_viewer_2.clear()
         self.ui.comb_move_viewer_2.clear()
         
-        reversed_signals = self.signals_1[::-1]
+        reversed_signals = self.signals_2[::-1]
 
         for signal in reversed_signals:
             self.ui.comb_sig_apperance_viewer_2.addItem(signal["name"])
@@ -743,64 +745,7 @@ class MyWindow(QMainWindow):
 
         return statistics
 
-    # def report(self):
-    #     if len(self.signals_1 )>0 and len(self.signals_2)>0:
-            
-    #         file_path, _ = QFileDialog.getSaveFileName(None, "Save PDF", "", "PDF Files (*.pdf);;All Files (*)")
-    
-    #         img_1, img_2 = self.capture_snapshot()
-    #         pdf = FPDF()
-            
-    #         pdf.add_page()
-            
-    #         pdf.image(img_1, 5, 10, 190)
-    #         os.remove(img_1)
-
-    #         table_x_1 = 5
-    #         table_y_1 = 100
-
-    #         data_dict1  = self.cal_statistics_1()
-    #         pdf.set_xy(table_x_1, table_y_1)
-    #         pdf.set_font("Arial", size=12)
-    #         pdf.cell(0, 8, "Data Table 1", ln=True, align="C")
-    #         pdf.ln(10)
-                
-    #         for key, value in data_dict1.items():
-    #             pdf.cell(100, 10, str(key), border=1)
-    #             pdf.cell(0, 10, str(value), border=1)
-    #             pdf.ln()
-                
-                
-                
-                
-    #         pdf.add_page()
-    #         pdf.image(img_2, 5, 10, 190)
-    #         os.remove(img_2)
-            
-    #         table_x_2 = 5
-    #         table_y_2 = 100
-            
-            
-
-    #         data_dict2  = self.cal_statistics_2()
-    #         pdf.set_xy(table_x_2, table_y_2)
-    #         pdf.set_font("Arial", size=12)
-    #         pdf.cell(0, 8, "Data Table 2", ln=True, align="C")
-    #         pdf.ln(10)
-            
-
-    #         for key, value in data_dict2.items():
-    #             pdf.cell(100, 10 , str(key), border=1)
-    #             pdf.cell(0, 10, str(value), border=1)
-    #             pdf.ln()
-            
-    #         pdf.output( file_path, "F")
-    #     else :
-    #         message_box = QMessageBox()
-    #         message_box.setWindowTitle("error")
-    #         message_box.setText("one pf the graphs is empty or both")
-    #         message_box.exec_()  # Display the message box
-
+   
             
     def capture_snapshot_1(self):
         exporter = exporters.ImageExporter(self.graph1.plotItem)
