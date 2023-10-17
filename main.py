@@ -52,15 +52,23 @@ class MyWindow(QMainWindow):
         self.ui.setupUi(self)  
         # self.ui.horizontalLayout_6.
         
-        self.graph1 = PlotWidget(self.ui.centralwidget)
-        # self.graph1.setGeometry(30, 50, 770, 300)
-        # self.graph1.setObjectName("Channel1")
-        # self.graph1.setYRange(-2,2)
+        self.ui.widget.setGeometry(1 , 42 , 900 , 400)
         
-        self.graph2 = PlotWidget(self.ui.centralwidget)
-        # self.graph2.setGeometry(30, 400, 770, 300)
+        
+        self.graph1 = PlotWidget(self.ui.widget)
+        self.graph1.setGeometry(1, 42, 900, 400)
+        # self.graph1.setGeometry(self.ui.widget.geometry())
+        # self.graph1.setGeometry(0, 0, self.ui.widget.geometry().width(), self.ui.widget.geometry().height())
+        # self.graph1.setParent(self.ui.widget)
+        # self.graph1.setObjectName("Channel1")
+        self.graph1.setYRange(-2,2)
+        
+        self.graph2 = PlotWidget(self.ui.widget_2)
+        # self.graph1.setGeometry(self.ui.widget_2.geometry())
+        # self.graph1.setParent(self.ui.widget_2)
+        self.graph2.setGeometry(1, 39, 900, 400)
         # self.graph2.setObjectName("Channel1")
-        # self.graph2.setYRange(-2,2)
+        self.graph2.setYRange(-2,2)
 
         self.timer_1 = QtCore.QTimer()
         self.timer_1.setInterval(100) 
@@ -283,7 +291,7 @@ class MyWindow(QMainWindow):
             for i in range(len(signal["data_lines"])):
                 x = signal["x"][:signal["data_indices"][i]]
                 y = signal["y"][:signal["data_indices"][i]]
-                signal["data_indices"][i] += 10  # Update the index for this signal
+                signal["data_indices"][i] += 5 # Update the index for this signal
                 
                 
                 # self.graph1.setXRange(max(x, default=0) - 0.5, max(x, default=0))
@@ -551,7 +559,7 @@ class MyWindow(QMainWindow):
             for i in range(len(signal["data_lines"])):
                 x = signal["x"][:signal["data_indices"][i]]
                 y = signal["y"][:signal["data_indices"][i]]
-                signal["data_indices"][i] += 10  # Update the index for this signal
+                signal["data_indices"][i] += 5 # Update the index for this signal
                 
                 # self.graph2.setXRange(max(x, default=0) - 0.5, max(x, default=0))
                 # self.graph2.setYRange(min(signal["y"]), max(signal["y"]))
