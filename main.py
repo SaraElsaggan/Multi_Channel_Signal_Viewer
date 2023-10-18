@@ -305,11 +305,11 @@ class MyWindow(QMainWindow):
             pass
 
     def rename_grph_2(self):
-        old_name = self.ui.combo_rename_grph_.currentText()
+        old_name = self.ui.combo_rename_grph_2.currentText()
         new_name, ok = QInputDialog.getText(self, 'Input Dialog', 'Enter your text:')
         
         if ok:
-            for signal in self.signals_:
+            for signal in self.signals_2:
                 if signal["name"] == old_name:
                     signal["name"] = new_name
             self.updata_combo_bxs_grph_2()            
