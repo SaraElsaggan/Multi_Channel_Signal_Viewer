@@ -23,7 +23,7 @@ import time
 import csv
 import sys
 from PyPDF2 import PdfFileWriter, PdfFileReader
-from PyQt5.QtWidgets import  QMessageBox ,  QApplication, QMainWindow, QVBoxLayout, QPushButton, QShortcut, QWidget, QDesktopWidget, QFileDialog
+from PyQt5.QtWidgets import QInputDialog ,  QMessageBox ,  QApplication, QMainWindow, QVBoxLayout, QPushButton, QShortcut, QWidget, QDesktopWidget, QFileDialog
 from PyQt5.QtGui import QIcon, QKeySequence, QPixmap, QImage
 from PyQt5.QtCore import QEvent, QObject, QTimer, Qt
 import numpy as np
@@ -52,23 +52,24 @@ class MyWindow(QMainWindow):
         self.ui.setupUi(self)  
         # self.ui.horizontalLayout_6.
         
-        self.ui.widget.setGeometry(1 , 42 , 900 , 400)
+        # self.ui.widget.setGeometry(1 , 42 , 900 , 400)
         
+        self.ui.btn_rename_sig_1.clicked.connect(self.rename_grph_1)        
+        self.ui.btn_rename_sig_2.clicked.connect(self.rename_grph_2)        
+        #self.ui.graphicsView = PlotWidget(self.ui.widget)
+        #self.ui.graphicsView.setGeometry(1, 42, 900, 400)
+        ## self.ui.graphicsView.setGeometry(self.ui.widget.geometry())
+        ## self.ui.graphicsView.setGeometry(0, 0, self.ui.widget.geometry().width(), self.ui.widget.geometry().height())
+        ## self.ui.graphicsView.setParent(self.ui.widget)
+        ## self.ui.graphicsView.setObjectName("Channel1")
+        #self.ui.graphicsView.setYRange(-2,2)
         
-        self.graph1 = PlotWidget(self.ui.widget)
-        self.graph1.setGeometry(1, 42, 900, 400)
-        # self.graph1.setGeometry(self.ui.widget.geometry())
-        # self.graph1.setGeometry(0, 0, self.ui.widget.geometry().width(), self.ui.widget.geometry().height())
-        # self.graph1.setParent(self.ui.widget)
-        # self.graph1.setObjectName("Channel1")
-        self.graph1.setYRange(-2,2)
-        
-        self.graph2 = PlotWidget(self.ui.widget_2)
-        # self.graph1.setGeometry(self.ui.widget_2.geometry())
-        # self.graph1.setParent(self.ui.widget_2)
-        self.graph2.setGeometry(1, 39, 900, 400)
-        # self.graph2.setObjectName("Channel1")
-        self.graph2.setYRange(-2,2)
+        # self.ui.graphicsView_2 = PlotWidget(self.ui.widget_2)
+        # # self.ui.graphicsView.setGeometry(self.ui.widget_2.geometry())
+        # # self.ui.graphicsView.setParent(self.ui.widget_2)
+        # self.ui.graphicsView_2.setGeometry(1, 39, 900, 400)
+        # # self.ui.graphicsView_2.setObjectName("Channel1")
+        # self.ui.graphicsView_2.setYRange(-2,2)
 
         self.timer_1 = QtCore.QTimer()
         self.timer_1.setInterval(100) 
@@ -205,7 +206,7 @@ class MyWindow(QMainWindow):
         self.clear_grph_1()
 
     def clear_grph_1(self):
-        self.graph1.clear()
+        self.ui.graphicsView.clear()
         self.timer_1.stop()
         icon = QtGui.QPixmap("play.png")
         self.ui.btn_play_pasuse_viewer_1.setIcon(QtGui.QIcon(icon))
@@ -236,7 +237,6 @@ class MyWindow(QMainWindow):
             "y" : y,
             "data_lines":[],
             "data_indices":[], 
-            "idx" : None
         }
         
         self.signals_1.append(signal)
@@ -247,31 +247,29 @@ class MyWindow(QMainWindow):
         self.replay_1()
          
     def plot_signal_grph_1(self ) :
-        
     
         for signal in self.signals_1:
-            data_line = self.graph1.plotItem.plot(signal["x"], signal["y"], pen=signal["color"])
+            data_line = self.ui.graphicsView.plotItem.plot( pen=signal["color"])
             signal["data_lines"].append(data_line)
             signal["data_indices"].append(0)
-            signal["idx"]=0
-        self.graph1.plotItem.getViewBox().setAutoPan(x=True,y=True)
+        self.ui.graphicsView.plotItem.getViewBox().setAutoPan(x=True,y=True)
         self.timer_1.timeout.connect(lambda:self.update_plot_data_grph_1(self.signals_1))
         self.timer_1.start()
-        self.graph1.show()
         # max_y , min_y = self.find_max_min_1()
         max_y , min_y = self.find_max_min_y_grph_1()
-        self.graph1.plotItem.vb.setLimits(xMin=min(signal["x"]), xMax=max(signal["x"]), yMin=min_y, yMax=max_y)
-        # self.graph1.plotItem.vb.setLimits(xMin=min(signal["x"]), xMax=max(signal["x"]), yMin=min(signal["y"]), yMax=max(signal["y"]))
-        self.graph1.setXRange(0 , 0.002*len(signal["data"]))
+        self.ui.graphicsView.plotItem.vb.setLimits(xMin=min(signal["x"]), xMax=max(signal["x"]), yMin=min_y-.5, yMax=max_y+.5)
+        # self.ui.graphicsView.plotItem.vb.setLimits(xMin=min(signal["x"]), xMax=max(signal["x"]), yMin=min(signal["y"]), yMax=max(signal["y"]))
+        self.ui.graphicsView.setXRange(0 , 0.002*len(signal["data"]))
 
         # x_data_length = len(self.signals_1[0]["data"]) if self.signals_1 else 1
         # initial_x_range = (0, 0.002 * x_data_length)  # Adjust 0.002 based on your data's range
-        # self.graph1.setXRange(*initial_x_range)
+        # self.ui.graphicsView.setXRange(*initial_x_range)
 
         
         icon = QtGui.QPixmap("pause.png")
         self.ui.btn_play_pasuse_viewer_1.setIcon(QtGui.QIcon(icon))
         
+        self.ui.graphicsView.show()
         
     def find_max_min_y_grph_1(self):
         # Initialize variables to store max and min y values
@@ -292,10 +290,9 @@ class MyWindow(QMainWindow):
                 x = signal["x"][:signal["data_indices"][i]]
                 y = signal["y"][:signal["data_indices"][i]]
                 signal["data_indices"][i] += 5 # Update the index for this signal
-                
-                
-                # self.graph1.setXRange(max(x, default=0) - 0.5, max(x, default=0))
-                # self.graph1.setYRange(min(signal["y"]), max(signal["y"]))
+                    
+                # self.ui.graphicsView.setXRange(max(x, default=0) - 0.5, max(x, default=0))
+                # self.ui.graphicsView.setYRange(min(signal["y"]), max(signal["y"]))
 
                 signal["data_lines"][i].setData(x, y)
                 
@@ -324,7 +321,31 @@ class MyWindow(QMainWindow):
         # The variable max_number now contains the maximum number from all "x" lists
         # print("Maximum number:", max_number)
 
-    # def 
+    def rename_grph_1(self):
+        old_name = self.ui.combo_rename_grph_1.currentText()
+        new_name, ok = QInputDialog.getText(self, 'Input Dialog', 'Enter your text:')
+        
+        if ok:
+            for signal in self.signals_1:
+                if signal["name"] == old_name:
+                    signal["name"] = new_name
+            self.updata_combo_bxs_grph_1()            
+        else:
+            pass
+
+    def rename_grph_2(self):
+        old_name = self.ui.combo_rename_grph_.currentText()
+        new_name, ok = QInputDialog.getText(self, 'Input Dialog', 'Enter your text:')
+        
+        if ok:
+            for signal in self.signals_:
+                if signal["name"] == old_name:
+                    signal["name"] = new_name
+            self.updata_combo_bxs_grph_2()            
+        else:
+            pass
+        
+                
             
 
 
@@ -350,17 +371,17 @@ class MyWindow(QMainWindow):
     def zoom_out_grph_1(self):
         # Increase the visible range 
         # max_y  , min_y= self.find_max_min_1()
-        # self.graph1.yAxis.setRange(min_y, max_y)
-        # self.graph1.xAxis.setRange(0, max_x)
-        # self.graph1.set
-        self.graph1.getViewBox().scaleBy((1.2, 1.2))
+        # self.ui.graphicsView.yAxis.setRange(min_y, max_y)
+        # self.ui.graphicsView.xAxis.setRange(0, max_x)
+        # self.ui.graphicsView.set
+        self.ui.graphicsView.getViewBox().scaleBy((1.2, 1.2))
         set 
         if self.islinked:
             self.zoom_out_grph_2()
        
     def zoom_in_grph_1(self):
          # Decrease the visible range 
-        self.graph1.getViewBox().scaleBy((1 / 1.2, 1 / 1.2))
+        self.ui.graphicsView.getViewBox().scaleBy((1 / 1.2, 1 / 1.2))
         if self.islinked:
             self.zoom_in_grph_2()            
             
@@ -388,7 +409,7 @@ class MyWindow(QMainWindow):
         self.data_1[file_name]['x_values'] = np.array([x.split(",")[0] for x in lines],dtype=float)
         self.data_1[file_name]['y_values'] = np.array([y.split(",")[1].strip("/\n") for y in lines],dtype=float)
 
-        self.data_line_1[file_name] = self.graph1.plot()
+        self.data_line_1[file_name] = self.ui.graphicsView.plot()
         if(len(self.data_line_1) > self.i_1):
             self.i_1+=1
             self.flag_1 =True
@@ -434,15 +455,15 @@ class MyWindow(QMainWindow):
         self.start = self.start + self.second_value_1
         self.end = self.end + self.second_value_1
         
-        self.graph1.setXRange(self.start ,self.end)
+        self.ui.graphicsView.setXRange(self.start ,self.end)
 
     def move_signal_from_grph_1(self):
             signal_to_move = self.ui.comb_move_viewer_1.currentText()
             for signal in self.signals_1:
                 if signal["name"] == signal_to_move:
                     for data_line in signal["data_lines"]:
-                        self.graph1.removeItem(data_line)
-                        self.graph2.addItem(data_line)
+                        self.ui.graphicsView.removeItem(data_line)
+                        self.ui.graphicsView_2.addItem(data_line)
                     
                     self.signals_2.append(signal)
                     self.signals_1.remove(signal)
@@ -454,22 +475,27 @@ class MyWindow(QMainWindow):
         
         self.ui.comb_sig_apperance_viewer_1.clear()
         self.ui.comb_move_viewer_1.clear()
+        self.ui.combo_rename_grph_1.clear()
         
         reversed_signals = self.signals_1[::-1]
 
         for signal in reversed_signals:
             self.ui.comb_sig_apperance_viewer_1.addItem( signal["name"])
             self.ui.comb_move_viewer_1.addItem( signal["name"])
+            self.ui.combo_rename_grph_1.addItem( signal["name"])
         
     def change_sig_color_grph_1(self):
+        color = colorchooser.askcolor()[1]
+        if color[1]:
+    
             signal_to_be_changed = self.ui.comb_sig_apperance_viewer_1.currentText()
             for signal in self.signals_1 :
                 if signal["name"] == signal_to_be_changed:
-                    signal["color"] = colorchooser.askcolor()[1]
+                    signal["color"] = color
             
                     for data_line in signal["data_lines"]:
                         data_line.setPen(signal["color"])   
-           
+        
     def show_hide_grph_1 (self):
         signal_to_show_hide = self.ui.comb_sig_apperance_viewer_1.currentText()
         for signal in self.signals_1 :
@@ -485,13 +511,13 @@ class MyWindow(QMainWindow):
                    
 
     def replay_1(self):
-        self.graph1.clear()
+        self.ui.graphicsView.clear()
         self.plot_signal_grph_1()
         if self.islinked:
             self.replay_2()
 
     def clear_grph_2(self):
-        self.graph2.clear()
+        self.ui.graphicsView_2.clear()
         self.timer_2.stop()
         icon = QtGui.QPixmap("play.png")
         self.ui.btn_play_pasuse_viewer_2.setIcon(QtGui.QIcon(icon))
@@ -521,7 +547,6 @@ class MyWindow(QMainWindow):
             "y" : y,
             "data_lines":[],
             "data_indices":[], 
-            "idx" : None
         }
         
         self.signals_2.append(signal)
@@ -534,23 +559,22 @@ class MyWindow(QMainWindow):
     def  plot_signal_grph_2(self ) :
     
         for signal in self.signals_2:
-            data_line = self.graph2.plotItem.plot(signal["x"], signal["y"], pen=signal["color"])
+            data_line = self.ui.graphicsView_2.plotItem.plot( pen=signal["color"])
             signal["data_lines"].append(data_line)
             signal["data_indices"].append(0)
-            signal["idx"]=0
-        self.graph2.plotItem.getViewBox().setAutoPan(x=True,y=True)
+        self.ui.graphicsView_2.plotItem.getViewBox().setAutoPan(x=True,y=True)
         self.timer_2.timeout.connect(lambda:self.update_plot_data_grph_2(self.signals_2))
         self.timer_2.start()
-        self.graph2.show()
+        self.ui.graphicsView_2.show()
         # max_y , min_y = self.find_max_min_2()
         max_y , min_y = self.find_max_min_y_grph_2()
-        self.graph2.plotItem.vb.setLimits(xMin=min(signal["x"]), xMax=max(signal["x"]), yMin=min_y, yMax=max_y)
-        # self.graph2.plotItem.vb.setLimits(xMin=min(signal["x"]), xMax=max(signal["x"]), yMin=min(signal["y"]), yMax=max(signal["y"]))
-        self.graph2.setXRange(0 , 0.002*len(signal["data"]))
+        self.ui.graphicsView_2.plotItem.vb.setLimits(xMin=min(signal["x"]), xMax=max(signal["x"]), yMin=min_y, yMax=max_y)
+        # self.ui.graphicsView_2.plotItem.vb.setLimits(xMin=min(signal["x"]), xMax=max(signal["x"]), yMin=min(signal["y"]), yMax=max(signal["y"]))
+        self.ui.graphicsView_2.setXRange(0 , 0.002*len(signal["data"]))
 
         # x_data_length = len(self.signals_2[0]["data"]) if self.signals_1 else 1
         # initial_x_range = (0, 0.002 * x_data_length)  # Adjust 0.002 based on your data's range
-        # self.graph2.setXRange(*initial_x_range)
+        # self.ui.graphicsView_2.setXRange(*initial_x_range)
 
         
         icon = QtGui.QPixmap("pause.png")
@@ -563,8 +587,8 @@ class MyWindow(QMainWindow):
                 y = signal["y"][:signal["data_indices"][i]]
                 signal["data_indices"][i] += 5 # Update the index for this signal
                 
-                # self.graph2.setXRange(max(x, default=0) - 0.5, max(x, default=0))
-                # self.graph2.setYRange(min(signal["y"]), max(signal["y"]))
+                # self.ui.graphicsView_2.setXRange(max(x, default=0) - 0.5, max(x, default=0))
+                # self.ui.graphicsView_2.setYRange(min(signal["y"]), max(signal["y"]))
 
                 signal["data_lines"][i].setData(x, y)
          
@@ -602,15 +626,15 @@ class MyWindow(QMainWindow):
         self.ui.comb_move_viewer_2.addItem(file_name)
                
     def zoom_out_grph_2(self):
-        self.graph2.getViewBox().scaleBy((1.2, 1.2))
+        self.ui.graphicsView_2.getViewBox().scaleBy((1.2, 1.2))
         if self.islinked:
-            self.graph1.getViewBox().scaleBy((1.2, 1.2))
+            self.ui.graphicsView.getViewBox().scaleBy((1.2, 1.2))
             
 
     def zoom_in_grph_2(self):
-        self.graph2.getViewBox().scaleBy((1 / 1.2, 1 / 1.2))
+        self.ui.graphicsView_2.getViewBox().scaleBy((1 / 1.2, 1 / 1.2))
         if self.islinked:
-            self.graph1.getViewBox().scaleBy((1 / 1.2, 1 / 1.2))
+            self.ui.graphicsView.getViewBox().scaleBy((1 / 1.2, 1 / 1.2))
             
     
     def faster_grph_2(self):
@@ -625,8 +649,8 @@ class MyWindow(QMainWindow):
             for signal in self.signals_2:
                 if signal["name"] == signal_to_move:
                     for data_line in signal["data_lines"]:
-                        self.graph2.removeItem(data_line)
-                        self.graph1.addItem(data_line)
+                        self.ui.graphicsView_2.removeItem(data_line)
+                        self.ui.graphicsView.addItem(data_line)
                     
                     self.signals_1.append(signal)
                     self.signals_2.remove(signal)
@@ -637,18 +661,23 @@ class MyWindow(QMainWindow):
         
         self.ui.comb_sig_apperance_viewer_2.clear()
         self.ui.comb_move_viewer_2.clear()
+        self.ui.combo_rename_grph_2.clear()
         
         reversed_signals = self.signals_2[::-1]
 
         for signal in reversed_signals:
             self.ui.comb_sig_apperance_viewer_2.addItem(signal["name"])
             self.ui.comb_move_viewer_2.addItem(signal["name"])
+            self.ui.combo_rename_grph_2.addItem(signal["name"])
     
     def change_sig_color_grph_2(self):
+        color = colorchooser.askcolor()[1]
+        if color[1]:
+    
             signal_to_be_changed = self.ui.comb_sig_apperance_viewer_2.currentText()
             for signal in self.signals_2 :
                 if signal["name"] == signal_to_be_changed:
-                    signal["color"] = colorchooser.askcolor()[1]
+                    signal["color"] = color
             
                     for data_line in signal["data_lines"]:
                         data_line.setPen(signal["color"])   
@@ -671,7 +700,7 @@ class MyWindow(QMainWindow):
     
 
     def replay_2(self):
-        self.graph2.clear()
+        self.ui.graphicsView_2.clear()
         self.plot_signal_grph_2()
         
     
@@ -706,7 +735,7 @@ class MyWindow(QMainWindow):
     
    
     def cal_statistics_1(self):
-        data_item = self.graph1.getPlotItem().listDataItems()[0]  
+        data_item = self.ui.graphicsView.getPlotItem().listDataItems()[0]  
         x_values, y_values = data_item.getData()
 
         mean_value = mean(y_values)
@@ -726,7 +755,7 @@ class MyWindow(QMainWindow):
         return statistics
         
     def cal_statistics_2(self):
-        data_item = self.graph2.getPlotItem().listDataItems()[0]  
+        data_item = self.ui.graphicsView_2.getPlotItem().listDataItems()[0]  
         x_values, y_values = data_item.getData()
 
         mean_value = mean(y_values)
@@ -748,9 +777,9 @@ class MyWindow(QMainWindow):
    
             
     def capture_snapshot_1(self):
-        exporter = exporters.ImageExporter(self.graph1.plotItem)
-        exporter.parameters()['width'] = self.graph1.width()    # (note this also affects height parameter)
-        exporter.parameters()['height'] = self.graph1.height()   # (note this also affects height parameter)
+        exporter = exporters.ImageExporter(self.ui.graphicsView.plotItem)
+        exporter.parameters()['width'] = self.ui.graphicsView.width()    # (note this also affects height parameter)
+        exporter.parameters()['height'] = self.ui.graphicsView.height()   # (note this also affects height parameter)
 # save to file
         img1_path = f"grah1_snap_{self.counter_1}.png"
         exporter.export(img1_path)
@@ -761,9 +790,9 @@ class MyWindow(QMainWindow):
         
         
     def capture_snapshot_2(self):
-        exporter = exporters.ImageExporter(self.graph2.plotItem)
-        exporter.parameters()['width'] = self.graph2.width()    # (note this also affects height parameter)
-        exporter.parameters()['height'] = self.graph2.height()   # (note this also affects height parameter)
+        exporter = exporters.ImageExporter(self.ui.graphicsView_2.plotItem)
+        exporter.parameters()['width'] = self.ui.graphicsView_2.width()    # (note this also affects height parameter)
+        exporter.parameters()['height'] = self.ui.graphicsView_2.height()   # (note this also affects height parameter)
 # save to file
         img2_path = f"grah2_snap_{self.counter_2}.png"
         exporter.export(img2_path)

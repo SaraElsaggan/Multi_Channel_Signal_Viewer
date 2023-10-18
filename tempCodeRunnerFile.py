@@ -1,2 +1,7 @@
-   # self.graph2.setXRange(max(x, default=0) - 0.5, max(x, default=0))
-                # self.graph2.setYRan
+_changed = self.ui.comb_sig_apperance_viewer_1.currentText()
+            for signal in self.signals_1 :
+                if signal["name"] == signal_to_be_changed:
+                    signal["color"] = color
+            
+                    for data_line in signal["data_lines"]:
+                    
