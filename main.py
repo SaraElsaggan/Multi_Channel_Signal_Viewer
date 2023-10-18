@@ -50,27 +50,8 @@ class MyWindow(QMainWindow):
         super(MyWindow , self).__init__()
         self.ui = Ui_MainWindow()
         self.ui.setupUi(self)  
-        # self.ui.horizontalLayout_6.
-        
-        # self.ui.widget.setGeometry(1 , 42 , 900 , 400)
-        
         self.ui.btn_rename_sig_1.clicked.connect(self.rename_grph_1)        
         self.ui.btn_rename_sig_2.clicked.connect(self.rename_grph_2)        
-        #self.ui.graphicsView = PlotWidget(self.ui.widget)
-        #self.ui.graphicsView.setGeometry(1, 42, 900, 400)
-        ## self.ui.graphicsView.setGeometry(self.ui.widget.geometry())
-        ## self.ui.graphicsView.setGeometry(0, 0, self.ui.widget.geometry().width(), self.ui.widget.geometry().height())
-        ## self.ui.graphicsView.setParent(self.ui.widget)
-        ## self.ui.graphicsView.setObjectName("Channel1")
-        #self.ui.graphicsView.setYRange(-2,2)
-        
-        # self.ui.graphicsView_2 = PlotWidget(self.ui.widget_2)
-        # # self.ui.graphicsView.setGeometry(self.ui.widget_2.geometry())
-        # # self.ui.graphicsView.setParent(self.ui.widget_2)
-        # self.ui.graphicsView_2.setGeometry(1, 39, 900, 400)
-        # # self.ui.graphicsView_2.setObjectName("Channel1")
-        # self.ui.graphicsView_2.setYRange(-2,2)
-
         self.timer_1 = QtCore.QTimer()
         self.timer_1.setInterval(100) 
         
@@ -255,15 +236,9 @@ class MyWindow(QMainWindow):
         self.ui.graphicsView.plotItem.getViewBox().setAutoPan(x=True,y=True)
         self.timer_1.timeout.connect(lambda:self.update_plot_data_grph_1(self.signals_1))
         self.timer_1.start()
-        # max_y , min_y = self.find_max_min_1()
         max_y , min_y = self.find_max_min_y_grph_1()
         self.ui.graphicsView.plotItem.vb.setLimits(xMin=min(signal["x"]), xMax=max(signal["x"]), yMin=min_y-.5, yMax=max_y+.5)
-        # self.ui.graphicsView.plotItem.vb.setLimits(xMin=min(signal["x"]), xMax=max(signal["x"]), yMin=min(signal["y"]), yMax=max(signal["y"]))
         self.ui.graphicsView.setXRange(0 , 0.002*len(signal["data"]))
-
-        # x_data_length = len(self.signals_1[0]["data"]) if self.signals_1 else 1
-        # initial_x_range = (0, 0.002 * x_data_length)  # Adjust 0.002 based on your data's range
-        # self.ui.graphicsView.setXRange(*initial_x_range)
 
         
         icon = QtGui.QPixmap("pause.png")
@@ -290,10 +265,6 @@ class MyWindow(QMainWindow):
                 x = signal["x"][:signal["data_indices"][i]]
                 y = signal["y"][:signal["data_indices"][i]]
                 signal["data_indices"][i] += 5 # Update the index for this signal
-                    
-                # self.ui.graphicsView.setXRange(max(x, default=0) - 0.5, max(x, default=0))
-                # self.ui.graphicsView.setYRange(min(signal["y"]), max(signal["y"]))
-
                 signal["data_lines"][i].setData(x, y)
                 
     def find_max_min_1(self):
@@ -369,11 +340,7 @@ class MyWindow(QMainWindow):
         self.ui.comb_move_viewer_1.addItem(file_name)
                
     def zoom_out_grph_1(self):
-        # Increase the visible range 
-        # max_y  , min_y= self.find_max_min_1()
-        # self.ui.graphicsView.yAxis.setRange(min_y, max_y)
-        # self.ui.graphicsView.xAxis.setRange(0, max_x)
-        # self.ui.graphicsView.set
+       
         self.ui.graphicsView.getViewBox().scaleBy((1.2, 1.2))
         set 
         if self.islinked:
@@ -396,67 +363,7 @@ class MyWindow(QMainWindow):
         if self.islinked :
             self.slower_grph_2()
 
-    def open_file_1(self):
-        file_path = QFileDialog.getOpenFileName( self , "open file", "" ,"(*.csv) ")
-
-        file = open(file_path[0])
-        lines = file.readlines()
-
-
-        file_name = file_path[0].split("/")[-1][:-4]
-        print(file_name)
-        self.data_1[file_name] = {}
-        self.data_1[file_name]['x_values'] = np.array([x.split(",")[0] for x in lines],dtype=float)
-        self.data_1[file_name]['y_values'] = np.array([y.split(",")[1].strip("/\n") for y in lines],dtype=float)
-
-        self.data_line_1[file_name] = self.ui.graphicsView.plot()
-        if(len(self.data_line_1) > self.i_1):
-            self.i_1+=1
-            self.flag_1 =True
-           
-        first_value = self.data_1[file_name]['x_values'][0]
-        
-        self.second_value_1 = self.data_1[file_name]['x_values'][1]
-        self.second_value_1 = self.second_value_1 - first_value 
-
-        self.end = self.second_value_1 * 100
-        
-        color =  colorchooser.askcolor()[1]
-        print(color)
-
-        signal = {
-            "color" : color ,
-            "name" : file_name, 
-            "display" : True,
-        }
-        
-        self.signals_1.append(signal)
-        self.add_signal_to_combo_grph_1(file_name)
-
-
-
-        self.timer_1.timeout.connect(self.update_plot_data_1)
-        self.timer_1.start()  
-
-    def update_plot_data_1(self):
-        if(self.flag_1 == True):
-            self.index_1 = 50
-            self.start  = 0
-            self.end  = self.second_value_1 * 100
-            self.flag_1 = False
-
-            
-        for signal in self.data_line_1:
-            x_to_plot = self.data_1[signal]['x_values'][:self.index_1]
-            y_to_plot = self.data_1[signal]['y_values'][:self.index_1]
-            self.data_line_1[signal].setData(x_to_plot, y_to_plot)
-
-        self.index_1 += 1
-        self.start = self.start + self.second_value_1
-        self.end = self.end + self.second_value_1
-        
-        self.ui.graphicsView.setXRange(self.start ,self.end)
-
+    
     def move_signal_from_grph_1(self):
             signal_to_move = self.ui.comb_move_viewer_1.currentText()
             for signal in self.signals_1:
@@ -566,15 +473,10 @@ class MyWindow(QMainWindow):
         self.timer_2.timeout.connect(lambda:self.update_plot_data_grph_2(self.signals_2))
         self.timer_2.start()
         self.ui.graphicsView_2.show()
-        # max_y , min_y = self.find_max_min_2()
         max_y , min_y = self.find_max_min_y_grph_2()
         self.ui.graphicsView_2.plotItem.vb.setLimits(xMin=min(signal["x"]), xMax=max(signal["x"]), yMin=min_y, yMax=max_y)
-        # self.ui.graphicsView_2.plotItem.vb.setLimits(xMin=min(signal["x"]), xMax=max(signal["x"]), yMin=min(signal["y"]), yMax=max(signal["y"]))
         self.ui.graphicsView_2.setXRange(0 , 0.002*len(signal["data"]))
 
-        # x_data_length = len(self.signals_2[0]["data"]) if self.signals_1 else 1
-        # initial_x_range = (0, 0.002 * x_data_length)  # Adjust 0.002 based on your data's range
-        # self.ui.graphicsView_2.setXRange(*initial_x_range)
 
         
         icon = QtGui.QPixmap("pause.png")
@@ -586,10 +488,6 @@ class MyWindow(QMainWindow):
                 x = signal["x"][:signal["data_indices"][i]]
                 y = signal["y"][:signal["data_indices"][i]]
                 signal["data_indices"][i] += 5 # Update the index for this signal
-                
-                # self.ui.graphicsView_2.setXRange(max(x, default=0) - 0.5, max(x, default=0))
-                # self.ui.graphicsView_2.setYRange(min(signal["y"]), max(signal["y"]))
-
                 signal["data_lines"][i].setData(x, y)
          
     
@@ -854,47 +752,6 @@ class MyWindow(QMainWindow):
         self.ui.btn_repo.setEnabled(False)
     
   
-  
-  
-    # def report_grph_2(self ):   
-    #     if len(self.signals_2)>0: 
-    #         file_path, _ = QFileDialog.getSaveFileName(None, "Save PDF", "", "PDF Files (*.pdf);;All Files (*)")
-    
-    #         img_1, img_2 = self.capture_snapshot()
-    #         pdf = FPDF()
-        
-    #     # Add a page
-    #         pdf.add_page()
-            
-    #         pdf.image(img_2, 5, 10, 190)
-            
-    #         os.remove(img_2)
-            
-    #         table_x = 5
-    #         table_y = 100
-            
-    #         data_dict1  = self.cal_statistics_2()
-    #         pdf.set_xy(table_x, table_y)
-    #         pdf.set_font("Arial", size=12)
-    #         pdf.cell(0, 10, "Data Table 1", ln=True, align="C")
-    #         pdf.ln(10)
-
-    #         for key, value in data_dict1.items():
-    #             pdf.cell(100, 10, str(key), border=1)
-    #             pdf.cell(0, 10, str(value), border=1)
-    #             pdf.ln()
-
-            
-    #         pdf.output( file_path, "F")
-    
-    #     else:
-    #         message_box = QMessageBox()
-    #         message_box.setWindowTitle("error")
-    #         message_box.setText("the graphs is empty")
-    #         message_box.exec_()     
-
-        
-        
 def main():
     app = QApplication(sys.argv)
     window = MyWindow() 
