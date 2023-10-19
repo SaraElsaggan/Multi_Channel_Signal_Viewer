@@ -8,12 +8,11 @@ This README provides an overview of the project, its features, and how to use it
 - [Steps to start](#Steps to start)
   
 ## Preview
-The Signal Viewer Project is a desktop application for visualizing and analyzing time-series signals.<br>
-It provides an interactive interface for loading, displaying, and analyzing signals from CSV files. <br>
-![Local Image](imgs/WhatsApp%20Image%202023-10-19%20at%2014.35.14_40981c88.jpg)<br>
-![Local Image](imgs/WhatsApp%20Image%202023-10-19%20at%2014.37.13_ed04cf29.jpg)<br>
-![Local Image](imgs/WhatsApp%20Image%202023-10-19%20at%2014.37.52_4ad3d8c0.jpg)<br>
-![Local Image](imgs/WhatsApp%20Image%202023-10-19%20at%2014.38.29_48daa380.jpg)<br>
+The Signal Viewer Project is a desktop application for visualizing and analyzing time-series signals.<br>It provides an interactive interface for loading, displaying, and analyzing signals from CSV files.
+![Local Image](imgs/WhatsApp%20Image%202023-10-19%20at%2014.35.14_40981c88.jpg)
+![Local Image](imgs/WhatsApp%20Image%202023-10-19%20at%2014.37.13_ed04cf29.jpg)
+![Local Image](imgs/WhatsApp%20Image%202023-10-19%20at%2014.37.52_4ad3d8c0.jpg)
+![Local Image](imgs/WhatsApp%20Image%202023-10-19%20at%2014.38.29_48daa380.jpg)
 ## Demo
 [signal_viewer_Demo](https://drive.google.com/drive/folders/11XpLMNR2brf_snuh3IEUBROZSLY5T0LM?usp=share_link)
 
@@ -28,8 +27,7 @@ It provides an interactive interface for loading, displaying, and analyzing sign
 
 ### Steps to start
 
-1.install python and visual studio.
-<br>2.ensure you have these python packages (install via pip if not):
+1.install python and visual studio.<br>2.ensure you have these python packages (install via pip if not):
   - PyQt5
   - numpy
   - matplotlib
