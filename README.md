@@ -5,7 +5,7 @@ This README provides an overview of the project, its features, and how to use it
 - [Preview](#Preview)
 - [Demo](#Demo)
 - [Features](#features)
-- [Prerequisites](#prerequisites)
+- [Steps to start](#Steps to start)
   
 ## Preview
 The Signal Viewer Project is a desktop application for visualizing and analyzing time-series signals.
@@ -26,7 +26,7 @@ It provides an interactive interface for loading, displaying, and analyzing sign
 ### Steps to start
 
 1.install python and visual studio.
-2.ensure you have these python packages (install via pip):
+2.ensure you have these python packages (install via pip if not):
   - PyQt5
   - numpy
   - matplotlib
