@@ -1,47 +1,23 @@
-import tempfile
-from reportlab.platypus import SimpleDocTemplate, Image, Table, TableStyle, PageBreak
 from reportlab.lib.units import inch
-import tkinter as tk
-from PIL import Image as PILImage
-from io import BytesIO
 from reportlab.lib.pagesizes import letter
-from reportlab.platypus import Image
-from matplotlib.backends.backend_pdf import PdfPages
-import matplotlib.pyplot as plt
-from reportlab.platypus import ListFlowable, ListItem
-from reportlab.platypus import SimpleDocTemplate, Paragraph, Spacer, Table, TableStyle
 from reportlab.lib.styles import getSampleStyleSheet
-from reportlab.lib import colors
-from reportlab.pdfgen import canvas
-from reportlab.lib.utils import ImageReader
-from PIL import Image
 from tabulate import tabulate
-from PyQt5 import QtCore, QtGui, QtWidgets
+from PyQt5 import QtCore, QtGui
 import os
-import re
-import time
-import csv
 import sys
-from PyPDF2 import PdfFileWriter, PdfFileReader
-from PyQt5.QtWidgets import QInputDialog ,  QMessageBox ,  QApplication, QMainWindow, QVBoxLayout, QPushButton, QShortcut, QWidget, QDesktopWidget, QFileDialog
-from PyQt5.QtGui import QIcon, QKeySequence, QPixmap, QImage
-from PyQt5.QtCore import QEvent, QObject, QTimer, Qt
+from PyQt5.QtWidgets import QInputDialog ,  QMessageBox ,  QApplication, QMainWindow, QShortcut, QFileDialog
+from PyQt5.QtGui import QIcon, QKeySequence
 import numpy as np
 from mainwindow import Ui_MainWindow
 from tkinter import *
 from tkinter import colorchooser
-from pyqtgraph import PlotWidget
 import pyqtgraph.exporters as exporters
 from PyQt5.QtWidgets import QApplication, QMainWindow, QVBoxLayout, QWidget, QDesktopWidget, QFileDialog
-from PyQt5.QtCore import QStateMachine, QState, QPropertyAnimation
-from PyQt5.QtCore import QDateTime, Qt
-import io
 from statistics import mean, stdev
 import matplotlib.pyplot as plt
 import pyqtgraph as pg
-import pandas as pd
-import pyqtgraph.exporters
 from fpdf import FPDF
+
 
 
 class MyWindow(QMainWindow):  
@@ -237,7 +213,7 @@ class MyWindow(QMainWindow):
         self.timer_1.timeout.connect(lambda:self.update_plot_data_grph_1(self.signals_1))
         self.timer_1.start()
         max_y , min_y = self.find_max_min_y_grph_1()
-        self.ui.graphicsView.plotItem.vb.setLimits(xMin=min(signal["x"]), xMax=max(signal["x"]), yMin=min_y-.5, yMax=max_y+.5)
+        self.ui.graphicsView.plotItem.vb.setLimits(xMin=0, xMax=max(signal["x"]), yMin=min_y-.5, yMax=max_y+.5)
         self.ui.graphicsView.setXRange(0 , 0.002*len(signal["data"]))
 
         
@@ -247,9 +223,8 @@ class MyWindow(QMainWindow):
         self.ui.graphicsView.show()
         
     def find_max_min_y_grph_1(self):
-        # Initialize variables to store max and min y values
-        max_y = float('-inf')  # Initialize with negative infinity
-        min_y = float('inf')   # Initialize with positive infinity
+        max_y = float('-inf')  
+        min_y = float('inf')   
 
         for signal in self.signals_1 :
             if "y" in signal and signal["y"]:
@@ -272,7 +247,6 @@ class MyWindow(QMainWindow):
         max_number = float('-inf')  # Start with negative infinity
         min_number = float('-inf')  # Start with negative infinity
 
-# Iterate through the list of dictionaries
         for signal in self.signals_1:
             y_list = signal.get("y", [])  # Get the "x" list from the dictionary
 
@@ -289,8 +263,7 @@ class MyWindow(QMainWindow):
                     min_number = current_min
                     
         return max_number , min_number                    
-        # The variable max_number now contains the maximum number from all "x" lists
-        # print("Maximum number:", max_number)
+      
 
     def rename_grph_1(self):
         old_name = self.ui.combo_rename_grph_1.currentText()
@@ -492,9 +465,8 @@ class MyWindow(QMainWindow):
          
     
     def find_max_min_y_grph_2(self):
-        # Initialize variables to store max and min y values
-        max_y = float('-inf')  # Initialize with negative infinity
-        min_y = float('inf')   # Initialize with positive infinity
+        max_y = float('-inf')  
+        min_y = float('inf')   
 
         for signal in self.signals_2 :
             if "y" in signal and signal["y"]:
@@ -689,9 +661,8 @@ class MyWindow(QMainWindow):
         
     def capture_snapshot_2(self):
         exporter = exporters.ImageExporter(self.ui.graphicsView_2.plotItem)
-        exporter.parameters()['width'] = self.ui.graphicsView_2.width()    # (note this also affects height parameter)
-        exporter.parameters()['height'] = self.ui.graphicsView_2.height()   # (note this also affects height parameter)
-# save to file
+        exporter.parameters()['width'] = self.ui.graphicsView_2.width()  
+        exporter.parameters()['height'] = self.ui.graphicsView_2.height() 
         img2_path = f"grah2_snap_{self.counter_2}.png"
         exporter.export(img2_path)
         self.snapshots_2.append(img2_path)
