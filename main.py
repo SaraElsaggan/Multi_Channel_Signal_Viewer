@@ -204,11 +204,15 @@ class MyWindow(QMainWindow):
         self.replay_1()
          
     def plot_signal_grph_1(self ) :
-    
+        p = 0
         for signal in self.signals_1:
             data_line = self.ui.graphicsView.plotItem.plot( pen=signal["color"])
             signal["data_lines"].append(data_line)
             signal["data_indices"].append(0)
+        p += 20
+        self.legend_1 = pg.LegendItem((10, 10), offset=(40 ,  p ))
+        self.legend_1.setParentItem(self.ui.graphicsView.getPlotItem())
+        self.legend_1.addItem(data_line, signal["name"])
         self.ui.graphicsView.plotItem.getViewBox().setAutoPan(x=True,y=True)
         self.timer_1.timeout.connect(lambda:self.update_plot_data_grph_1(self.signals_1))
         self.timer_1.start()
@@ -605,24 +609,30 @@ class MyWindow(QMainWindow):
     
    
     def cal_statistics_1(self):
-        data_item = self.ui.graphicsView.getPlotItem().listDataItems()[0]  
-        x_values, y_values = data_item.getData()
+        statistics_list = []
 
-        mean_value = mean(y_values)
-        std_deviation = stdev(y_values)
-        duration = len(y_values)
-        min_value = min(y_values)
-        max_value = max(y_values)
+        for signal in self.signals_1:
+            data_item = self.ui.graphicsView.getPlotItem().listDataItems()[0]  
+            x_values, y_values = data_item.getData()
 
-        statistics = {
-            'mean': round(mean_value , 2),
-            'std': round(std_deviation , 2),
-            'duration': round(duration , 2),
-            'min': round(min_value , 2),
-            'max': round(max_value , 2)
-        }
+            mean_value = round(mean(y_values), 2)
+            std_deviation = round(stdev(y_values), 2)
+            duration = round(len(y_values), 2)
+            min_value = round(min(y_values), 2)
+            max_value = round(max(y_values), 2)
 
-        return statistics
+            statistics = {
+                "signal" : signal["name"],
+                'mean': mean_value,
+                'std': std_deviation,
+                'duration': duration,
+                'min': min_value,
+                'max': max_value
+            }
+
+            statistics_list.append(statistics)
+
+        return statistics_list
         
     def cal_statistics_2(self):
         data_item = self.ui.graphicsView_2.getPlotItem().listDataItems()[0]  
@@ -648,9 +658,8 @@ class MyWindow(QMainWindow):
             
     def capture_snapshot_1(self):
         exporter = exporters.ImageExporter(self.ui.graphicsView.plotItem)
-        exporter.parameters()['width'] = self.ui.graphicsView.width()    # (note this also affects height parameter)
-        exporter.parameters()['height'] = self.ui.graphicsView.height()   # (note this also affects height parameter)
-# save to file
+        exporter.parameters()['width'] = self.ui.graphicsView.width()    
+        exporter.parameters()['height'] = self.ui.graphicsView.height()   
         img1_path = f"grah1_snap_{self.counter_1}.png"
         exporter.export(img1_path)
         self.snapshots_1.append(img1_path)
@@ -686,15 +695,31 @@ class MyWindow(QMainWindow):
             table_y = 100
             
             data_dict1  = self.cal_statistics_1()
+            
             pdf.set_xy(table_x, table_y)
             pdf.set_font("Arial", size=12)
             pdf.cell(0, 10, "Data Table 1", ln=True, align="C")
             pdf.ln(10)
+            col_widths = [60, 25, 25, 25, 25, 25]
+            headers = ["Signals", "mean", "max", "min", "std", "duration"]
+            for header in headers:
+                pdf.cell(col_widths[headers.index(header)], 10, header, border=1)
+            pdf.ln()
 
-            for key, value in data_dict1.items():
-                pdf.cell(100, 10, str(key), border=1)
-                pdf.cell(0, 10, str(value), border=1)
+            # Create the table rows with 7 rows
+            for data in data_dict1:
+                pdf.cell(col_widths[0], 10, data["signal"], border=1)
+                pdf.cell(col_widths[1], 10, str(data['mean']), border=1)
+                pdf.cell(col_widths[2], 10, str(data['max']), border=1)
+                pdf.cell(col_widths[3], 10, str(data['min']), border=1)
+                pdf.cell(col_widths[4], 10, str(data['std']), border=1)
+                pdf.cell(col_widths[5], 10, str(data['duration']), border=1)
                 pdf.ln()
+
+            # for key, value in data_dict1.items():
+            #     pdf.cell(100, 10, str(key), border=1)
+            #     pdf.cell(0, 10, str(value), border=1)
+            #     pdf.ln()
 
                 
                 
