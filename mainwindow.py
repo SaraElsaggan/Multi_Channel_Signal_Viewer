@@ -16,7 +16,7 @@ class Ui_MainWindow(object):
         MainWindow.setObjectName("MainWindow")
         MainWindow.resize(1453, 778)
         font = QtGui.QFont()
-        font.setBold(True)
+        font.setBold(True)      
         MainWindow.setFont(font)
         MainWindow.setFocusPolicy(QtCore.Qt.NoFocus)
         MainWindow.setStyleSheet("QGroupBox  {\n"
