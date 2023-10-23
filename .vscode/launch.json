@@ -8,8 +8,8 @@
       "args": [],
       "stopAtEntry": false,
       "externalConsole": true,
-      "cwd": "c:/Users/Sara/AppData/Local/Microsoft/Windows/INetCache/IE/GV71NVIY",
-      "program": "c:/Users/Sara/AppData/Local/Microsoft/Windows/INetCache/IE/GV71NVIY/build/Debug/outDebug",
+      "cwd": "c:/Users/Sara/Downloads",
+      "program": "c:/Users/Sara/Downloads/build/Debug/outDebug",
       "MIMode": "gdb",
       "miDebuggerPath": "gdb",
       "setupCommands": [

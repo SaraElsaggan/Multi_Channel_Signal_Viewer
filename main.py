@@ -5,14 +5,14 @@ from tabulate import tabulate
 from PyQt5 import QtCore, QtGui
 import os
 import sys
-from PyQt5.QtWidgets import QInputDialog ,  QMessageBox ,  QApplication, QMainWindow, QShortcut, QFileDialog
+from PyQt5.QtWidgets import QInputDialog  ,  QApplication, QMainWindow, QShortcut, QFileDialog
 from PyQt5.QtGui import QIcon, QKeySequence
 import numpy as np
 from mainwindow import Ui_MainWindow
 from tkinter import *
 from tkinter import colorchooser
 import pyqtgraph.exporters as exporters
-from PyQt5.QtWidgets import QApplication, QMainWindow, QVBoxLayout, QWidget, QDesktopWidget, QFileDialog
+from PyQt5.QtWidgets import QApplication, QMainWindow, QFileDialog
 from statistics import mean, stdev
 import matplotlib.pyplot as plt
 import pyqtgraph as pg
@@ -32,7 +32,14 @@ class MyWindow(QMainWindow):
         self.timer_1.setInterval(100) 
         
         self.legend_1 = []
+        
         # self.legend_1 = []
+        
+        
+        self.ui.graphicsView.addLegend()
+       
+
+
 
         self.timer_2 = QtCore.QTimer()
         self.timer_2.setInterval(100) 
@@ -125,6 +132,7 @@ class MyWindow(QMainWindow):
         self.counter_1 = 1
         self.counter_2 = 1
 
+
         QShortcut(QKeySequence("Ctrl+p"), self).activated.connect(self.report)
         QShortcut(QKeySequence("Ctrl+l"), self).activated.connect(self.link_graphs)
         QShortcut(QKeySequence("Ctrl+c"), self).activated.connect(self.clear_all)
@@ -138,7 +146,6 @@ class MyWindow(QMainWindow):
         self.ui.btn_snap_grph_1.clicked.connect(self.capture_snapshot_1)
         self.ui.btn_snap_grph_2.clicked.connect(self.capture_snapshot_2)
         self.ui.btn_repo.clicked.connect(self.report)
-        # self.ui.btn_report_grph_2.clicked.connect(self.report_grph_2)
         self.ui.actionreport.triggered.connect(self.report)
         
         self.snapshots_1 = []
@@ -202,44 +209,21 @@ class MyWindow(QMainWindow):
         
         self.updata_combo_bxs_grph_1()
 
-        print(signal["color"])
-        print(type(signal["x"]))
+        
         self.replay_1()
     
-    # def update_legends_1(self):
-    #     p=0
-    #     self.ui.graphicsView.plotItem.legend = None
-    #     for signal in self.signals_1:
-    #         p += 20
-    #         legend_1 = pg.LegendItem((10, 10), offset=(40 ,  p ))
-    #         legend_1.setParentItem(self.ui.graphicsView.getPlotItem())
-    #         legend_1.addItem(signal["data_lines"][0], signal["name"])
-            
-    # def fun(self):
-    #     p = 0
-    #     for item in self.ui.graphicsView.plotItem.childItems():
-    #         if isinstance(item, pg.LegendItem):
-    #            self.ui.graphicsView.plotItem.legend.removeItem(item)
-    #     for signal in self.signals_1:
-    #         p += 20
-    #         legend_1 = pg.LegendItem((10, 10), offset=(40 ,  p ))
-    #         legend_1.setParentItem(self.ui.graphicsView.getPlotItem())
-    #         legend_1.addItem(signal["data_lines"][0], signal["name"])
-    #         self.legend_1.append(legend_1)
-            
-    
-    
     def plot_signal_grph_1(self ) :
-        p = 0
+        # p = 0
         for signal in self.signals_1:
             data_line = self.ui.graphicsView.plotItem.plot( pen=signal["color"])
             signal["data_lines"].append(data_line)
             signal["data_indices"].append(0)
-            p += 20                 
-        legend_1 = pg.LegendItem((10, 10), offset=(40 ,  p ))
-        legend_1.setParentItem(self.ui.graphicsView.getPlotItem())
-        legend_1.addItem(data_line, signal["name"])
-        self.legend_1.append(legend_1)
+            # p += 20                 
+        # legend_1 = pg.LegendItem((10, 10), offset=(40 ,  p ))
+        # legend_1.setParentItem(self.ui.graphicsView.getPlotItem())
+        # legend_1.addItem(data_line, signal["name"])
+        # self.legend_1.append(legend_1)
+        
         
         # self.fun()
         
@@ -249,12 +233,15 @@ class MyWindow(QMainWindow):
         max_y , min_y = self.find_max_min_y_grph_1()
         self.ui.graphicsView.plotItem.vb.setLimits(xMin=0, xMax=max(signal["x"]), yMin=min_y-.5, yMax=max_y+.5)
         self.ui.graphicsView.setXRange(0 , 0.002*len(signal["data"]))
+        # self.ui.graphicsView.addLegend(offset=(50, 30))
+        
         # self.update_legends_1()
         # legends = self.ui.graphicsView.plotItem.legend.items
         # print(legends)
         
         icon = QtGui.QPixmap("pause.png")
         self.ui.btn_play_pasuse_viewer_1.setIcon(QtGui.QIcon(icon))
+        self.ui.graphicsView.plotItem.addLegend()
         
         self.ui.graphicsView.show()
         
@@ -275,23 +262,21 @@ class MyWindow(QMainWindow):
             for i in range(len(signal["data_lines"])):
                 x = signal["x"][:signal["data_indices"][i]]
                 y = signal["y"][:signal["data_indices"][i]]
-                signal["data_indices"][i] += 5 # Update the index for this signal
+                signal["data_indices"][i] += 5 
                 signal["data_lines"][i].setData(x, y)
                 
     def find_max_min_1(self):
 
-        max_number = float('-inf')  # Start with negative infinity
-        min_number = float('-inf')  # Start with negative infinity
+        max_number = float('-inf')  
+        min_number = float('-inf')  
 
         for signal in self.signals_1:
-            y_list = signal.get("y", [])  # Get the "x" list from the dictionary
+            y_list = signal.get("y", [])  
 
-            # Find the maximum number in the current "x" list
             if y_list:
                 current_max = max(y_list)
                 current_min = min(y_list)
                 
-                # Update the maximum number if the current maximum is greater
                 if current_max > max_number:
                     max_number = current_max
                     
@@ -309,8 +294,9 @@ class MyWindow(QMainWindow):
             for signal in self.signals_1:
                 if signal["name"] == old_name:
                     signal["name"] = new_name
-            self.updata_combo_bxs_grph_1()        
-            # self.update_legends_1()    
+            self.updata_combo_bxs_grph_1()   
+            
+             
         else:
             pass
 
@@ -325,10 +311,6 @@ class MyWindow(QMainWindow):
             self.updata_combo_bxs_grph_2()            
         else:
             pass
-        
-                
-            
-
 
     def play_pause_grph_1(self):
         if self.timer_1.isActive():
@@ -423,9 +405,7 @@ class MyWindow(QMainWindow):
                         data_line.setVisible(True) 
                 else:
                     for data_line in signal["data_lines"]:    # self.current_signal_v1.data_line.setVisible(False)
-                        data_line.setVisible(False)
-    
-                   
+                        data_line.setVisible(False)              
 
     def replay_1(self):
         self.ui.graphicsView.clear()
@@ -440,9 +420,6 @@ class MyWindow(QMainWindow):
         self.ui.btn_play_pasuse_viewer_2.setIcon(QtGui.QIcon(icon))
         self.signals_2.clear()
         self.updata_combo_bxs_grph_2()
-
-
-
 
     def upload_data_grph_2(self):
         file_path  , _ = QFileDialog.getOpenFileName( self , "open file", "" ,"(*.csv) ")
@@ -507,7 +484,6 @@ class MyWindow(QMainWindow):
                 signal["data_indices"][i] += 5 # Update the index for this signal
                 signal["data_lines"][i].setData(x, y)
          
-    
     def find_max_min_y_grph_2(self):
         max_y = float('-inf')  
         min_y = float('inf')   
@@ -518,10 +494,6 @@ class MyWindow(QMainWindow):
                 min_y = min(min_y, min(signal["y"]))
 
         return max_y, min_y
-    
-         
-         
-         
 
     def play_pause_grph_2(self):
         if self.timer_2.isActive():
@@ -557,7 +529,6 @@ class MyWindow(QMainWindow):
     def slower_grph_2(self):
          self.timer_2.setInterval(self.timer_2.interval() * 2)
 
- 
     def move_signal_from_grph_2(self):
             signal_to_move = self.ui.comb_move_viewer_2.currentText()
             for signal in self.signals_2:
@@ -596,7 +567,6 @@ class MyWindow(QMainWindow):
                     for data_line in signal["data_lines"]:
                         data_line.setPen(signal["color"])   
             
-    
     def show_hide_grph_2 (self):
         signal_to_show_hide = self.ui.comb_sig_apperance_viewer_2.currentText()
         for signal in self.signals_2 :
@@ -608,10 +578,6 @@ class MyWindow(QMainWindow):
                 else:
                     for data_line in signal["data_lines"]:    # self.current_signal_v1.data_line.setVisible(False)
                         data_line.setVisible(False)        
-        
-        
-        
-    
 
     def replay_2(self):
         self.ui.graphicsView_2.clear()
@@ -694,8 +660,6 @@ class MyWindow(QMainWindow):
         }
 
         return statistics
-
-   
             
     def capture_snapshot_1(self):
         exporter = exporters.ImageExporter(self.ui.graphicsView.plotItem)
@@ -706,8 +670,6 @@ class MyWindow(QMainWindow):
         self.snapshots_1.append(img1_path)
         self.counter_1 += 1 
         self.ui.btn_repo.setEnabled(True)
-        
-        
         
     def capture_snapshot_2(self):
         exporter = exporters.ImageExporter(self.ui.graphicsView_2.plotItem)
@@ -755,20 +717,10 @@ class MyWindow(QMainWindow):
                 pdf.cell(col_widths[4], 10, str(data['std']), border=1)
                 pdf.cell(col_widths[5], 10, str(data['duration']), border=1)
                 pdf.ln()
-
-            # for key, value in data_dict1.items():
-            #     pdf.cell(100, 10, str(key), border=1)
-            #     pdf.cell(0, 10, str(value), border=1)
-            #     pdf.ln()
-            
                 
         for snap in self.snapshots_1:
             os.remove(snap)
-            # self.snapshots_1.remove(snap)
         self.snapshots_1.clear()
-                
-                
-                
                 
         for snap in self.snapshots_2:
                 
@@ -792,7 +744,6 @@ class MyWindow(QMainWindow):
            
         for snap in self.snapshots_2:
             os.remove(snap)
-            # self.snapshots_2.remove(snap)
         self.snapshots_2.clear()
         
         pdf.output( file_path, "F")
@@ -806,6 +757,7 @@ def main():
     window.setWindowTitle("signal viewer")
     window.showMaximized()
     window.show()
+    QShortcut(QKeySequence("Ctrl+q"), window).activated.connect(window.close)
     sys.exit(app.exec_())
 
 if __name__ == '__main__':
