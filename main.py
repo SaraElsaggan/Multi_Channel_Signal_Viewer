@@ -26,15 +26,14 @@ class MyWindow(QMainWindow):
         super(MyWindow , self).__init__()
         self.ui = Ui_MainWindow()
         self.ui.setupUi(self)  
-        
-        
         self.ui.btn_rename_sig_1.clicked.connect(self.rename_grph_1)        
         self.ui.btn_rename_sig_2.clicked.connect(self.rename_grph_2)        
         self.timer_1 = QtCore.QTimer()
         self.timer_1.setInterval(100) 
+        
         self.legend_1 = []
         
-        
+        # self.legend_1 = []
         
         
         self.ui.graphicsView.addLegend()
@@ -182,7 +181,7 @@ class MyWindow(QMainWindow):
         
         if self.islinked:
             self.clear_grph_2()
-       
+        
            
     def upload_data_grph_1(self):
         file_path  , _ = QFileDialog.getOpenFileName( self , "open file", "" ,"(*.csv) ")
@@ -214,15 +213,15 @@ class MyWindow(QMainWindow):
         self.replay_1()
     
     def plot_signal_grph_1(self ) :
-        p = 0
+        # p = 0
         for signal in self.signals_1:
             data_line = self.ui.graphicsView.plotItem.plot( pen=signal["color"])
             signal["data_lines"].append(data_line)
             signal["data_indices"].append(0)
-            p += 20                 
-        legend_1 = pg.LegendItem((10, 10), offset=(40 ,  p ))
-        legend_1.setParentItem(self.ui.graphicsView.getPlotItem())
-        legend_1.addItem(data_line, signal["name"])
+            # p += 20                 
+        # legend_1 = pg.LegendItem((10, 10), offset=(40 ,  p ))
+        # legend_1.setParentItem(self.ui.graphicsView.getPlotItem())
+        # legend_1.addItem(data_line, signal["name"])
         # self.legend_1.append(legend_1)
         
         
@@ -265,8 +264,6 @@ class MyWindow(QMainWindow):
                 y = signal["y"][:signal["data_indices"][i]]
                 signal["data_indices"][i] += 5 
                 signal["data_lines"][i].setData(x, y)
-                self.ui.graphicsView.getViewBox().autoRange()
-
                 
     def find_max_min_1(self):
 
@@ -335,7 +332,7 @@ class MyWindow(QMainWindow):
         self.ui.comb_move_viewer_1.addItem(file_name)
 
     def zoom_out_grph_1(self):
-        
+       
         self.ui.graphicsView.getViewBox().scaleBy((1.2, 1.2))
         set 
         if self.islinked:
@@ -486,8 +483,6 @@ class MyWindow(QMainWindow):
                 y = signal["y"][:signal["data_indices"][i]]
                 signal["data_indices"][i] += 5 # Update the index for this signal
                 signal["data_lines"][i].setData(x, y)
-                self.ui.graphicsView_2.getViewBox().autoRange()
-                
          
     def find_max_min_y_grph_2(self):
         max_y = float('-inf')  
@@ -726,7 +721,6 @@ class MyWindow(QMainWindow):
         for snap in self.snapshots_1:
             os.remove(snap)
         self.snapshots_1.clear()
-        
                 
         for snap in self.snapshots_2:
                 
@@ -768,4 +762,3 @@ def main():
 
 if __name__ == '__main__':
     main()
-
